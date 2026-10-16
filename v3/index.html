@@ -511,7 +511,7 @@ section.light{background:#F3EDE0;color:var(--ink);
 <header class="nav" id="nav">
   <div class="wrap">
     <a href="#top" class="nav-logo" aria-label="دبلومك علينا — الرئيسية"><img src="../logo.webp" alt="دبلومك علينا"></a>
-    <nav class="nav-links" aria-label="أقسام الصفحة"><a href="#work">شغلنا</a><a href="#ledger">شو بنعمل</a><a href="#package">الباقة</a><a href="#services">الخدمات</a><a href="#faq">أسئلة</a></nav>
+    <nav class="nav-links" aria-label="أقسام الصفحة"><a href="#proof">آراء زباينا</a><a href="#ledger">شو بنعمل</a><a href="#package">الباقة</a><a href="#services">الخدمات</a><a href="#faq">أسئلة</a></nav>
     <a class="nav-cta" href="https://wa.me/962779283635" target="_blank" rel="noopener"><svg class="i" style="fill:currentColor;stroke:none"><use href="#i-wa"/></svg>احكي معنا</a>
   </div>
 </header>
@@ -529,7 +529,7 @@ section.light{background:#F3EDE0;color:var(--ink);
         <p class="lead rv">بنحمل عنك الدبلوم المهني كامل، <b>من أول مهمة لآخر بحث</b> — بقسط ثابت 20 دينار مع نزول الراتب، بدون سهر ولا قوالب ولا ركض ورا المواعيد.</p>
         <div class="hero-actions rv">
           <a href="#package" class="btn btn-gold">شوف الباقة</a>
-          <a href="#work" class="btn btn-ghost">شوف نماذج شغلنا</a>
+          <a href="#proof" class="btn btn-ghost">شوف شو بيحكوا عنا</a>
         </div>
         <div class="ribbon rv">
           <span><svg class="i"><use href="#i-wallet"/></svg>200 دينار للدبلوم كامل</span>
@@ -541,28 +541,23 @@ section.light{background:#F3EDE0;color:var(--ink);
     <div class="scroll-cue" aria-hidden="true"></div>
   </section>
 
-  <!-- ============ WORK SAMPLES ============ -->
-  <section class="block light" id="work">
+  <!-- ============ PROOF ============ -->
+  <section class="block light" id="proof">
     <div class="wrap">
       <div class="head rv">
-        <div class="kicker">عينات من شغلنا</div>
-        <h2 class="h2">عروض تقديمية <span class="foil">بتشد الطلاب</span></h2>
-        <p class="sub">شرائح من عروض حقيقية جهزناها لمعلمين. اسحب الشريحة لتقلّب، واضغط عليها لتكبر.</p>
+        <div class="kicker">من زباينا ومرشديهم</div>
+        <h2 class="h2">ما بنحكي عن حالنا، <span class="foil">هم بيحكوا</span></h2>
+        <p class="sub">رسائل حقيقية من معلمين اشتغلنا معهم، وكلام مرشدين عن الشغل، وعلامات من المنصة.</p>
       </div>
-      <div class="dtabs rv" role="tablist" id="deckTabs"></div>
-      <div class="deck-stage" id="deckStage" tabindex="0" aria-label="شرائح العرض، استخدم الأسهم للتقليب"></div>
-      <div class="deck-bar">
-        <div><h3 id="deckTitle"></h3><small id="deckMeta"></small></div>
-        <div class="ctl">
-          <button class="rail-btn" id="deckPrev" aria-label="الشريحة السابقة"><svg class="i"><use href="#i-arrow-r"/></svg></button>
-          <span class="count" id="deckCount"></span>
-          <button class="rail-btn" id="deckNext" aria-label="الشريحة التالية"><svg class="i"><use href="#i-arrow"/></svg></button>
-        </div>
+      <div class="tabs rv" role="tablist" id="proofTabs">
+        <button class="tab" role="tab" data-tab="msgs" aria-selected="true">رسائل الزباين</button>
+        <button class="tab" role="tab" data-tab="mentors" aria-selected="false">كلام المرشدين</button>
+        <button class="tab" role="tab" data-tab="grades" aria-selected="false">العلامات</button>
       </div>
-      <div class="work-cta rv">
-        <p>بدك عرض بهالمستوى لدرسك؟<small>عرض تقديمي كامل على درسك وصفّك.</small></p>
-        <a class="btn btn-gold" href="https://wa.me/962779283635?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%B4%D9%81%D8%AA%20%D8%B9%D9%8A%D9%86%D8%A7%D8%AA%20%D8%A7%D9%84%D8%B9%D8%B1%D9%88%D8%B6%20%D9%88%D8%A8%D8%AF%D9%8A%20%D8%B9%D8%B1%D8%B6%20%D8%AA%D9%82%D8%AF%D9%8A%D9%85%D9%8A%20%D9%84%D8%AF%D8%B1%D8%B3%D9%8A" target="_blank" rel="noopener"><svg class="i" style="fill:currentColor;stroke:none"><use href="#i-wa"/></svg>اطلب عرض · 5 دنانير</a>
-      </div>
+    </div>
+    <div class="hrail" id="proofRail" role="tabpanel"></div>
+    <div class="wrap">
+      <p class="proof-note rv"><svg class="i"><use href="#i-lock"/></svg><span>خبّينا الأسماء والأرقام حفاظًا على خصوصية زباينا. والعلامة قرار المرشد، اللي بنضمنه إحنا هو جودة الشغل.</span></p>
     </div>
   </section>
 
@@ -618,23 +613,34 @@ section.light{background:#F3EDE0;color:var(--ink);
     </div>
   </section>
 
-  <!-- ============ PROOF ============ -->
-  <section class="block light" id="proof">
+  <!-- ============ CLARITY ============ -->
+  <section class="block light" id="clarity">
     <div class="wrap">
       <div class="head rv">
-        <div class="kicker">من زباينا ومرشديهم</div>
-        <h2 class="h2">ما بنحكي عن حالنا، <span class="foil">هم بيحكوا</span></h2>
-        <p class="sub">رسائل حقيقية من معلمين اشتغلنا معهم، وكلام مرشدين عن الشغل، وعلامات من المنصة.</p>
+        <div class="kicker">شو بيكون إلك لحالك، وشو ممكن يتشابه؟</div>
+        <h2 class="h2">بنحب نكون واضحين معك <span class="foil">من البداية</span></h2>
       </div>
-      <div class="tabs rv" role="tablist" id="proofTabs">
-        <button class="tab" role="tab" data-tab="msgs" aria-selected="true">رسائل الزباين</button>
-        <button class="tab" role="tab" data-tab="mentors" aria-selected="false">كلام المرشدين</button>
-        <button class="tab" role="tab" data-tab="grades" aria-selected="false">العلامات</button>
+      <div class="clarity">
+        <article class="card d3">
+          <span class="tag solo"><svg class="i"><use href="#i-lock"/></svg>إلك لحالك</span>
+          <h3>المقالات والبحث الاستقصائي</h3>
+          <ul class="ticks">
+            <li><svg class="i"><use href="#i-check"/></svg><span>بتنكتب <b>إلك إنت بالتحديد</b> وعلى تخصصك.</span></li>
+            <li><svg class="i"><use href="#i-check"/></svg><span>ما بتنعطى لأي معلم ثاني.</span></li>
+            <li><svg class="i"><use href="#i-check"/></svg><span><b>نسبة الاستلال فيها مضمونة.</b></span></li>
+          </ul>
+        </article>
+        <article class="card d3">
+          <span class="tag share"><svg class="i"><use href="#i-layers"/></svg>ممكن يتشابه</span>
+          <h3>المهام الأسبوعية</h3>
+          <ul class="ticks">
+            <li><svg class="i"><use href="#i-check"/></svg><span>ممكن بعضها يتشابه مع معلمين من نفس تخصصك، بس <b>بمجموعات ثانية</b> مرشدهم الأكاديمي غير مرشدك.</span></li>
+            <li><svg class="i"><use href="#i-check"/></svg><span><b>ما بتنعطى لأي حدا بمجموعتك.</b></span></li>
+            <li><svg class="i"><use href="#i-check"/></svg><span>المهام الأسبوعية ما عليها أي نوع من فحص التشابه، فما رح يصير معك أي مشكلة بإذن الله.</span></li>
+          </ul>
+        </article>
       </div>
-    </div>
-    <div class="hrail" id="proofRail" role="tabpanel"></div>
-    <div class="wrap">
-      <p class="proof-note rv"><svg class="i"><use href="#i-lock"/></svg><span>خبّينا الأسماء والأرقام حفاظًا على خصوصية زباينا. والعلامة قرار المرشد، اللي بنضمنه إحنا هو جودة الشغل.</span></p>
+      <p class="honest rv">هاد الإشي بيعمله كل اللي بيشتغلوا بهالمجال، بس ما حدا بيحكيه. <b>إحنا حبينا نوضحه من باب الشفافية</b>، عشان تكون عارف كل إشي من البداية.</p>
     </div>
   </section>
 
@@ -741,34 +747,28 @@ section.light{background:#F3EDE0;color:var(--ink);
     <div class="wrap"><div class="svc-list" id="svcList"></div></div>
   </section>
 
-  <!-- ============ CLARITY ============ -->
-  <section class="block light" id="clarity">
+  <!-- ============ WORK SAMPLES ============ -->
+  <section class="block light" id="work">
     <div class="wrap">
       <div class="head rv">
-        <div class="kicker">شو بيكون إلك لحالك، وشو ممكن يتشابه؟</div>
-        <h2 class="h2">بنحب نكون واضحين معك <span class="foil">من البداية</span></h2>
+        <div class="kicker">عينات من شغلنا</div>
+        <h2 class="h2">عروض تقديمية <span class="foil">بتشد الطلاب</span></h2>
+        <p class="sub">شرائح من عروض حقيقية جهزناها لمعلمين. اسحب الشريحة لتقلّب، واضغط عليها لتكبر.</p>
       </div>
-      <div class="clarity">
-        <article class="card d3">
-          <span class="tag solo"><svg class="i"><use href="#i-lock"/></svg>إلك لحالك</span>
-          <h3>المقالات والبحث الاستقصائي</h3>
-          <ul class="ticks">
-            <li><svg class="i"><use href="#i-check"/></svg><span>بتنكتب <b>إلك إنت بالتحديد</b> وعلى تخصصك.</span></li>
-            <li><svg class="i"><use href="#i-check"/></svg><span>ما بتنعطى لأي معلم ثاني.</span></li>
-            <li><svg class="i"><use href="#i-check"/></svg><span><b>نسبة الاستلال فيها مضمونة.</b></span></li>
-          </ul>
-        </article>
-        <article class="card d3">
-          <span class="tag share"><svg class="i"><use href="#i-layers"/></svg>ممكن يتشابه</span>
-          <h3>المهام الأسبوعية</h3>
-          <ul class="ticks">
-            <li><svg class="i"><use href="#i-check"/></svg><span>ممكن بعضها يتشابه مع معلمين من نفس تخصصك، بس <b>بمجموعات ثانية</b> مرشدهم الأكاديمي غير مرشدك.</span></li>
-            <li><svg class="i"><use href="#i-check"/></svg><span><b>ما بتنعطى لأي حدا بمجموعتك.</b></span></li>
-            <li><svg class="i"><use href="#i-check"/></svg><span>المهام الأسبوعية ما عليها أي نوع من فحص التشابه، فما رح يصير معك أي مشكلة بإذن الله.</span></li>
-          </ul>
-        </article>
+      <div class="dtabs rv" role="tablist" id="deckTabs"></div>
+      <div class="deck-stage" id="deckStage" tabindex="0" aria-label="شرائح العرض، استخدم الأسهم للتقليب"></div>
+      <div class="deck-bar">
+        <div><h3 id="deckTitle"></h3><small id="deckMeta"></small></div>
+        <div class="ctl">
+          <button class="rail-btn" id="deckPrev" aria-label="الشريحة السابقة"><svg class="i"><use href="#i-arrow-r"/></svg></button>
+          <span class="count" id="deckCount"></span>
+          <button class="rail-btn" id="deckNext" aria-label="الشريحة التالية"><svg class="i"><use href="#i-arrow"/></svg></button>
+        </div>
       </div>
-      <p class="honest rv">هاد الإشي بيعمله كل اللي بيشتغلوا بهالمجال، بس ما حدا بيحكيه. <b>إحنا حبينا نوضحه من باب الشفافية</b>، عشان تكون عارف كل إشي من البداية.</p>
+      <div class="work-cta rv">
+        <p>بدك عرض بهالمستوى لدرسك؟<small>عرض تقديمي كامل على درسك وصفّك.</small></p>
+        <a class="btn btn-gold" href="https://wa.me/962779283635?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%B4%D9%81%D8%AA%20%D8%B9%D9%8A%D9%86%D8%A7%D8%AA%20%D8%A7%D9%84%D8%B9%D8%B1%D9%88%D8%B6%20%D9%88%D8%A8%D8%AF%D9%8A%20%D8%B9%D8%B1%D8%B6%20%D8%AA%D9%82%D8%AF%D9%8A%D9%85%D9%8A%20%D9%84%D8%AF%D8%B1%D8%B3%D9%8A" target="_blank" rel="noopener"><svg class="i" style="fill:currentColor;stroke:none"><use href="#i-wa"/></svg>اطلب عرض · 5 دنانير</a>
+      </div>
     </div>
   </section>
 

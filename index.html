@@ -60,7 +60,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 :focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px;border-radius:8px}
 svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 .wrap{width:100%;max-width:1160px;margin:0 auto;padding:0 var(--gutter)}
-.foil{background:var(--foil);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--gold)}
+.foil{background:var(--foil-text,var(--foil));background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--gold)}
 @media (prefers-reduced-motion:no-preference){ .foil{animation:foil 7s linear infinite} }
 @keyframes foil{to{background-position:-220% 0}}
 
@@ -85,6 +85,9 @@ main,header,footer{position:relative;z-index:2}
 .nav.hide{transform:translateY(-110%)}
 .nav .wrap{display:flex;align-items:center;justify-content:space-between}
 .nav-logo img{height:46px;width:auto}
+.nav-links{display:none}
+.nav-links a{font-size:.92rem;font-weight:500;color:var(--muted);transition:color .3s}
+.nav-links a:hover{color:var(--gold-hi)}
 .nav-cta{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:99px;font-weight:600;font-size:.88rem;
   border:1px solid var(--line);background:rgba(0,77,64,.35);backdrop-filter:blur(10px);transition:background .3s,border-color .3s}
 .nav-cta:hover{border-color:var(--gold);background:rgba(191,149,63,.12)}
@@ -130,7 +133,7 @@ main,header,footer{position:relative;z-index:2}
 @keyframes cue{0%{opacity:0;transform:translateY(0)}40%{opacity:1}100%{opacity:0;transform:translateY(12px)}}
 
 /* ================= Sections ================= */
-section.block{padding:88px 0}
+section.block{padding:76px 0}
 .kicker{font-family:var(--f-display);font-size:.8rem;font-weight:700;color:var(--gold);margin-bottom:10px;display:flex;align-items:center;gap:10px}
 .kicker::before{content:"";width:22px;height:1px;background:var(--gold)}
 .h2{font-family:var(--f-display);font-weight:800;font-size:clamp(1.7rem,6.4vw,3rem);line-height:1.3;margin-bottom:14px}
@@ -211,6 +214,14 @@ section.block{padding:88px 0}
 .proof-note svg{color:var(--gold);margin-top:5px;font-size:1rem}
 
 /* ================= Work samples: 3D slide deck ================= */
+.dtabs{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;padding:4px 2px 10px;scroll-snap-type:x proximity}
+.dtabs::-webkit-scrollbar{display:none}
+.dtab{flex:0 0 132px;scroll-snap-align:start;display:grid;gap:8px;padding:6px;text-align:start;border-radius:14px;border:1px solid rgba(0,77,64,.12);background:#fff;transition:border-color .3s,box-shadow .3s,transform .35s var(--ease)}
+.dtab:hover{transform:translateY(-2px)}
+.dtab img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:9px}
+.dtab span{font-size:.78rem;font-weight:600;line-height:1.45;color:var(--muted);padding:0 4px 4px}
+.dtab[aria-selected="true"]{border-color:var(--gold);box-shadow:0 0 0 2px rgba(191,149,63,.45),0 14px 30px -18px rgba(0,40,33,.55)}
+.dtab[aria-selected="true"] span{color:var(--ink)}
 .deck-stage{position:relative;width:min(100%,760px);margin:84px auto 0;aspect-ratio:16/9;perspective:1400px;touch-action:pan-y;user-select:none;-webkit-user-select:none;outline:none}
 .slide{position:absolute;inset:0;border-radius:14px;overflow:hidden;background:#0a3a32;cursor:grab;transform-origin:50% 0%;
   box-shadow:0 30px 60px -24px rgba(0,0,0,.75),0 0 0 1px rgba(191,149,63,.28);transition:transform .65s var(--ease),opacity .65s var(--ease),filter .65s}
@@ -305,30 +316,23 @@ section.block{padding:88px 0}
 .why-copy p{color:var(--muted);margin-bottom:12px}
 .why-copy p b{color:var(--ink)}
 
-/* ================= Services carousel ================= */
-.rail-wrap{position:relative}
-.rail{position:relative;display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:20px calc(50% - min(36vw,160px)) 36px;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
-.rail::-webkit-scrollbar{display:none}
-.svc{flex:0 0 min(72vw,320px);scroll-snap-align:center;cursor:pointer;display:flex;flex-direction:column;min-height:300px;padding:24px;
-  transform:perspective(900px) translateX(var(--tx,0px)) rotateY(var(--ry,0deg)) scale(var(--s,1));opacity:var(--o,1);transition:border-color .3s}
-.svc:hover{border-color:rgba(191,149,63,.45)}
-.svc .ico{margin-bottom:18px}
+/* ================= Services list ================= */
 .svc-note{display:inline-flex;align-items:flex-start;gap:8px;margin-top:16px;padding:10px 16px;border-radius:14px;font-size:.88rem;color:var(--gold-hi);background:rgba(191,149,63,.08);border:1px solid rgba(191,149,63,.25);text-align:start;max-width:36em}
 .svc-note svg{margin-top:5px;flex-shrink:0;color:var(--gold)}
-.svc h3{font-family:var(--f-display);font-weight:700;font-size:1.2rem;margin-bottom:8px}
-.svc p{font-size:.9rem;color:var(--muted);flex:1}
-.svc .cost{display:flex;align-items:baseline;gap:6px;margin-top:18px;padding-top:16px;border-top:1px solid rgba(191,149,63,.15)}
-.svc .cost b{font-family:var(--f-display);font-weight:900;font-size:2.3rem;line-height:1}
-.svc .cost span{color:var(--muted);font-size:.9rem}
-.svc .cost em{margin-inline-start:auto;font-style:normal;font-size:.8rem;color:var(--gold-hi);display:inline-flex;align-items:center;gap:4px}
-.svc .note{font-size:.78rem;color:var(--gold-hi);margin-top:6px}
-.svc.hl{border-color:rgba(191,149,63,.5);background:linear-gradient(160deg,rgba(191,149,63,.16),rgba(0,33,28,.8))}
-.rail-nav{display:flex;justify-content:center;align-items:center;gap:14px;margin-top:-6px}
+.svc-list{display:grid;gap:12px;max-width:980px;margin:0 auto}
+.svc-row{display:flex;align-items:center;gap:14px;width:100%;padding:14px 16px;text-align:start;transition:border-color .3s,transform .4s var(--ease)}
+.svc-row:hover{border-color:rgba(191,149,63,.5);transform:translateY(-2px)}
+.svc-row.hl{border-color:rgba(191,149,63,.45)}
+.svc-row .ico{width:42px;height:42px;font-size:1.2rem}
+.svc-row .tx{flex:1;min-width:0}
+.svc-row strong{display:block;font-family:var(--f-display);font-weight:700;font-size:1rem;line-height:1.5}
+.svc-row small{display:block;font-size:.82rem;color:var(--muted);line-height:1.6}
+.svc-row .pr{display:flex;align-items:baseline;gap:4px;flex-shrink:0}
+.svc-row .pr b{font-family:var(--f-display);font-weight:900;font-size:1.7rem;line-height:1}
+.svc-row .pr span{font-size:.76rem;color:var(--muted)}
+.svc-row > svg{color:var(--gold);flex-shrink:0}
 .rail-btn{width:46px;height:46px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:1.2rem;color:var(--gold-hi);background:rgba(0,33,28,.5)}
 .rail-btn:hover{border-color:var(--gold)}
-.dots{display:flex;gap:6px}
-.dots i{width:6px;height:6px;border-radius:99px;background:rgba(245,239,224,.2);transition:width .4s var(--ease),background .4s}
-.dots i.on{width:22px;background:var(--gold)}
 
 /* ================= Steps ================= */
 .steps{list-style:none;display:grid;gap:0;position:relative}
@@ -345,6 +349,17 @@ section.block{padding:88px 0}
 .promise blockquote{font-family:var(--f-serif);font-weight:700;font-size:clamp(2.2rem,10vw,4.4rem);line-height:1.35;margin-bottom:18px}
 .promise p{color:var(--muted);max-width:32em;margin:0 auto 30px;font-size:1.05rem}
 .promise .leaf{display:inline-grid;place-items:center;width:54px;height:54px;border-radius:50%;border:1px solid var(--line);color:var(--gold);font-size:1.5rem;margin-bottom:22px}
+
+/* ================= FAQ ================= */
+.faq{display:grid;gap:8px}
+.faq-list{border-top:1px solid rgba(0,77,64,.14)}
+.faq-list details{border-bottom:1px solid rgba(0,77,64,.14)}
+.faq-list summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 2px;font-family:var(--f-display);font-weight:700;font-size:1rem;line-height:1.6}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary svg{flex-shrink:0;color:var(--gold-hi);font-size:1.15rem;transition:transform .4s var(--ease)}
+.faq-list details[open] summary svg{transform:rotate(45deg)}
+.faq-list details p{padding:0 2px 22px;color:var(--muted);font-size:.95rem;max-width:40em}
+.faq-more{display:inline-flex;align-items:center;gap:8px;margin-top:4px;font-weight:600;color:var(--gold-hi);border-bottom:1px solid currentColor;padding-bottom:2px}
 
 /* ================= Footer ================= */
 footer{border-top:1px solid rgba(191,149,63,.12);padding:40px 0 110px;background:rgba(0,20,17,.75);text-align:center}
@@ -414,8 +429,43 @@ footer small{color:var(--faint);font-size:.8rem}
   .yours-wrap{position:sticky;top:96px}
   .why{grid-template-columns:1fr 1fr;gap:56px}
   .rail{padding-inline:calc(50% - 160px)}
-  section.block{padding:120px 0}
 }
+
+/* ================= Cream sections ================= */
+section.light{background:#F3EDE0;color:var(--ink);
+  --ink:#10302A;--muted:rgba(16,48,42,.74);--faint:rgba(16,48,42,.52);--line:rgba(140,100,30,.3);--gold-hi:#8A6420;
+  --foil-text:linear-gradient(115deg,#7A5210 0%,#A67C2E 28%,#CDA34C 48%,#9A7026 70%,#7A5210 100%)}
+.light .card{background:#fff;border-color:rgba(0,77,64,.1);box-shadow:0 24px 50px -32px rgba(0,40,33,.4);backdrop-filter:none;-webkit-backdrop-filter:none}
+.light .kicker{color:#8A6420}
+.light .tab{background:#fff;border-color:rgba(0,77,64,.14);color:var(--muted)}
+.light .tab[aria-selected="true"]{color:#241904;border-color:transparent}
+.light .rail-btn{background:#fff;border-color:rgba(0,77,64,.18);color:#004D40}
+.light .work-cta{background:#fff;border-color:rgba(191,149,63,.5)}
+.light .slide{box-shadow:0 30px 60px -28px rgba(0,30,25,.6),0 0 0 1px rgba(191,149,63,.3)}
+.light .see{color:#F3DFA2}
+.light .tag.solo{background:rgba(191,149,63,.14);border-color:rgba(191,149,63,.45)}
+.light .tag.share{background:rgba(0,77,64,.06);border-color:rgba(0,77,64,.16)}
+.light .honest{background:rgba(191,149,63,.1)}
+.light .mbar.solo::before{background:linear-gradient(180deg,rgba(0,77,64,.34),rgba(0,77,64,.12));border-color:rgba(0,77,64,.18)}
+.light .plot{border-bottom-color:rgba(0,77,64,.16)}
+.light .plot .line20{border-top-color:rgba(138,100,32,.65)}
+.light .legend i.solo{background:rgba(0,77,64,.2);border-color:rgba(0,77,64,.26)}
+.light .why-total{border-top-color:rgba(191,149,63,.32)}
+.light .ico{background:linear-gradient(145deg,rgba(191,149,63,.2),rgba(191,149,63,.06));border-color:rgba(191,149,63,.4)}
+
+@media (min-width:960px){
+  .nav-links{display:flex;gap:30px}
+  .head:not(.center){display:grid;grid-template-columns:1.15fr .85fr;column-gap:56px;align-items:end}
+  .head:not(.center) .kicker,.head:not(.center) .h2{grid-column:1}
+  .head:not(.center) .h2{margin-bottom:0}
+  .head:not(.center) .sub{grid-column:2;grid-row:1 / span 2;align-self:end;padding-bottom:8px}
+  .faq{grid-template-columns:.8fr 1.2fr;gap:64px;align-items:start}
+  .faq > .head{display:block;position:sticky;top:110px}
+  .dtabs{justify-content:center;flex-wrap:wrap;overflow:visible}
+  .dtab{flex-basis:150px}
+  section.block{padding:112px 0}
+}
+@media (min-width:760px){ .svc-list{grid-template-columns:1fr 1fr} }
 </style>
 </head>
 <body>
@@ -460,6 +510,7 @@ footer small{color:var(--faint);font-size:.8rem}
 <header class="nav" id="nav">
   <div class="wrap">
     <a href="#top" class="nav-logo" aria-label="دبلومك علينا — الرئيسية"><img src="logo.webp" alt="دبلومك علينا"></a>
+    <nav class="nav-links" aria-label="أقسام الصفحة"><a href="#proof">آراء زباينا</a><a href="#ledger">شو بنعمل</a><a href="#package">الباقة</a><a href="#services">الخدمات</a><a href="#faq">أسئلة</a></nav>
     <a class="nav-cta" href="https://wa.me/962779283635" target="_blank" rel="noopener"><svg class="i" style="fill:currentColor;stroke:none"><use href="#i-wa"/></svg>احكي معنا</a>
   </div>
 </header>
@@ -477,7 +528,7 @@ footer small{color:var(--faint);font-size:.8rem}
         <p class="lead rv">بنحمل عنك الدبلوم المهني كامل، <b>من أول مهمة لآخر بحث</b> — بقسط ثابت 20 دينار مع نزول الراتب، بدون سهر ولا قوالب ولا ركض ورا المواعيد.</p>
         <div class="hero-actions rv">
           <a href="#package" class="btn btn-gold">شوف الباقة</a>
-          <a href="#ledger" class="btn btn-ghost">شو بنعمل عنك؟</a>
+          <a href="#proof" class="btn btn-ghost">شوف شو بيحكوا عنا</a>
         </div>
         <div class="ribbon rv">
           <span><svg class="i"><use href="#i-wallet"/></svg>200 دينار للدبلوم كامل</span>
@@ -487,6 +538,26 @@ footer small{color:var(--faint);font-size:.8rem}
       </div>
     </div>
     <div class="scroll-cue" aria-hidden="true"></div>
+  </section>
+
+  <!-- ============ PROOF ============ -->
+  <section class="block light" id="proof">
+    <div class="wrap">
+      <div class="head rv">
+        <div class="kicker">من زباينا ومرشديهم</div>
+        <h2 class="h2">ما بنحكي عن حالنا، <span class="foil">هم بيحكوا</span></h2>
+        <p class="sub">رسائل حقيقية من معلمين اشتغلنا معهم، وكلام مرشدين عن الشغل، وعلامات من المنصة.</p>
+      </div>
+      <div class="tabs rv" role="tablist" id="proofTabs">
+        <button class="tab" role="tab" data-tab="msgs" aria-selected="true">رسائل الزباين</button>
+        <button class="tab" role="tab" data-tab="mentors" aria-selected="false">كلام المرشدين</button>
+        <button class="tab" role="tab" data-tab="grades" aria-selected="false">العلامات</button>
+      </div>
+    </div>
+    <div class="hrail" id="proofRail" role="tabpanel"></div>
+    <div class="wrap">
+      <p class="proof-note rv"><svg class="i"><use href="#i-lock"/></svg><span>خبّينا الأسماء والأرقام حفاظًا على خصوصية زباينا. والعلامة قرار المرشد، اللي بنضمنه إحنا هو جودة الشغل.</span></p>
+    </div>
   </section>
 
   <!-- ============ LEDGER: علينا / عليك ============ -->
@@ -542,7 +613,7 @@ footer small{color:var(--faint);font-size:.8rem}
   </section>
 
   <!-- ============ CLARITY ============ -->
-  <section class="block" id="clarity">
+  <section class="block light" id="clarity">
     <div class="wrap">
       <div class="head rv">
         <div class="kicker">شو بيكون إلك لحالك، وشو ممكن يتشابه؟</div>
@@ -569,26 +640,6 @@ footer small{color:var(--faint);font-size:.8rem}
         </article>
       </div>
       <p class="honest rv">هاد الإشي بيعمله كل اللي بيشتغلوا بهالمجال، بس ما حدا بيحكيه. <b>إحنا حبينا نوضحه من باب الشفافية</b>، عشان تكون عارف كل إشي من البداية.</p>
-    </div>
-  </section>
-
-  <!-- ============ PROOF ============ -->
-  <section class="block" id="proof">
-    <div class="wrap">
-      <div class="head rv">
-        <div class="kicker">من زباينا ومرشديهم</div>
-        <h2 class="h2">ما بنحكي عن حالنا، <span class="foil">هم بيحكوا</span></h2>
-        <p class="sub">رسائل حقيقية من معلمين اشتغلنا معهم، وكلام مرشدين عن الشغل، وعلامات من المنصة.</p>
-      </div>
-      <div class="tabs rv" role="tablist" id="proofTabs">
-        <button class="tab" role="tab" data-tab="msgs" aria-selected="true">رسائل الزباين</button>
-        <button class="tab" role="tab" data-tab="mentors" aria-selected="false">كلام المرشدين</button>
-        <button class="tab" role="tab" data-tab="grades" aria-selected="false">العلامات</button>
-      </div>
-    </div>
-    <div class="hrail" id="proofRail" role="tabpanel"></div>
-    <div class="wrap">
-      <p class="proof-note rv"><svg class="i"><use href="#i-lock"/></svg><span>خبّينا الأسماء والأرقام حفاظًا على خصوصية زباينا. والعلامة قرار المرشد، اللي بنضمنه إحنا هو جودة الشغل.</span></p>
     </div>
   </section>
 
@@ -651,7 +702,7 @@ footer small{color:var(--faint);font-size:.8rem}
   </section>
 
   <!-- ============ WHY FIXED ============ -->
-  <section class="block" id="why">
+  <section class="block light" id="why">
     <div class="wrap">
       <div class="why">
         <div class="why-copy rv">
@@ -682,15 +733,28 @@ footer small{color:var(--faint);font-size:.8rem}
     </div>
   </section>
 
+  <!-- ============ SERVICES ============ -->
+  <section class="block" id="services">
+    <div class="wrap">
+      <div class="head center rv">
+        <div class="kicker">خدمات منفصلة</div>
+        <h2 class="h2">بدك <span class="foil">خدمة وحدة</span> بس؟</h2>
+        <p class="sub">إذا مش محتاج الباقة كاملة، اختار اللي بدك ياه، واضغط على أي خدمة لتشوف تفاصيلها.</p>
+        <p class="svc-note"><svg class="i"><use href="#i-check"/></svg><span>بالخدمات المنفصلة، فتح المنصة والتسليم عليك. بالباقة الشاملة، حتى التسليم علينا.</span></p>
+      </div>
+    </div>
+    <div class="wrap"><div class="svc-list" id="svcList"></div></div>
+  </section>
+
   <!-- ============ WORK SAMPLES ============ -->
-  <section class="block" id="work">
+  <section class="block light" id="work">
     <div class="wrap">
       <div class="head rv">
         <div class="kicker">عينات من شغلنا</div>
         <h2 class="h2">عروض تقديمية <span class="foil">بتشد الطلاب</span></h2>
         <p class="sub">شرائح من عروض حقيقية جهزناها لمعلمين. اسحب الشريحة لتقلّب، واضغط عليها لتكبر.</p>
       </div>
-      <div class="tabs rv" role="tablist" id="deckTabs"></div>
+      <div class="dtabs rv" role="tablist" id="deckTabs"></div>
       <div class="deck-stage" id="deckStage" tabindex="0" aria-label="شرائح العرض، استخدم الأسهم للتقليب"></div>
       <div class="deck-bar">
         <div><h3 id="deckTitle"></h3><small id="deckMeta"></small></div>
@@ -703,26 +767,6 @@ footer small{color:var(--faint);font-size:.8rem}
       <div class="work-cta rv">
         <p>بدك عرض بهالمستوى لدرسك؟<small>عرض تقديمي كامل على درسك وصفّك.</small></p>
         <a class="btn btn-gold" href="https://wa.me/962779283635?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%B4%D9%81%D8%AA%20%D8%B9%D9%8A%D9%86%D8%A7%D8%AA%20%D8%A7%D9%84%D8%B9%D8%B1%D9%88%D8%B6%20%D9%88%D8%A8%D8%AF%D9%8A%20%D8%B9%D8%B1%D8%B6%20%D8%AA%D9%82%D8%AF%D9%8A%D9%85%D9%8A%20%D9%84%D8%AF%D8%B1%D8%B3%D9%8A" target="_blank" rel="noopener"><svg class="i" style="fill:currentColor;stroke:none"><use href="#i-wa"/></svg>اطلب عرض · 5 دنانير</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ SERVICES ============ -->
-  <section class="block" id="services">
-    <div class="wrap">
-      <div class="head center rv">
-        <div class="kicker">خدمات منفصلة</div>
-        <h2 class="h2">بدك <span class="foil">خدمة وحدة</span> بس؟</h2>
-        <p class="sub">إذا مش محتاج الباقة كاملة، اختار اللي بدك ياه. اسحب لتشوف كل الخدمات.</p>
-        <p class="svc-note"><svg class="i"><use href="#i-check"/></svg><span>بالخدمات المنفصلة، فتح المنصة والتسليم عليك. بالباقة الشاملة، حتى التسليم علينا.</span></p>
-      </div>
-    </div>
-    <div class="rail-wrap">
-      <div class="rail" id="rail"></div>
-      <div class="rail-nav">
-        <button class="rail-btn" id="railPrev" aria-label="الخدمة السابقة"><svg class="i"><use href="#i-arrow-r"/></svg></button>
-        <div class="dots" id="dots"></div>
-        <button class="rail-btn" id="railNext" aria-label="الخدمة التالية"><svg class="i"><use href="#i-arrow"/></svg></button>
       </div>
     </div>
   </section>
@@ -740,6 +784,26 @@ footer small{color:var(--faint);font-size:.8rem}
         <li class="rv"><span class="num">3</span><div><h3>القسط الأول مع الراتب</h3><p>مع نزول الراتب بتدفع أول 20 دينار، وما في أي دفعة مقدمة غيرها.</p></div></li>
         <li class="rv"><span class="num">4</span><div><h3>والدبلوم علينا</h3><p>ومن أول مهمة، إنت مرتاح.</p></div></li>
       </ol>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="block light" id="faq">
+    <div class="wrap faq">
+      <div class="head rv">
+        <div class="kicker">حتى تكون الصورة كاملة</div>
+        <h2 class="h2">أسئلة <span class="foil">بتخطر عبالك</span></h2>
+        <a class="faq-more" href="https://wa.me/962779283635" target="_blank" rel="noopener">سؤالك مش موجود؟ احكي معنا<svg class="i"><use href="#i-arrow"/></svg></a>
+      </div>
+      <div class="faq-list rv">
+        <details><summary>شو الفرق بين الباقة والخدمات المنفصلة؟<svg class="i"><use href="#i-plus"/></svg></summary><p>الباقة بتشمل الدبلوم كامل بـ200 دينار على 10 أقساط، وحتى التسليم على المنصة بمواعيده علينا. بالخدمات المنفصلة بتختار اللي بدك ياه وبتدفع سعره، وفتح المنصة والتسليم عليك.</p></details>
+        <details><summary>متى بدفع أول قسط؟ وكيف؟<svg class="i"><use href="#i-plus"/></svg></summary><p>أول 20 دينار مع نزول الراتب، وهو عن الشهر الأول، وما في أي دفعة مقدمة غيره. بعدها 20 دينار كل شهر مع الراتب لحد القسط العاشر. والدفع كليك أو المحفظة.</p></details>
+        <details><summary>شو اللي بضل عليّ بالباقة؟<svg class="i"><use href="#i-plus"/></svg></summary><p>أربع أشياء بس: المحاضرة الأسبوعية، الجلستين الإرشاديتين، جلستين التدريس المصغّر، وصور وفيديوهات التوثيق لما تطلبها المهمة. وحتى هدول بنجهزك إلهم: الأداة والشرح للجلسات الإرشادية، والعرض والسيناريو للتدريس المصغّر.</p></details>
+        <details><summary>صار معي ظرف وتأخر القسط؟<svg class="i"><use href="#i-plus"/></svg></summary><p>عادي، بيندفع مع قسط الشهر اللي بعده.</p></details>
+        <details><summary>إذا طلب المرشد تعديل؟<svg class="i"><use href="#i-plus"/></svg></summary><p>التعديل علينا. بنسلّم قبل الموعد بوقت كافي، وإذا طلب المرشد تعديل بنعدّل حسب ملاحظاته.</p></details>
+        <details><summary>في ضمان لعلامة معيّنة؟<svg class="i"><use href="#i-plus"/></svg></summary><p>العلامة قرار المرشد. اللي بنضمنه إحنا هو جودة الشغل، ونسبة الاستلال بالمقالات والبحث الاستقصائي.</p></details>
+        <details><summary>بياناتي بأمان؟<svg class="i"><use href="#i-plus"/></svg></summary><p>ما بنشارك اسمك أو معلوماتك مع أي طرف، وبيانات الدخول بنستخدمها لإنجاز مهامك بس.</p></details>
+      </div>
     </div>
   </section>
 
@@ -838,41 +902,15 @@ document.addEventListener('DOMContentLoaded', () => {
     privacy:{ico:'i-lock', t:'الخصوصية', s:'بياناتك بأمان', f:['ما بنشارك اسمك أو معلوماتك مع أي طرف','بيانات الدخول بنستخدمها لإنجاز مهامك بس','المقالات والبحث الاستقصائي ما بتنعطى لأي معلم ثاني']}
   };
 
-  /* ---------- Build rail ---------- */
-  const rail = $('#rail'), dots = $('#dots');
-  rail.innerHTML = services.map((x,i)=>`
-    <article class="card svc${x.hl?' hl':''}" data-i="${i}" tabindex="0" role="button" aria-label="${x.t}">
-      <div class="ico"><svg class="i"><use href="#${x.ico}"/></svg></div>
-      <h3>${x.t}</h3><p>${x.d}</p>
-      <div class="cost"><b class="foil">${x.p}</b><span>${x.u}</span><em>التفاصيل <svg class="i"><use href="#i-arrow"/></svg></em></div>
-      ${x.note?`<div class="note">${x.note}</div>`:''}
-    </article>`).join('');
-  dots.innerHTML = services.map(()=>'<i></i>').join('');
-  const cards = [...rail.children], dotEls = [...dots.children];
-  let active = 0;
-  function railFx(){
-    // layout positions (not getBoundingClientRect) so the card's own transform can't feed back
-    const mid = rail.clientWidth/2, sl = rail.scrollLeft;
-    let best = 1e9;
-    cards.forEach((c,i)=>{
-      const r = {width:c.offsetWidth}, off = (c.offsetLeft - sl + r.width/2 - mid) / r.width;
-      if (Math.abs(off) < best){ best = Math.abs(off); active = i; }
-      if (reduce) return;
-      const o = Math.max(-2, Math.min(2, off));
-      c.style.setProperty('--ry', (o * -22) + 'deg');
-      c.style.setProperty('--tx', (-Math.max(-1.2, Math.min(1.2, o)) * r.width * .2) + 'px');
-      c.style.setProperty('--s', 1 - Math.min(Math.abs(o),1.5) * .1);
-      c.style.setProperty('--o', 1 - Math.min(Math.abs(o),1.5) * .35);
-      c.style.zIndex = 10 - Math.round(Math.abs(o) * 3);
-    });
-    dotEls.forEach((d,i)=>d.classList.toggle('on', i===active));
-  }
-  rail.addEventListener('scroll', ()=>requestAnimationFrame(railFx), {passive:true});
-  addEventListener('resize', railFx);
-  const go = dir => { const n = Math.max(0, Math.min(cards.length-1, active+dir)); cards[n].scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'}); };
-  $('#railNext').onclick = () => go(1);
-  $('#railPrev').onclick = () => go(-1);
-  railFx();
+  /* ---------- Services list ---------- */
+  const svcList = $('#svcList');
+  svcList.innerHTML = services.map((x,i)=>`
+    <button type="button" class="card svc-row${x.hl?' hl':''}" data-i="${i}">
+      <span class="ico"><svg class="i"><use href="#${x.ico}"/></svg></span>
+      <span class="tx"><strong>${x.t}</strong><small>${x.d}${x.note?` · ${x.note}`:''}</small></span>
+      <span class="pr"><b class="foil">${x.p}</b><span>${x.u}</span></span>
+      <svg class="i"><use href="#i-arrow"/></svg>
+    </button>`).join('');
 
   /* ---------- Sheet ---------- */
   const sheet = $('#sheet');
@@ -890,8 +928,7 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#sClose').focus({preventScroll:true});
   }
   function closeSheet(){ sheet.classList.remove('open'); document.body.style.overflow = ''; }
-  rail.addEventListener('click', e => { const c = e.target.closest('.svc'); if (c) openSheet(services[c.dataset.i], true); });
-  rail.addEventListener('keydown', e => { if ((e.key==='Enter'||e.key===' ') && e.target.classList.contains('svc')){ e.preventDefault(); openSheet(services[e.target.dataset.i], true); } });
+  svcList.addEventListener('click', e => { const c = e.target.closest('.svc-row'); if (c) openSheet(services[c.dataset.i], true); });
   document.querySelectorAll('[data-open]').forEach(b => b.onclick = () => openSheet(info[b.dataset.open], false));
   $('#sClose').onclick = closeSheet;
   sheet.addEventListener('click', e => { if (e.target === sheet) closeSheet(); });
@@ -986,9 +1023,9 @@ document.addEventListener('DOMContentLoaded', () => {
     {id:'d5', t:'لعبة الإعراب: الحصة الثانية', m:'الصف الثامن · لغة عربية · 25 شريحة', s:['s01','s03','s05','s16']}
   ];
   const deckTabs = $('#deckTabs'), stageEl = $('#deckStage');
-  deckTabs.innerHTML = decks.map((d,i) => `<button class="tab" role="tab" data-d="${i}" aria-selected="${i===0}">${d.t}</button>`).join('');
-  let deck = 0, cur = 0, slidesEls = [];
   const src = (d, s, w) => `${W}${d.id}-${s}-${w}.webp`;
+  deckTabs.innerHTML = decks.map((d,i) => `<button class="dtab" role="tab" data-d="${i}" aria-selected="${i===0}"><img src="${src(d,d.s[0],640)}" width="640" height="360" alt="" loading="lazy" decoding="async"><span>${d.t}</span></button>`).join('');
+  let deck = 0, cur = 0, slidesEls = [];
   function layoutDeck(){
     const n = slidesEls.length;
     slidesEls.forEach((el, k) => {
@@ -1010,10 +1047,10 @@ document.addEventListener('DOMContentLoaded', () => {
       sizes="(min-width: 800px) 760px, 92vw" width="1280" height="720" alt="${d.t}: شريحة ${k+1}" ${k ? 'loading="lazy"' : ''} decoding="async"></div>`).join('');
     slidesEls = [...stageEl.children];
     $('#deckTitle').textContent = d.t; $('#deckMeta').textContent = d.m;
-    deckTabs.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', +t.dataset.d === i));
+    deckTabs.querySelectorAll('.dtab').forEach(t => t.setAttribute('aria-selected', +t.dataset.d === i));
     layoutDeck();
   }
-  deckTabs.addEventListener('click', e => { const t = e.target.closest('.tab'); if (t) renderDeck(+t.dataset.d); });
+  deckTabs.addEventListener('click', e => { const t = e.target.closest('.dtab'); if (t) renderDeck(+t.dataset.d); });
   // throw the top slide off to one side; it then tucks in at the back of the stack
   function flick(dir){
     const n = slidesEls.length, top = slidesEls[cur];
@@ -1207,7 +1244,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // past the hero the cap is a faint backdrop: while the page is idle, draw every 3rd frame to save battery
       frame++;
       if (sheet.classList.contains('open') || lb.classList.contains('open')) return;
-      if (p >= 1 && !drag && performance.now() - lastScrollAt > 400 && frame % 3) return;
+      if (p >= 1){ canvas.style.opacity = 0; return; }
       const dt = Math.min(clock.getDelta(), .05), t = clock.elapsedTime;
 
       if (!drag){ vel += ((reduce ? 0 : .005) - vel) * .03; rotY += vel * dt * 60; }
@@ -1231,7 +1268,7 @@ document.addEventListener('DOMContentLoaded', () => {
       r1.rotation.z += .0016; r2.rotation.z -= .0011;
       dust.rotation.y = t*.015 + scrollY0*.0003;
       dust.position.y = scrollY0 * .0012;
-      canvas.style.opacity = (1 - e*.78).toFixed(3);
+      canvas.style.opacity = (1 - e).toFixed(3);
 
       renderer.render(scene, camera);
     }
