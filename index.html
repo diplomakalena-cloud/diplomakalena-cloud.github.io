@@ -16,8 +16,8 @@
 <meta property="og:description" content="بنحمل عنك الدبلوم المهني كامل، من أول مهمة لآخر بحث. 200 دينار على 10 أقساط، بدون دفعة مقدمة.">
 <meta property="og:url" content="https://diplomakalena-cloud.github.io/">
 <meta property="og:image" content="https://diplomakalena-cloud.github.io/og-image.jpg">
-<meta property="og:image:width" content="800">
-<meta property="og:image:height" content="420">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -279,18 +279,29 @@ section.block{padding:88px 0}
 /* ================= Why fixed ================= */
 .why{display:grid;gap:40px;align-items:center}
 .why-vis{display:grid;gap:24px}
-.row-label{font-size:.82rem;color:var(--faint);margin-bottom:8px}
-.vary{display:flex;align-items:flex-end;gap:8px;height:150px;padding:24px 0 22px}
-.vary .bar{flex:1;position:relative;min-height:6px}
-.vary .bar::before{content:"";position:absolute;inset:0;border-radius:8px 8px 3px 3px;background:linear-gradient(180deg,rgba(245,239,224,.22),rgba(245,239,224,.05));border:1px solid rgba(245,239,224,.12);
-  transform-origin:bottom;transform:scaleY(.05);transition:transform 1s var(--ease);transition-delay:inherit}
-.vary .bar b{position:absolute;bottom:100%;inset-inline:0;text-align:center;margin-bottom:4px;font-family:var(--f-display);font-weight:700;font-size:.9rem;color:var(--ink)}
-.vary .bar small{position:absolute;top:100%;inset-inline:0;text-align:center;margin-top:4px;font-size:.66rem;color:var(--faint);white-space:nowrap}
-.in .vary .bar::before{transform:scaleY(1)}
-.steady{display:flex;gap:6px}
-.steady span{flex:1;height:40px;border-radius:8px;background:var(--foil);background-size:300% 100%;color:#2a1c05;font-family:var(--f-display);font-weight:800;font-size:.85rem;display:grid;place-items:center;
-  opacity:0;transform:translateY(10px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
-.in .steady span{opacity:1;transform:none}
+.row-label{font-size:.86rem;font-weight:600;color:var(--ink);margin-bottom:6px}
+.mchart{position:relative}
+.plot{position:relative;height:190px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:end;padding-top:30px;border-bottom:1px solid rgba(245,239,224,.12)}
+.plot .line20{position:absolute;inset-inline:0;bottom:var(--h);border-top:1.5px dashed rgba(243,223,162,.55);pointer-events:none}
+.mgroup{height:100%;display:flex;align-items:flex-end;justify-content:center;gap:6px}
+.mbar{position:relative;flex:0 1 38px;height:var(--h)}
+.mbar::before{content:"";position:absolute;inset:0;border-radius:8px 8px 2px 2px;transform-origin:bottom;transform:scaleY(.04);transition:transform 1s var(--ease);transition-delay:inherit}
+.mbar.solo::before{background:linear-gradient(180deg,rgba(245,239,224,.24),rgba(245,239,224,.06));border:1px solid rgba(245,239,224,.14)}
+.mbar.gold::before{background:var(--foil);background-size:200% 200%;box-shadow:0 8px 24px -8px rgba(191,149,63,.6)}
+.mbar b{position:absolute;bottom:100%;inset-inline:-6px;text-align:center;margin-bottom:4px;font-family:var(--f-display);font-weight:800;font-size:.95rem;line-height:1.2;opacity:0;transition:opacity .5s .6s}
+.mbar.gold b{color:var(--gold-hi)}
+.in .mbar::before{transform:scaleY(1)}
+.in .mbar b{opacity:1}
+.mlabels{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:10px;text-align:center}
+.mlabels span{font-size:.8rem;font-weight:600;line-height:1.5}
+.mlabels small{display:block;font-size:.72rem;font-weight:400;color:var(--faint)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.8rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{width:14px;height:14px;border-radius:4px;flex-shrink:0}
+.legend i.solo{background:rgba(245,239,224,.18);border:1px solid rgba(245,239,224,.2)}
+.legend i.gold{background:var(--foil)}
+.why-total{padding-top:18px;border-top:1px solid rgba(191,149,63,.18);font-size:.95rem;color:var(--muted);line-height:1.8}
+.why-total b{color:var(--ink);font-family:var(--f-display);font-weight:800}
 .why-copy p{color:var(--muted);margin-bottom:12px}
 .why-copy p b{color:var(--ink)}
 
@@ -302,6 +313,8 @@ section.block{padding:88px 0}
   transform:perspective(900px) translateX(var(--tx,0px)) rotateY(var(--ry,0deg)) scale(var(--s,1));opacity:var(--o,1);transition:border-color .3s}
 .svc:hover{border-color:rgba(191,149,63,.45)}
 .svc .ico{margin-bottom:18px}
+.svc-note{display:inline-flex;align-items:flex-start;gap:8px;margin-top:16px;padding:10px 16px;border-radius:14px;font-size:.88rem;color:var(--gold-hi);background:rgba(191,149,63,.08);border:1px solid rgba(191,149,63,.25);text-align:start;max-width:36em}
+.svc-note svg{margin-top:5px;flex-shrink:0;color:var(--gold)}
 .svc h3{font-family:var(--f-display);font-weight:700;font-size:1.2rem;margin-bottom:8px}
 .svc p{font-size:.9rem;color:var(--muted);flex:1}
 .svc .cost{display:flex;align-items:baseline;gap:6px;margin-top:18px;padding-top:16px;border-top:1px solid rgba(191,149,63,.15)}
@@ -623,6 +636,7 @@ footer small{color:var(--faint);font-size:.8rem}
                 <li><svg class="i"><use href="#i-check"/></svg>أداة التقييم</li>
                 <li><svg class="i"><use href="#i-check"/></svg>ملف الإنجاز</li>
                 <li><svg class="i"><use href="#i-check"/></svg>تجهيز التدريس المصغّر</li>
+                <li style="grid-column:1/-1"><svg class="i"><use href="#i-check"/></svg>التسليم على المنصة بمواعيده</li>
               </ul>
             </div>
           </div>
@@ -643,27 +657,26 @@ footer small{color:var(--faint);font-size:.8rem}
         <div class="why-copy rv">
           <div class="kicker">ليش قسط ثابت؟</div>
           <h2 class="h2">الـ20 دينار <span class="foil">مش سعر مهمة</span></h2>
-          <p>هي قسط شهري ثابت. بالدبلوم في مهام سعرها دينارين، وفي مهام بـ15 دينار زي أداة التقييم بلس، والبحث الاستقصائي لحاله بـ45 دينار.</p>
+          <p>هي قسط شهري ثابت. المهمة الأسبوعية سعرها دينارين، بس بالشهر في حوالي 12 مهمة، يعني 24 دينار للمهام الأسبوعية لحالها. وفوقها في أشهر فيها مقال بـ15 دينار، أو أداة التقييم بلس بـ15، أو البحث الاستقصائي بـ45.</p>
           <p><b>بس إنت ما رح تحسب ولا تسأل «هاي بكم؟».</b> بتدفع نفس الـ20 كل شهر، مهما كان الشغل اللي عليك هداك الشهر: مهام أسبوعية بس، أو مقال، أو بحث.</p>
         </div>
         <div class="card why-vis rv" id="whyVis">
-          <div>
-            <div class="row-label">لو بدك تدفع لكل مهمة لحالها</div>
-            <div class="vary">
-              <div class="bar" style="height:5%"><b>2</b><small>مهمة</small></div>
-              <div class="bar" style="height:11%;transition-delay:.08s"><b>5</b><small>عرض</small></div>
-              <div class="bar" style="height:33%;transition-delay:.16s"><b>15</b><small>مقال</small></div>
-              <div class="bar" style="height:100%;transition-delay:.24s"><b>45</b><small>بحث</small></div>
-              <div class="bar" style="height:22%;transition-delay:.32s"><b>10</b><small>ملف الإنجاز</small></div>
-              <div class="bar" style="height:33%;transition-delay:.4s"><b>15</b><small>أداة بلس</small></div>
+          <div class="row-label">لو بدك تدفع لكل مهمة لحالها</div>
+          <div class="mchart" role="img" aria-label="شهر عادي 24 دينار، شهر فيه مقال 39 دينار، شهر فيه البحث الاستقصائي 69 دينار، ومع الباقة 20 دينار كل شهر">
+            <div class="plot">
+              <div class="line20" style="--h:29.0%"></div>
+              <div class="mgroup"><div class="mbar solo" style="--h:34.8%;transition-delay:0.00s"><b>24</b></div><div class="mbar gold" style="--h:29.0%;transition-delay:0.45s"><b>20</b></div></div>
+              <div class="mgroup"><div class="mbar solo" style="--h:56.5%;transition-delay:0.12s"><b>39</b></div><div class="mbar gold" style="--h:29.0%;transition-delay:0.53s"><b>20</b></div></div>
+              <div class="mgroup"><div class="mbar solo" style="--h:100.0%;transition-delay:0.24s"><b>69</b></div><div class="mbar gold" style="--h:29.0%;transition-delay:0.61s"><b>20</b></div></div>
+            </div>
+            <div class="mlabels">
+              <span>شهر عادي<small>12 مهمة × 2</small></span>
+              <span>شهر فيه مقال<small>24 + 15</small></span>
+              <span>شهر فيه البحث الاستقصائي<small>24 + 45</small></span>
             </div>
           </div>
-          <div>
-            <div class="row-label">مع الباقة الشاملة</div>
-            <div class="steady">
-              <span style="transition-delay:.5s">20</span><span style="transition-delay:.56s">20</span><span style="transition-delay:.62s">20</span><span style="transition-delay:.68s">20</span><span style="transition-delay:.74s">20</span><span style="transition-delay:.8s">20</span>
-            </div>
-          </div>
+          <div class="legend"><span><i class="solo"></i>كل مهمة لحالها</span><span><i class="gold"></i>مع الباقة: 20 دينار كل شهر</span></div>
+          <p class="why-total">وعلى مدار الدبلوم كامل: <b>أكثر من 300 دينار</b> لو دفعت كل إشي لحال، مقابل <b class="foil">200</b> بالباقة الشاملة.</p>
         </div>
       </div>
     </div>
@@ -701,6 +714,7 @@ footer small{color:var(--faint);font-size:.8rem}
         <div class="kicker">خدمات منفصلة</div>
         <h2 class="h2">بدك <span class="foil">خدمة وحدة</span> بس؟</h2>
         <p class="sub">إذا مش محتاج الباقة كاملة، اختار اللي بدك ياه. اسحب لتشوف كل الخدمات.</p>
+        <p class="svc-note"><svg class="i"><use href="#i-check"/></svg><span>بالخدمات المنفصلة، فتح المنصة والتسليم عليك. بالباقة الشاملة، حتى التسليم علينا.</span></p>
       </div>
     </div>
     <div class="rail-wrap">
