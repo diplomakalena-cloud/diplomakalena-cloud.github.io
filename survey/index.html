@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#00211C">
+<meta name="robots" content="noindex, nofollow">
+<title>استبانة المشتركين | دبلومك علينا</title>
+<meta name="description" content="استبانة بيانات المشتركين في دبلومك علينا — مرة وحدة بس، حتى ما نرجع نسألك عن نفس البيانات مع كل مهمة.">
+<meta property="og:title" content="استبانة بيانات المشتركين — دبلومك علينا">
+<meta property="og:description" content="5–7 دقائق، ولمرة وحدة بس. هدفنا راحتك وإنجاز المطلوب بأقل تعب ممكن.">
+<meta property="og:image" content="https://diplomakalena-cloud.github.io/og-image.jpg">
+<meta property="og:locale" content="ar_JO">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ================= Tokens (same as the main site) ================= */
+:root{
+  --forest:#00211C;
+  --green:#004D40;
+  --moss:#0A3A32;
+  --gold:#BF953F;
+  --gold-hi:#F3DFA2;
+  --ink:#F5EFE0;
+  --muted:rgba(245,239,224,.68);
+  --faint:rgba(245,239,224,.45);
+  --line:rgba(191,149,63,.24);
+  --glass:rgba(0,77,64,.28);
+  --field:rgba(0,20,17,.45);
+  --field-line:rgba(245,239,224,.14);
+  --error:#FFB4A2;
+  --foil:linear-gradient(115deg,#AA771C 0%,#BF953F 20%,#FCF6BA 42%,#B38728 60%,#FBF5B7 80%,#AA771C 100%);
+  --f-display:'Alexandria',sans-serif;
+  --f-body:'IBM Plex Sans Arabic',sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --r-lg:28px; --r-md:20px; --r-sm:14px;
+  --gutter:16px;
+  color-scheme:dark;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--f-body);color:var(--ink);line-height:1.8;font-size:16px;
+  background:var(--forest);
+  background-image:
+    radial-gradient(120% 70% at 85% -10%, rgba(0,77,64,.85), transparent 60%),
+    radial-gradient(90% 60% at 0% 110%, rgba(0,77,64,.55), transparent 60%);
+  background-attachment:fixed;
+  min-height:100vh;overflow-x:hidden;
+}
+img{max-width:100%;display:block}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px;border-radius:8px}
+svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+[hidden]{display:none!important}
+.foil{background:var(--foil);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--gold)}
+@media (prefers-reduced-motion:no-preference){ .foil{animation:foil 7s linear infinite} }
+@keyframes foil{to{background-position:-220% 0}}
+
+.wrap{width:100%;max-width:680px;margin:0 auto;padding:0 var(--gutter)}
+
+/* ================= Test-mode banner ================= */
+.test-banner{position:sticky;top:0;z-index:60;background:#5A2A12;color:#FFE3C7;font-size:.86rem;text-align:center;padding:8px var(--gutter);line-height:1.6}
+
+/* ================= Header ================= */
+.top{padding:28px 0 8px;text-align:center}
+.top img{width:132px;height:auto;margin:0 auto}
+
+/* ================= Screens ================= */
+.screen{padding:12px 0 140px}
+@media (prefers-reduced-motion:no-preference){
+  .enter{animation:enter .55s var(--ease) both}
+  @keyframes enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+}
+
+.card{background:var(--glass);border:1px solid var(--line);border-radius:var(--r-md);padding:22px 18px;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+@media (min-width:560px){ .card{padding:28px 28px} }
+
+/* Intro */
+.kicker{display:inline-block;font-size:.8rem;font-weight:600;letter-spacing:.02em;color:var(--gold-hi);
+  border:1px solid var(--line);border-radius:99px;padding:3px 14px;margin-bottom:14px}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(1.55rem,6vw,2.1rem);line-height:1.45;margin-bottom:14px}
+.intro p{color:var(--muted);margin-bottom:10px}
+.intro .greet{color:var(--ink);font-weight:600}
+.note{display:flex;gap:12px;align-items:flex-start;margin:18px 0;padding:14px 16px;border-radius:var(--r-sm);
+  background:rgba(191,149,63,.1);border:1px solid rgba(191,149,63,.3)}
+.note svg{font-size:1.4rem;color:var(--gold-hi);margin-top:3px}
+.note p{margin:0;color:var(--ink);font-size:.95rem}
+.note b{color:var(--gold-hi)}
+.intro .aim{color:var(--ink);font-weight:500}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 22px}
+.meta-row span{display:inline-flex;align-items:center;gap:6px;font-size:.84rem;color:var(--muted);
+  background:rgba(0,20,17,.35);border:1px solid var(--field-line);border-radius:99px;padding:4px 12px}
+.meta-row svg{color:var(--gold)}
+.done-note{font-size:.88rem;color:var(--gold-hi);margin-bottom:14px}
+.link-btn{display:block;margin:14px auto 0;font-size:.88rem;color:var(--faint);text-decoration:underline;text-underline-offset:4px}
+.link-btn:hover{color:var(--muted)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 26px;border-radius:99px;
+  font-family:var(--f-display);font-weight:700;font-size:1rem;transition:transform .35s var(--ease),box-shadow .35s,background .3s,opacity .3s}
+.btn-gold{background:var(--foil);background-size:200% 100%;color:#1d1406;box-shadow:0 10px 30px -8px rgba(191,149,63,.55),inset 0 1px 0 rgba(255,255,255,.5)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 18px 40px -10px rgba(191,149,63,.7),inset 0 1px 0 rgba(255,255,255,.5)}
+.btn-ghost{border:1px solid rgba(245,239,224,.22);background:rgba(0,33,28,.5)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold-hi)}
+.btn[disabled]{opacity:.6;pointer-events:none}
+.btn-block{width:100%}
+
+/* ================= Progress ================= */
+.progress{margin:6px 0 18px}
+.progress-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:8px}
+.progress-head .step{font-size:.84rem;color:var(--gold-hi);font-weight:600;white-space:nowrap}
+.progress-head h2{font-family:var(--f-display);font-weight:700;font-size:1.15rem;line-height:1.5}
+.bar{height:6px;border-radius:6px;background:rgba(245,239,224,.1);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--foil);border-radius:6px;transition:width .6s var(--ease)}
+.dots{display:flex;gap:6px;margin-top:10px}
+.dots span{flex:1;height:3px;border-radius:3px;background:rgba(245,239,224,.12);transition:background .4s}
+.dots span.on{background:var(--gold)}
+
+/* ================= Questions ================= */
+.q{margin-bottom:14px;scroll-margin-top:24px}
+.q.card{padding:20px 16px}
+@media (min-width:560px){ .q.card{padding:24px 24px} }
+.q-label{display:flex;gap:10px;align-items:flex-start;font-weight:600;font-size:1.02rem;line-height:1.7;margin-bottom:4px}
+.q-num{flex-shrink:0;display:inline-grid;place-items:center;min-width:28px;height:28px;padding:0 6px;border-radius:9px;margin-top:1px;
+  font-family:var(--f-display);font-size:.8rem;font-weight:700;color:#1d1406;background:var(--foil);background-size:200% 100%}
+.req{color:var(--gold);margin-inline-start:2px}
+.q-hint{color:var(--muted);font-size:.9rem;margin:2px 0 0;padding-inline-start:38px}
+.q-body{margin-top:14px}
+
+input[type=text],input[type=tel],select{
+  width:100%;min-height:54px;padding:12px 16px;border-radius:var(--r-sm);
+  background:var(--field);border:1px solid var(--field-line);color:var(--ink);
+  font:inherit;font-size:1rem;transition:border-color .25s,box-shadow .25s,background .25s;
+  -webkit-appearance:none;appearance:none}
+input::placeholder{color:var(--faint)}
+input:focus,select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(191,149,63,.18);background:rgba(0,20,17,.6)}
+input.ltr{direction:ltr;text-align:right}
+select{cursor:pointer;padding-inline-start:44px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23BF953F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-size:20px;background-position:left 16px center}
+select:disabled{opacity:.55;cursor:not-allowed}
+select option{background:#0A3A32;color:var(--ink)}
+
+/* Option tiles (radio + checkbox) */
+.opts{display:grid;gap:10px}
+.opts.g2{grid-template-columns:1fr}
+.opts.chips{grid-template-columns:repeat(3,1fr)}
+@media (min-width:480px){ .opts.g2{grid-template-columns:1fr 1fr} }
+.opt{position:relative;display:flex;align-items:center;gap:12px;min-height:52px;padding:12px 14px;border-radius:var(--r-sm);
+  background:var(--field);border:1px solid var(--field-line);cursor:pointer;line-height:1.55;
+  transition:border-color .25s,background .25s,transform .2s}
+.opt:hover{border-color:rgba(191,149,63,.45)}
+.opt:active{transform:scale(.99)}
+.opt input{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px}
+.opt .mark{flex-shrink:0;width:22px;height:22px;border:1.6px solid rgba(245,239,224,.4);display:grid;place-items:center;transition:all .25s}
+.opt[data-kind=radio] .mark{border-radius:50%}
+.opt[data-kind=check] .mark{border-radius:7px}
+.opt .mark svg{width:14px;height:14px;stroke:#1d1406;stroke-width:3;opacity:0;transform:scale(.6);transition:all .25s var(--ease)}
+.opt.sel{border-color:var(--gold);background:rgba(191,149,63,.13)}
+.opt.sel .mark{background:var(--foil);background-size:200% 100%;border-color:transparent}
+.opt.sel .mark svg{opacity:1;transform:none}
+.opt:has(input:focus-visible){outline:2px solid var(--gold-hi);outline-offset:2px}
+.opt small{display:block;color:var(--muted);font-size:.84rem}
+.chips .opt{justify-content:center;text-align:center;padding:10px 6px;min-height:50px;font-size:.95rem}
+.chips .opt .mark{display:none}
+.chips .opt.sel{color:var(--gold-hi);font-weight:600}
+.other-input{margin-top:10px}
+.count{font-size:.82rem;color:var(--faint);margin-top:10px}
+
+/* Rich choice cards (Q21–22) */
+.opt.rich{align-items:flex-start;padding:16px 16px}
+.opt.rich .mark{margin-top:3px}
+.rich-title{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-weight:700;font-size:1rem;color:var(--ink)}
+.rich-desc{display:block;margin-top:4px;color:var(--muted);font-size:.92rem;line-height:1.75}
+.badge{font-size:.72rem;font-weight:700;padding:2px 10px;border-radius:99px;color:#1d1406;background:var(--foil);background-size:200% 100%}
+.opt-num{font-size:.78rem;color:var(--gold-hi);font-weight:600;display:block;margin-bottom:2px}
+.context{margin-top:12px;padding:12px 14px;border-radius:var(--r-sm);background:rgba(0,20,17,.3);border-inline-start:3px solid var(--gold);color:var(--muted);font-size:.92rem}
+.context b{color:var(--ink)}
+
+/* Errors */
+.err{display:flex;align-items:center;gap:8px;margin-top:10px;color:var(--error);font-size:.9rem;font-weight:500}
+.q.invalid{border-color:rgba(255,180,162,.55)}
+.q.invalid input,.q.invalid select{border-color:rgba(255,180,162,.5)}
+@media (prefers-reduced-motion:no-preference){
+  .shake{animation:shake .4s}
+  @keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+}
+
+/* Honeypot */
+.hp{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;opacity:0;pointer-events:none}
+
+/* ================= Bottom nav ================= */
+.navbar{position:fixed;bottom:0;inset-inline:0;z-index:40;padding:12px 0 calc(12px + env(safe-area-inset-bottom));
+  background:rgba(0,33,28,.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid rgba(191,149,63,.16)}
+.navbar .wrap{display:flex;gap:10px}
+.navbar .btn-gold{flex:1}
+.navbar .btn-ghost{flex:0 0 auto;padding:0 20px}
+.saved{text-align:center;font-size:.76rem;color:var(--faint);margin-top:6px;min-height:1.2em;transition:opacity .4s}
+
+/* ================= Thank you / status ================= */
+.final{text-align:center;padding-top:6px}
+.final .seal{width:84px;height:84px;margin:6px auto 18px;border-radius:50%;display:grid;place-items:center;
+  background:var(--foil);background-size:200% 100%;box-shadow:0 18px 50px -12px rgba(191,149,63,.6)}
+.final .seal svg{width:40px;height:40px;stroke:#1d1406;stroke-width:2.6}
+.final .seal.wait{background:rgba(191,149,63,.14);border:1px solid var(--line);box-shadow:none}
+.final .seal.wait svg{stroke:var(--gold-hi);stroke-width:1.8}
+@media (prefers-reduced-motion:no-preference){
+  .final .seal{animation:pop .7s var(--ease) both}
+  @keyframes pop{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
+  .final .seal.wait svg{animation:spin 1.4s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+}
+.final h2{font-family:var(--f-display);font-weight:800;font-size:1.6rem;margin-bottom:10px}
+.final p{color:var(--muted);margin-bottom:10px}
+.final .tagline{margin-top:22px;font-family:var(--f-display);font-weight:800;font-size:clamp(1.15rem,5vw,1.4rem);line-height:1.6}
+.final .actions{display:flex;flex-direction:column;gap:10px;margin-top:22px}
+.wa{display:inline-flex;align-items:center;gap:8px;justify-content:center;color:var(--muted);font-size:.9rem;margin-top:18px}
+.wa:hover{color:var(--gold-hi)}
+.wa svg{fill:currentColor;stroke:none;font-size:1.1rem}
+
+footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gutter) 24px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-once" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></symbol>
+  <symbol id="i-sync" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.42.25-.69.25-1.29.18-1.41-.08-.13-.28-.2-.57-.35M12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88a9.82 9.82 0 0 1 9.88 9.89c0 5.45-4.44 9.88-9.88 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.9a11.82 11.82 0 0 0-3.48-8.41z"/></symbol>
+</svg>
+
+<div class="test-banner" id="testBanner" hidden>وضع التجربة: الاستبانة مش مربوطة بجدول البيانات لسا، فالإجابات ما رح تنحفظ. لا تبعث الرابط للمعلمين قبل ما تربطها.</div>
+
+<header class="top wrap">
+  <a href="../" aria-label="دبلومك علينا"><img src="../logo.webp" alt="دبلومك علينا" width="1291" height="775"></a>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ Intro ============ -->
+  <section class="screen intro" id="intro">
+    <div class="card enter">
+      <span class="kicker">استبانة بيانات المشتركين</span>
+      <h1>خلّينا نتعرّف عليك <span class="foil">مرة وحدة بس</span></h1>
+      <p class="greet">عزيزي المعلم، عزيزتي المعلمة،</p>
+      <p>حتى نقدر نساعدك طوال فترة الدبلوم بأفضل طريقة، وبأقل جهد ممكن منك، يرجى تعبئة الاستبانة التالية بدقة.</p>
+      <div class="note">
+        <svg class="i"><use href="#i-clock"/></svg>
+        <p><b>ملاحظة مهمة:</b> الاستبانة طويلة شوي، وتستغرق تعبئتها حوالي 5–7 دقائق، لكنها لمرة واحدة فقط. جمعنا فيها معظم المعلومات اللي بنحتاجها طوال الدبلوم، حتى ما نرجع نسألك عن البيانات نفسها مع كل مهمة.</p>
+      </div>
+      <p class="aim">هدفنا راحتك، وإنجاز المطلوب بأقل تعب ممكن.</p>
+      <div class="meta-row">
+        <span><svg class="i"><use href="#i-clock"/></svg>5–7 دقائق</span>
+        <span><svg class="i"><use href="#i-once"/></svg>5 أقسام قصيرة</span>
+        <span><svg class="i"><use href="#i-lock"/></svg>إجاباتك بتنحفظ أول بأول</span>
+      </div>
+      <p class="done-note" id="doneNote" hidden>إنت عبّيت الاستبانة قبل هيك، شكراً إلك. إذا بدك تعدّل شي، عبّيها من جديد وبنعتمد آخر نسخة.</p>
+      <button class="btn btn-gold btn-block" id="startBtn" type="button">يلا نبلّش<svg class="i"><use href="#i-next"/></svg></button>
+      <button class="link-btn" id="restartBtn" type="button" hidden>ابدأ من جديد</button>
+    </div>
+  </section>
+
+  <!-- ============ Form ============ -->
+  <form class="screen" id="form" novalidate hidden>
+    <div class="progress" aria-live="polite">
+      <div class="progress-head">
+        <h2 id="secTitle"></h2>
+        <span class="step" id="secStep"></span>
+      </div>
+      <div class="bar"><i id="barFill"></i></div>
+      <div class="dots" id="dots"></div>
+    </div>
+    <div id="sectionBody"></div>
+    <div class="hp" aria-hidden="true"><label>اتركه فارغاً<input type="text" id="hp" tabindex="-1" autocomplete="off"></label></div>
+  </form>
+
+  <!-- ============ Final ============ -->
+  <section class="screen final" id="final" hidden></section>
+
+</main>
+
+<nav class="navbar" id="navbar" hidden>
+  <div class="wrap">
+    <button class="btn btn-ghost" id="prevBtn" type="button"><svg class="i"><use href="#i-prev"/></svg>السابق</button>
+    <button class="btn btn-gold" id="nextBtn" type="button"><span>التالي</span><svg class="i"><use href="#i-next"/></svg></button>
+  </div>
+  <div class="saved" id="savedNote"></div>
+</nav>
+
+<footer>دبلومك علينا · إنت ركّز على صفك، والدبلوم علينا</footer>
+
+<script>
+/* =====================================================================
+   رابط Google Apps Script — الصقه هون بعد ما تنشر السكربت (انظر SETUP.md)
+   ===================================================================== */
+const ENDPOINT = 'https://script.google.com/macros/s/AKfycbwREXec1Y0LacJqrvVdRdL9Bv7q80gekYii4hz1QL61npauzUrZ9O4Mea7VjqDavcBh/exec';
+
+const WHATSAPP = 'https://wa.me/962779283635';
+const KEY_DRAFT = 'dk-survey-draft-v1';
+const KEY_OUTBOX = 'dk-survey-outbox-v1';
+const KEY_DONE = 'dk-survey-done-v1';
+
+const GOVERNORATES = ['العاصمة (عمّان)','إربد','الزرقاء','البلقاء','مادبا','المفرق','جرش','عجلون','الكرك','الطفيلة','معان','العقبة'];
+const GRADES = ['الرابع','الخامس','السادس','السابع','الثامن','التاسع','العاشر','الحادي عشر','الثاني عشر (التوجيهي)'];
+const OTHER = 'أخرى';
+
+/* ---------- Questions ----------
+   col: the column header in the Google Sheet. */
+const SECTIONS = [
+  { title:'بيانات المعلم', qs:[
+    { id:'name', n:1, label:'الاسم الرباعي', col:'الاسم الرباعي', type:'text', autocomplete:'name', placeholder:'مثال: محمد أحمد علي حسن',
+      check:v => v.trim().split(/\s+/).length >= 3 || 'اكتب الاسم رباعي لو سمحت' },
+    { id:'ministry', n:2, label:'الرقم الوزاري', col:'الرقم الوزاري', type:'text', inputmode:'numeric', ltr:true, digits:true,
+      check:v => /^\d{3,15}$/.test(v) || 'الرقم الوزاري لازم يكون أرقام بس' },
+    { id:'phone', n:3, label:'رقم الهاتف (واتساب)', col:'رقم الهاتف (واتساب)', type:'tel', inputmode:'tel', autocomplete:'tel', ltr:true, digits:true, placeholder:'07XXXXXXXX',
+      check:v => !!normPhone(v) || 'اكتب رقم أردني من 10 أرقام يبدأ بـ 07',
+      out:v => normPhone(v) },
+    { id:'major', n:4, label:'التخصص الجامعي', col:'التخصص الجامعي', type:'text', placeholder:'مثال: لغة عربية وآدابها' },
+    { id:'years', n:5, label:'عدد سنوات الخبرة في التدريس', col:'سنوات الخبرة', type:'text', inputmode:'numeric', ltr:true, digits:true, placeholder:'مثال: 4',
+      hint:'إذا أقل من سنة اكتب 0',
+      check:v => (/^\d{1,2}$/.test(v) && +v <= 50) || 'اكتب عدد السنوات بالأرقام' },
+    { id:'role', n:6, label:'الصفة', col:'الصفة', type:'radio', layout:'g2', options:['المعلم الطالب','المعلمة الطالبة'] },
+  ]},
+  { title:'معلومات المدرسة', qs:[
+    { id:'school', n:7, label:'اسم المدرسة كاملًا', col:'اسم المدرسة', type:'text', placeholder:'مثال: مدرسة الشهيد ... الثانوية للبنين' },
+    { id:'gov', n:8, label:'المحافظة', col:'المحافظة', type:'select', options:GOVERNORATES, placeholder:'اختر المحافظة' },
+    { id:'directorate', n:9, label:'المديرية أو اللواء الذي تتبعه المدرسة', col:'المديرية / اللواء', type:'text', placeholder:'مثال: لواء ماركا' },
+    { id:'area', n:10, label:'طبيعة المنطقة التي تقع فيها المدرسة', col:'طبيعة المنطقة', type:'radio', layout:'g2',
+      options:['ريفية (قرية)','حضرية (مدينة)','ضواحي مدينة','بادية','مخيم'] },
+    { id:'schoolType', n:11, label:'نوع المدرسة', col:'نوع المدرسة', type:'radio', layout:'g2', other:true,
+      options:['حكومية','خاصة','تابعة لوكالة الغوث',OTHER] },
+    { id:'size', n:12, label:'حجم المدرسة من حيث عدد الطلاب', col:'حجم المدرسة', type:'radio',
+      options:['صغيرة (أقل من 300 طالب)','متوسطة (من 300 إلى 700 طالب)','كبيرة (أكثر من 700 طالب)','لا أعرف العدد التقريبي'] },
+  ]},
+  { title:'التدريس والبيئة الصفية', qs:[
+    { id:'subjects', n:13, label:'ما المبحث أو المباحث التي تدرّسها حاليًا؟', col:'المباحث', type:'check', layout:'g2', other:true,
+      hint:'يمكنك اختيار أكثر من مبحث.',
+      options:['اللغة العربية','اللغة الإنجليزية','الرياضيات','العلوم','الفيزياء','الكيمياء','العلوم الحياتية','علوم الأرض والبيئة',
+        'التربية الإسلامية','الدراسات الاجتماعية','التاريخ','تاريخ الأردن','الجغرافيا','التربية الوطنية والمدنية','الثقافة المالية',
+        'المهارات الرقمية','الحاسوب','التربية المهنية','التربية الرياضية','التربية الفنية والموسيقية والمسرحية','الفلسفة',
+        'علوم النفس والاجتماع','مباحث التعليم المهني BTEC',OTHER] },
+    { id:'grades', n:14, label:'ما الصفوف التي تدرّسها حاليًا؟', col:'الصفوف', type:'check', layout:'chips',
+      hint:'يمكنك اختيار أكثر من صف.', options:GRADES },
+    { id:'prefGrade', n:15, label:'ما الصف الذي تفضّل أن نعتمده في المهام التطبيقية والبحث الاستقصائي؟', col:'الصف المعتمد للمهام', type:'select',
+      hint:'اختر الصف الأنسب لك من الصفوف التي تدرّسها، وسنعتمده في إعداد المهام كلما كان ذلك مناسبًا، حتى لا نضطر إلى سؤالك في كل مرة.',
+      options:() => GRADES.filter(g => (state.grades || []).includes(g)),
+      placeholder:'اختر الصف', emptyPlaceholder:'اختر صفوفك في السؤال السابق أولًا' },
+    { id:'classSize', n:16, label:'ما متوسط عدد الطلاب في الشعبة الواحدة؟', col:'متوسط عدد الطلاب في الشعبة', type:'text', inputmode:'numeric', ltr:true, digits:true, placeholder:'مثال: 32',
+      check:v => (/^\d{1,3}$/.test(v) && +v >= 1 && +v <= 150) || 'اكتب العدد بالأرقام' },
+    { id:'roomSpace', n:17, label:'كيف تصف مساحة الغرف الصفية التي تدرّس فيها؟', col:'مساحة الغرف الصفية', type:'radio',
+      options:[
+        {v:'ضيقة', d:'يصعب تنفيذ الأنشطة الجماعية فيها'},
+        {v:'متوسطة', d:'تسمح بالعمل الثنائي والمجموعات الصغيرة'},
+        {v:'واسعة', d:'تسمح بالحركة وتنفيذ الأنشطة بسهولة'},
+        {v:'تختلف المساحة من شعبة إلى أخرى'} ] },
+    { id:'level', n:18, label:'كيف تصف المستوى التحصيلي العام لطلابك؟', col:'المستوى التحصيلي', type:'radio', layout:'g2',
+      options:['منخفض','متوسط','مرتفع',{v:'متفاوت', d:'توجد مستويات مختلفة داخل الصف'}] },
+    { id:'equipment', n:19, label:'ما الوسائل والتجهيزات المتاحة لك في الغرفة الصفية؟', col:'التجهيزات المتاحة', type:'check', layout:'g2',
+      hint:'يمكنك اختيار أكثر من إجابة، حتى نراعي الإمكانات المتوفرة عند إعداد خطط الدروس والأنشطة.',
+      exclusive:'لا تتوفر تجهيزات إضافية',
+      options:['جهاز عرض (بروجكتور)','جهاز حاسوب أو لابتوب','إنترنت داخل الصف','سبورة عادية','سبورة ذكية','مختبر حاسوب','طابعة',
+        'سماعات أو أجهزة صوت','أدوات ووسائل تعليمية','لا تتوفر تجهيزات إضافية'] },
+  ]},
+  { title:'معلومات الدبلوم', qs:[
+    { id:'mentor', n:20, label:'ما اسم المرشد الأكاديمي في الدبلوم؟', col:'المرشد الأكاديمي', type:'text', placeholder:'مثال: د. ...',
+      hint:'المقصود الدكتور أو الدكتورة المسؤول(ة) عن مجموعتك في الدبلوم، وليس المرشد التربوي في المدرسة.' },
+  ]},
+  { title:'التوثيق والتعاون مع الزملاء', qs:[
+    { id:'docs', n:21, label:'بعض مهام الدبلوم تحتاج إلى صور أو فيديوهات لتوثيق الأنشطة الصفية. كيف تفضّل التعامل معها؟', col:'تفضيل التوثيق (صور/فيديو)', type:'rich',
+      hint:'اختر الطريقة الأريح لك:',
+      options:[
+        { v:'تواصل معي عند الحاجة', tag:'الخيار الأول',
+          d:'كلما ظهرت مهمة تحتاج صورًا أو فيديوهات، تواصل معي وأخبرني بالمطلوب، وسأقرر وقتها إن كنت سأرسل لك التوثيق أو لا.' },
+        { v:'لا أريد تقديم صور أو فيديوهات', tag:'الخيار الثاني', badge:'الخيار الأريح',
+          d:'أفضّل إراحة نفسي من موضوع التصوير والتوثيق طوال الدبلوم. عدم تقديم الصور أو الفيديوهات لا يؤثر بحد ذاته في النجاح بالدبلوم، لكنه قد يؤثر في علامة بعض المهام بحسب متطلباتها.' },
+        { v:'سأرسل الصور والفيديوهات المطلوبة', tag:'الخيار الثالث',
+          d:'أي مهمة تحتاج إلى صور أو فيديوهات، تواصل معي وأخبرني بالمطلوب، وسأرسل لك التوثيق المناسب.' } ] },
+    { id:'peer', n:22, label:'بعض مهام الدبلوم تتطلب العمل مع زميل وتبادل التغذية الراجعة. كيف تفضّل التعامل معها؟', col:'تفضيل العمل مع الزميل', type:'rich',
+      context:'<b>للتوضيح:</b> قد يُطلب منك إعداد مهمة، ثم عرضها على زميل في مجموعتك ليقدم لك تغذية راجعة، وفي المقابل تطّلع أنت على مهمته وتعلّق عليها.',
+      hint:'اختر الطريقة التي تناسبك:',
+      options:[
+        { v:'الطريقة الأريح والأقل تعبًا', tag:'الخيار الأول', badge:'الأريح',
+          d:'أتفق مع زميلي على أن يُجهّز كل واحد منا مهمته كاملة، بما فيها التعليق أو التغذية الراجعة المطلوبة؛ يعني هو يُجهّز مهمته ويكتب التعليق عليها، وأنا أُجهّز مهمتي وأكتب التعليق عليها، دون الحاجة إلى تبادل الملفات أو التعليقات بيننا.' },
+        { v:'نلتزم بخطوات التبادل في كل مهمة', tag:'الخيار الثاني',
+          d:'بعد تجهيز مهمتي، ترسلونها لي حتى أبعثها لزميلي ويقدم تغذيته الراجعة، ويبعث لي مهمته حتى أراجعها وأعلّق عليها بمساعدتكم، ثم أرسل لكم ما يلزم لاستكمال المهمة.' } ] },
+  ]},
+];
+
+/* ---------- Storage (never let it break the page) ---------- */
+const store = {
+  get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+};
+
+/* ---------- Helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const optV = o => typeof o === 'string' ? o : o.v;
+const toLatinDigits = s => s.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+function normPhone(v){
+  const d = toLatinDigits(v).replace(/[\s\-()]/g,'');
+  const m = d.match(/^(?:\+?962|00962|0)?(7[789]\d{7})$/);
+  return m ? '0' + m[1] : '';
+}
+function uid(){
+  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+}
+
+/* ---------- State ---------- */
+const draft = store.get(KEY_DRAFT) || {};
+let state = draft.answers || {};
+let step = Number.isInteger(draft.step) ? Math.min(draft.step, SECTIONS.length - 1) : 0;
+let savedTimer;
+
+function saveDraft(){
+  const ok = store.set(KEY_DRAFT, { answers: state, step, at: Date.now() });
+  const note = $('#savedNote');
+  if (!ok) { note.textContent = ''; return; }
+  note.textContent = 'إجاباتك محفوظة على جهازك';
+  note.style.opacity = 1;
+  clearTimeout(savedTimer);
+  savedTimer = setTimeout(() => note.style.opacity = .55, 1600);
+}
+
+/* ---------- Rendering ---------- */
+function renderQuestion(q){
+  const hint = q.hint ? `<p class="q-hint">${esc(q.hint)}</p>` : '';
+  const ctx = q.context ? `<div class="context">${q.context}</div>` : '';
+  let body = '';
+  const val = state[q.id];
+
+  if (q.type === 'text' || q.type === 'tel') {
+    body = `<input type="${q.type}" id="f-${q.id}" name="${q.id}" value="${esc(val || '')}"
+      ${q.inputmode ? `inputmode="${q.inputmode}"` : ''} ${q.autocomplete ? `autocomplete="${q.autocomplete}"` : 'autocomplete="off"'}
+      ${q.placeholder ? `placeholder="${esc(q.placeholder)}"` : ''} class="${q.ltr ? 'ltr' : ''}" aria-describedby="e-${q.id}">`;
+  }
+  else if (q.type === 'select') {
+    const opts = typeof q.options === 'function' ? q.options() : q.options;
+    const empty = !opts.length;
+    body = `<select id="f-${q.id}" name="${q.id}" ${empty ? 'disabled' : ''} aria-describedby="e-${q.id}">
+      <option value="">${esc(empty && q.emptyPlaceholder ? q.emptyPlaceholder : q.placeholder)}</option>
+      ${opts.map(o => `<option ${o === val ? 'selected' : ''}>${esc(o)}</option>`).join('')}
+    </select>`;
+  }
+  else if (q.type === 'radio' || q.type === 'check' || q.type === 'rich') {
+    const kind = q.type === 'check' ? 'check' : 'radio';
+    const sel = kind === 'check' ? (val || []) : [val];
+    body = `<div class="opts ${q.layout || ''}" role="${kind === 'check' ? 'group' : 'radiogroup'}" aria-labelledby="l-${q.id}">` +
+      q.options.map(o => {
+        const v = optV(o), on = sel.includes(v);
+        const inner = q.type === 'rich'
+          ? `<span><span class="opt-num">${esc(o.tag)}</span><span class="rich-title">${esc(v)}${o.badge ? `<span class="badge">${esc(o.badge)}</span>` : ''}</span><span class="rich-desc">${esc(o.d)}</span></span>`
+          : `<span>${esc(v)}${o.d ? `<small>${esc(o.d)}</small>` : ''}</span>`;
+        return `<label class="opt ${q.type === 'rich' ? 'rich' : ''} ${on ? 'sel' : ''}" data-kind="${kind}">
+          <input type="${kind === 'check' ? 'checkbox' : 'radio'}" name="${q.id}" value="${esc(v)}" ${on ? 'checked' : ''}>
+          <span class="mark"><svg class="i"><use href="#i-check"/></svg></span>${inner}</label>`;
+      }).join('') + `</div>`;
+    if (q.other) {
+      const showOther = sel.includes(OTHER);
+      body += `<input type="text" class="other-input" id="o-${q.id}" placeholder="حدّد لو سمحت…" value="${esc(state[q.id + '_other'] || '')}" ${showOther ? '' : 'hidden'} autocomplete="off">`;
+    }
+    if (kind === 'check' && q.layout === 'chips') body += `<p class="count" id="c-${q.id}"></p>`;
+  }
+
+  return `<div class="q card" id="q-${q.id}" data-q="${q.id}">
+    <div class="q-label" id="l-${q.id}"><span class="q-num">${q.n}</span><span>${esc(q.label)}<span class="req" aria-hidden="true">*</span></span></div>
+    ${hint}${ctx}
+    <div class="q-body">${body}</div>
+    <div class="err" id="e-${q.id}" role="alert" hidden><svg class="i"><use href="#i-alert"/></svg><span></span></div>
+  </div>`;
+}
+
+function renderStep(){
+  const sec = SECTIONS[step];
+  $('#secTitle').textContent = sec.title;
+  $('#secStep').textContent = `القسم ${step + 1} من ${SECTIONS.length}`;
+  $('#barFill').style.width = ((step + 1) / SECTIONS.length * 100) + '%';
+  $('#dots').innerHTML = SECTIONS.map((_, i) => `<span class="${i <= step ? 'on' : ''}"></span>`).join('');
+  const body = $('#sectionBody');
+  body.innerHTML = sec.qs.map(renderQuestion).join('');
+  body.classList.remove('enter'); void body.offsetWidth; body.classList.add('enter');
+  $('#prevBtn').hidden = step === 0;
+  const last = step === SECTIONS.length - 1;
+  $('#nextBtn span').textContent = last ? 'إرسال الإجابات' : 'التالي';
+  updateCounts();
+  window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+}
+
+function updateCounts(){
+  const c = document.getElementById('c-grades');
+  if (c) { const n = (state.grades || []).length; c.textContent = n ? `اخترت ${n} ${n === 1 ? 'صف' : n === 2 ? 'صفين' : n <= 10 ? 'صفوف' : 'صف'}` : ''; }
+}
+
+function refreshPrefGrade(){
+  const q = SECTIONS[2].qs.find(x => x.id === 'prefGrade');
+  const opts = q.options();
+  if (state.prefGrade && !opts.includes(state.prefGrade)) delete state.prefGrade;
+  if (!state.prefGrade && opts.length === 1) state.prefGrade = opts[0];
+  const holder = document.getElementById('q-prefGrade');
+  if (!holder) return;
+  const wasInvalid = holder.classList.contains('invalid');
+  holder.outerHTML = renderQuestion(q);
+  if (wasInvalid && !state.prefGrade) validateQ(q);
+}
+
+/* ---------- Input handling ---------- */
+const findQ = id => SECTIONS.flatMap(s => s.qs).find(q => q.id === id);
+
+$('#sectionBody').addEventListener('input', e => {
+  const t = e.target;
+  if (t.classList.contains('other-input')) {
+    const id = t.id.slice(2); state[id + '_other'] = t.value; clearErr(id); saveDraft(); return;
+  }
+  const q = findQ(t.name); if (!q) return;
+  if (q.type === 'text' || q.type === 'tel') {
+    if (q.digits) { const fixed = toLatinDigits(t.value); if (fixed !== t.value) t.value = fixed; }
+    state[q.id] = t.value; clearErr(q.id); saveDraft();
+  }
+});
+
+$('#sectionBody').addEventListener('change', e => {
+  const t = e.target, q = findQ(t.name); if (!q) return;
+  if (q.type === 'select') { state[q.id] = t.value; }
+  else if (t.type === 'radio') {
+    state[q.id] = t.value;
+    t.closest('.opts').querySelectorAll('.opt').forEach(l => l.classList.toggle('sel', l.querySelector('input').checked));
+  }
+  else if (t.type === 'checkbox') {
+    let arr = state[q.id] || [];
+    arr = t.checked ? [...arr, t.value] : arr.filter(x => x !== t.value);
+    if (q.exclusive && t.checked) arr = t.value === q.exclusive ? [q.exclusive] : arr.filter(x => x !== q.exclusive);
+    arr = q.options.map(optV).filter(v => arr.includes(v)); // keep original order
+    state[q.id] = arr;
+    t.closest('.opts').querySelectorAll('.opt').forEach(l => {
+      const inp = l.querySelector('input'); inp.checked = arr.includes(inp.value); l.classList.toggle('sel', inp.checked);
+    });
+    if (q.id === 'grades') { updateCounts(); refreshPrefGrade(); }
+  }
+  if (q.other) {
+    const sel = q.type === 'check' ? (state[q.id] || []) : [state[q.id]];
+    const o = document.getElementById('o-' + q.id);
+    const show = sel.includes(OTHER);
+    if (o.hidden && show) { o.hidden = false; o.focus(); } else if (!show) o.hidden = true;
+  }
+  clearErr(q.id); saveDraft();
+});
+
+/* ---------- Validation ---------- */
+function clearErr(id){
+  const box = document.getElementById('q-' + id); if (!box) return;
+  box.classList.remove('invalid');
+  const e = document.getElementById('e-' + id); if (e) e.hidden = true;
+}
+function showErr(id, msg){
+  const box = document.getElementById('q-' + id);
+  box.classList.add('invalid');
+  const e = document.getElementById('e-' + id);
+  e.querySelector('span').textContent = msg; e.hidden = false;
+}
+function validateQ(q){
+  const v = state[q.id];
+  let msg = '';
+  if (q.type === 'check') {
+    if (!v || !v.length) msg = 'اختر إجابة واحدة على الأقل';
+  } else if (q.type === 'radio' || q.type === 'rich' || q.type === 'select') {
+    if (!v) msg = q.type === 'select' ? 'اختر من القائمة' : 'اختر إجابة';
+  } else {
+    if (!v || !v.trim()) msg = 'هذا السؤال مطلوب';
+    else if (q.check) { const r = q.check(v.trim()); if (r !== true) msg = r; }
+  }
+  if (!msg && q.other) {
+    const sel = q.type === 'check' ? (v || []) : [v];
+    if (sel.includes(OTHER) && !(state[q.id + '_other'] || '').trim()) msg = 'اكتب شو تقصد بـ «أخرى»';
+  }
+  if (msg) showErr(q.id, msg); else clearErr(q.id);
+  return !msg;
+}
+function validateStep(){
+  let first = null;
+  SECTIONS[step].qs.forEach(q => { if (!validateQ(q) && !first) first = q; });
+  if (first) {
+    const box = document.getElementById('q-' + first.id);
+    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
+    const f = box.querySelector('input:not([hidden]),select');
+    if (f && (f.type === 'text' || f.type === 'tel' || f.tagName === 'SELECT')) setTimeout(() => f.focus({ preventScroll: true }), 350);
+  }
+  return !first;
+}
+
+/* ---------- Payload ---------- */
+function buildPayload(){
+  const fields = [];
+  SECTIONS.forEach(sec => sec.qs.forEach(q => {
+    let v = state[q.id];
+    if (q.type === 'check') {
+      v = (v || []).map(x => x === OTHER ? `${OTHER}: ${(state[q.id + '_other'] || '').trim()}` : x).join('، ');
+    } else if (q.other && v === OTHER) {
+      v = `${OTHER}: ${(state[q.id + '_other'] || '').trim()}`;
+    } else if (typeof v === 'string') {
+      v = q.out ? q.out(v.trim()) : v.trim();
+    }
+    fields.push({ label: q.col, value: v || '' });
+  }));
+  return { id: uid(), submittedAt: new Date().toISOString(), ua: navigator.userAgent.slice(0, 160), hp: $('#hp').value, fields };
+}
+
+/* ---------- Sending (with a local outbox so nothing is lost) ---------- */
+async function send(payload){
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 25000);
+  try {
+    const res = await fetch(ENDPOINT, { method: 'POST', body: JSON.stringify(payload), signal: ctrl.signal });
+    const data = await res.json();
+    return !!(data && data.ok);
+  } catch (e) { return false; }
+  finally { clearTimeout(timer); }
+}
+async function flushOutbox(){
+  if (!ENDPOINT) return true;
+  const box = store.get(KEY_OUTBOX) || [];
+  if (!box.length) return true;
+  const left = [];
+  for (const p of box) { if (!(await send(p))) left.push(p); }
+  if (left.length) store.set(KEY_OUTBOX, left); else store.del(KEY_OUTBOX);
+  return !left.length;
+}
+
+async function submit(){
+  const payload = buildPayload();
+  if (!ENDPOINT) { console.info('وضع التجربة — هذه الإجابات لم تُرسل:', payload); showFinal('ok'); return; }
+  const box = store.get(KEY_OUTBOX) || [];
+  box.push(payload);
+  const queued = store.set(KEY_OUTBOX, box);
+  showFinal('sending');
+  const ok = await flushOutbox();
+  if (ok) { store.del(KEY_DRAFT); store.set(KEY_DONE, Date.now()); showFinal('ok'); }
+  else if (queued) showFinal('queued');
+  else showFinal('failed');
+}
+
+/* ---------- Screens ---------- */
+function show(id){
+  ['intro','form','final'].forEach(s => $('#' + s).hidden = s !== id);
+  $('#navbar').hidden = id !== 'form';
+}
+function showFinal(kind){
+  show('final');
+  const f = $('#final');
+  const tagline = `<p class="tagline">إنت ركّز على صفك، <span class="foil">والدبلوم علينا.</span></p>`;
+  const wa = `<a class="wa" href="${WHATSAPP}" target="_blank" rel="noopener"><svg class="i"><use href="#i-wa"/></svg>أي سؤال؟ احكي معنا</a>`;
+  if (kind === 'ok') {
+    f.innerHTML = `<div class="card enter"><div class="seal"><svg class="i"><use href="#i-check"/></svg></div>
+      <h2>شكرًا لتعبئة الاستبانة!</h2>
+      <p>هيك صارت عندنا المعلومات الأساسية اللي بنحتاجها لتجهيز مهامك خلال الدبلوم، وبنرجع نتواصل معك فقط إذا احتجنا شيئًا خاصًا بمهمة معينة.</p>
+      ${tagline}${wa}</div>`;
+  } else if (kind === 'sending') {
+    f.innerHTML = `<div class="card enter"><div class="seal wait"><svg class="i"><use href="#i-sync"/></svg></div>
+      <h2>عم نرسل إجاباتك…</h2><p>ثواني بس، لا تسكّر الصفحة.</p></div>`;
+  } else if (kind === 'queued') {
+    f.innerHTML = `<div class="card enter"><div class="seal wait"><svg class="i"><use href="#i-sync"/></svg></div>
+      <h2>إجاباتك محفوظة على جهازك</h2>
+      <p>ما قدرنا نوصل للنت هسا، بس ولا إجابة ضاعت. أول ما يرجع النت رح تنبعث لحالها، أو اضغط «حاول مرة ثانية».</p>
+      <p style="font-size:.88rem">إذا سكّرت الصفحة، افتح نفس الرابط من نفس الجهاز لاحقًا وبنرسلها تلقائيًا.</p>
+      <div class="actions"><button class="btn btn-gold" id="retryBtn" type="button"><svg class="i"><use href="#i-sync"/></svg>حاول مرة ثانية</button></div>
+      ${wa}</div>`;
+    $('#retryBtn').onclick = retry;
+  } else {
+    f.innerHTML = `<div class="card enter"><div class="seal wait"><svg class="i"><use href="#i-alert"/></svg></div>
+      <h2>صار خلل بالإرسال</h2>
+      <p>إجاباتك لسا موجودة بالصفحة. تأكد من النت واضغط «حاول مرة ثانية»، وإذا ضلّت المشكلة احكي معنا على واتساب.</p>
+      <div class="actions"><button class="btn btn-gold" id="retryBtn" type="button"><svg class="i"><use href="#i-sync"/></svg>حاول مرة ثانية</button>
+      <button class="btn btn-ghost" id="backBtn" type="button">رجوع للإجابات</button></div>${wa}</div>`;
+    $('#retryBtn').onclick = submit;
+    $('#backBtn').onclick = () => { show('form'); renderStep(); };
+  }
+  window.scrollTo(0, 0);
+}
+async function retry(){
+  const btn = $('#retryBtn'); if (btn) btn.disabled = true;
+  const ok = await flushOutbox();
+  if (ok) { store.del(KEY_DRAFT); store.set(KEY_DONE, Date.now()); showFinal('ok'); }
+  else if (btn) btn.disabled = false;
+}
+
+/* ---------- Wiring ---------- */
+$('#startBtn').onclick = () => { show('form'); renderStep(); saveDraft(); };
+$('#restartBtn').onclick = () => { state = {}; step = 0; store.del(KEY_DRAFT); show('form'); renderStep(); };
+$('#prevBtn').onclick = () => { if (step > 0) { step--; renderStep(); saveDraft(); } };
+$('#nextBtn').onclick = () => {
+  if (!validateStep()) return;
+  if (step < SECTIONS.length - 1) { step++; renderStep(); saveDraft(); }
+  else { $('#nextBtn').disabled = true; submit().finally(() => $('#nextBtn').disabled = false); }
+};
+$('#form').addEventListener('submit', e => e.preventDefault());
+$('#sectionBody').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.tagName === 'INPUT') { e.preventDefault(); $('#nextBtn').click(); }
+});
+window.addEventListener('online', () => {
+  flushOutbox().then(ok => { if (ok && !$('#final').hidden && $('#retryBtn')) { store.del(KEY_DRAFT); store.set(KEY_DONE, Date.now()); showFinal('ok'); } });
+});
+
+/* ---------- Boot ---------- */
+if (!ENDPOINT) $('#testBanner').hidden = false;
+const hasDraft = Object.keys(state).length > 0;
+if (hasDraft) { $('#startBtn').firstChild.textContent = 'كمّل من وين ما وقفت'; $('#restartBtn').hidden = false; }
+if (store.get(KEY_DONE) && !hasDraft) $('#doneNote').hidden = false;
+const pending = (store.get(KEY_OUTBOX) || []).length;
+if (pending && ENDPOINT) {
+  showFinal('sending');
+  flushOutbox().then(ok => {
+    if (ok) { store.del(KEY_DRAFT); store.set(KEY_DONE, Date.now()); showFinal('ok'); } else showFinal('queued');
+  });
+}
+</script>
+</body>
+</html>
