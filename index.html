@@ -159,22 +159,24 @@ section.block{padding:76px 0}
 
 /* ================= Ledger: علينا / عليك ================= */
 .ledger{display:grid;gap:40px}
-.side-label{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:24px}
+.side-label{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:20px}
 .side-label h3{font-family:var(--f-display);font-weight:900;font-size:clamp(2.2rem,10vw,3.6rem);line-height:1.35}
 .side-label small{color:var(--faint);font-size:.85rem}
-.ours{display:grid;gap:14px}
-.ours .card{display:flex;gap:14px;align-items:flex-start;padding:16px}
-.ours h4{font-family:var(--f-display);font-weight:700;font-size:1.02rem;margin-bottom:2px}
+.yours-side .side-label h3{font-size:clamp(1.6rem,7vw,2.1rem);color:var(--ink)}
+.ours{display:grid;gap:14px;align-content:start}
+.ours .card{display:flex;gap:14px;align-items:flex-start;padding:18px}
+.ours h4{font-family:var(--f-display);font-weight:700;font-size:1.05rem;margin-bottom:4px}
 .ours p{font-size:.9rem;color:var(--muted);line-height:1.7}
-.yours-wrap{border-radius:var(--r-lg);padding:22px;border:1px dashed rgba(191,149,63,.4);background:rgba(0,33,28,.55);backdrop-filter:blur(10px)}
-.yours{display:grid;gap:14px;counter-reset:y}
-.yours li{list-style:none;position:relative;padding:16px 16px 16px 16px;border-radius:var(--r-sm);background:rgba(245,239,224,.03);border:1px solid rgba(245,239,224,.07)}
-.yours .top{display:flex;gap:12px;align-items:center;margin-bottom:6px}
-.yours .n{font-family:var(--f-display);font-weight:800;color:var(--forest);background:var(--foil);width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:.9rem;flex-shrink:0}
-.yours h4{font-family:var(--f-display);font-weight:700;font-size:1rem}
-.yours p{font-size:.9rem;color:var(--muted)}
-.we-prep{margin-top:10px;font-size:.84rem;color:var(--gold-hi);display:flex;gap:8px;align-items:flex-start;padding-top:10px;border-top:1px solid rgba(191,149,63,.15)}
-.we-prep svg{margin-top:5px;color:var(--gold)}
+.yours-wrap{border-radius:var(--r-lg);padding:6px 20px;border:1px dashed rgba(191,149,63,.4);background:rgba(0,33,28,.55);backdrop-filter:blur(10px)}
+.yours{display:grid}
+.yours li{list-style:none;padding:16px 0}
+.yours li + li{border-top:1px solid rgba(245,239,224,.08)}
+.yours .top{display:flex;gap:10px;align-items:center;margin-bottom:4px}
+.yours .n{font-family:var(--f-display);font-weight:800;color:var(--forest);background:var(--foil);width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:.76rem;flex-shrink:0}
+.yours h4{font-family:var(--f-display);font-weight:700;font-size:.95rem}
+.yours p{font-size:.84rem;color:var(--muted);line-height:1.7;padding-inline-start:34px}
+.we-prep{margin-top:6px;padding-inline-start:34px;font-size:.8rem;line-height:1.7;color:var(--gold-hi);display:flex;gap:6px;align-items:flex-start}
+.we-prep svg{margin-top:4px;color:var(--gold);flex-shrink:0}
 .ledger-close{margin-top:40px;text-align:center;font-family:var(--f-display);font-weight:700;font-size:1.15rem}
 
 /* ================= Clarity ================= */
@@ -404,6 +406,7 @@ footer small{color:var(--faint);font-size:.8rem}
 @media (min-width:760px){
   :root{--gutter:28px}
   .ours{grid-template-columns:1fr 1fr}
+  .ours .card:last-child:nth-child(odd){grid-column:1/-1}
   .clarity{grid-template-columns:1fr 1fr}
   .pkg-top{grid-template-columns:1fr 1fr;align-items:end;padding:36px 36px 30px}
   .pkg-name{grid-column:1/-1}
@@ -425,8 +428,11 @@ footer small{color:var(--faint);font-size:.8rem}
   .hero-fallback{top:auto;inset-inline-start:auto;inset-inline-end:6%;width:340px}
   .drag-hint{top:auto;bottom:90px;inset-inline-start:auto;inset-inline-end:16%;margin:0}
   .hero-actions .btn{flex:0 0 auto}
-  .ledger{grid-template-columns:1.45fr 1fr;gap:28px;align-items:start}
-  .yours-wrap{position:sticky;top:96px}
+  /* the two labels share one row so their baselines line up; علينا gets the wide column */
+  .ledger{grid-template-columns:1.6fr 1fr;grid-template-rows:auto auto;column-gap:32px;row-gap:0}
+  .ledger > div{display:grid;grid-row:span 2;grid-template-rows:subgrid}
+  .side-label{align-self:end}
+  .yours-wrap{align-self:start;position:sticky;top:96px}
   .why{grid-template-columns:1fr 1fr;gap:56px}
   .rail{padding-inline:calc(50% - 160px)}
 }
@@ -570,7 +576,7 @@ section.light{background:#F3EDE0;color:var(--ink);
       </div>
 
       <div class="ledger">
-        <div>
+        <div class="ours-side">
           <div class="side-label rv"><h3 class="foil">علينا</h3><small>كل مهمة على القالب المطلوب إلها</small></div>
           <div class="ours">
             <article class="card d3"><div class="ico"><svg class="i"><use href="#i-tasks"/></svg></div><div><h4>المهام الأسبوعية</h4><p>بكل المساقات: خطط دروس، تحليل محتوى، دراسات حالة، وغيرها.</p></div></article>
@@ -583,9 +589,9 @@ section.light{background:#F3EDE0;color:var(--ink);
           </div>
         </div>
 
-        <div class="yours-wrap d3">
-          <div class="side-label"><h3>عليك</h3><small>4 أشياء بس</small></div>
-          <ol class="yours">
+        <div class="yours-side">
+          <div class="side-label rv"><h3>عليك</h3><small>4 أشياء بس</small></div>
+          <ol class="yours yours-wrap d3">
             <li>
               <div class="top"><span class="n">1</span><h4>المحاضرة الأسبوعية</h4></div>
               <p>بتحضرها إنت على المنصة، لأنه الحضور بيكون باسمك ومع مرشدك.</p>
