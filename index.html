@@ -158,24 +158,38 @@ section.block{padding:76px 0}
 @media (prefers-reduced-motion:reduce){.d3{transform:none!important;opacity:1!important}.rv{opacity:1;transform:none}}
 
 /* ================= Ledger: علينا / عليك ================= */
-.ledger{display:grid;gap:40px}
-.side-label{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:24px}
-.side-label h3{font-family:var(--f-display);font-weight:900;font-size:clamp(2.2rem,10vw,3.6rem);line-height:1.35}
-.side-label small{color:var(--faint);font-size:.85rem}
-.ours{display:grid;gap:14px}
+.ledger{display:grid;gap:48px}
+.side-label{display:flex;align-items:center;flex-wrap:wrap;gap:4px 22px;margin-bottom:16px}
+.side-label h3{font-family:var(--f-display);font-weight:900;font-size:clamp(2.2rem,9vw,3rem);line-height:1.35}
+.side-label p{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;font-size:.9rem;color:var(--muted)}
+.side-label p b{font-family:var(--f-display);font-weight:700;color:var(--ink)}
+.side-label p b span{font-size:1.25em;margin-inline-end:4px}
+.side-label .dot{width:5px;height:5px;border-radius:50%;background:var(--gold)}
+.ours{display:grid;gap:12px}
 .ours .card{display:flex;gap:14px;align-items:flex-start;padding:16px}
+.ours .ico{width:42px;height:42px;font-size:1.2rem}
 .ours h4{font-family:var(--f-display);font-weight:700;font-size:1.02rem;margin-bottom:2px}
-.ours p{font-size:.9rem;color:var(--muted);line-height:1.7}
-.yours-wrap{border-radius:var(--r-lg);padding:22px;border:1px dashed rgba(191,149,63,.4);background:rgba(0,33,28,.55);backdrop-filter:blur(10px)}
-.yours{display:grid;gap:14px;counter-reset:y}
-.yours li{list-style:none;position:relative;padding:16px 16px 16px 16px;border-radius:var(--r-sm);background:rgba(245,239,224,.03);border:1px solid rgba(245,239,224,.07)}
-.yours .top{display:flex;gap:12px;align-items:center;margin-bottom:6px}
-.yours .n{font-family:var(--f-display);font-weight:800;color:var(--forest);background:var(--foil);width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:.9rem;flex-shrink:0}
-.yours h4{font-family:var(--f-display);font-weight:700;font-size:1rem}
-.yours p{font-size:.9rem;color:var(--muted)}
-.we-prep{margin-top:10px;font-size:.84rem;color:var(--gold-hi);display:flex;gap:8px;align-items:flex-start;padding-top:10px;border-top:1px solid rgba(191,149,63,.15)}
-.we-prep svg{margin-top:5px;color:var(--gold)}
+.ours p{font-size:.88rem;color:var(--muted);line-height:1.7}
+.ours .feature{grid-column:1/-1;align-items:center;padding:20px;border-color:rgba(191,149,63,.55);
+  background:radial-gradient(90% 140% at 100% 0%,rgba(191,149,63,.16),transparent 60%),linear-gradient(160deg,rgba(0,90,74,.55),rgba(0,33,28,.8))}
+.ours .feature .ico{width:52px;height:52px;font-size:1.5rem;border-color:rgba(191,149,63,.55)}
+.ours .feature h4{font-size:1.2rem}
+.yours-label{text-align:center;margin-bottom:18px}
+.yours-label h3{display:flex;align-items:center;justify-content:center;gap:16px;font-family:var(--f-display);font-weight:900;font-size:clamp(1.7rem,6vw,2.2rem);line-height:1.4}
+.yours-label h3::before,.yours-label h3::after{content:"";flex:0 1 110px;height:1px}
+.yours-label h3::before{background:linear-gradient(to right,var(--gold),transparent)}
+.yours-label h3::after{background:linear-gradient(to left,var(--gold),transparent)}
+.yours-label small{display:block;color:var(--faint);font-size:.88rem}
+.yours{display:grid;gap:12px}
+.yours li{list-style:none;padding:14px 16px;border-radius:var(--r-sm);background:rgba(0,33,28,.6);border:1px solid rgba(245,239,224,.09)}
+.yours .top{display:flex;gap:10px;align-items:center;margin-bottom:4px}
+.yours .n{font-family:var(--f-display);font-weight:800;color:var(--forest);background:var(--foil);width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:.8rem;flex-shrink:0}
+.yours h4{font-family:var(--f-display);font-weight:700;font-size:.95rem}
+.yours p{font-size:.84rem;color:var(--muted);line-height:1.7}
+.we-prep{margin-top:6px;font-size:.8rem;line-height:1.7;color:var(--gold-hi);display:flex;gap:6px;align-items:flex-start}
+.we-prep svg{margin-top:4px;color:var(--gold);flex-shrink:0}
 .ledger-close{margin-top:40px;text-align:center;font-family:var(--f-display);font-weight:700;font-size:1.15rem}
+@media (min-width:560px){ .yours{grid-template-columns:1fr 1fr} }
 
 /* ================= Clarity ================= */
 .clarity{display:grid;gap:20px}
@@ -396,7 +410,7 @@ footer small{color:var(--faint);font-size:.8rem}
 .sheet .btn{width:100%}
 
 @media (max-width:759px){
-  .card,.yours-wrap,.eyebrow,.btn-ghost,.nav-cta{backdrop-filter:none;-webkit-backdrop-filter:none}
+  .card,.eyebrow,.btn-ghost,.nav-cta{backdrop-filter:none;-webkit-backdrop-filter:none}
   .card{background:linear-gradient(160deg,rgba(0,77,64,.62),rgba(0,33,28,.9))}
 }
 
@@ -404,6 +418,8 @@ footer small{color:var(--faint);font-size:.8rem}
 @media (min-width:760px){
   :root{--gutter:28px}
   .ours{grid-template-columns:1fr 1fr}
+  .ours-side{padding:16px;border-radius:var(--r-lg);border:1px solid rgba(191,149,63,.18);background:rgba(0,33,28,.35)}
+  .side-label{padding:8px 20px;border-radius:var(--r-md);border:1px solid rgba(191,149,63,.2);background:rgba(0,77,64,.22)}
   .clarity{grid-template-columns:1fr 1fr}
   .pkg-top{grid-template-columns:1fr 1fr;align-items:end;padding:36px 36px 30px}
   .pkg-name{grid-column:1/-1}
@@ -425,8 +441,8 @@ footer small{color:var(--faint);font-size:.8rem}
   .hero-fallback{top:auto;inset-inline-start:auto;inset-inline-end:6%;width:340px}
   .drag-hint{top:auto;bottom:90px;inset-inline-start:auto;inset-inline-end:16%;margin:0}
   .hero-actions .btn{flex:0 0 auto}
-  .ledger{grid-template-columns:1.45fr 1fr;gap:28px;align-items:start}
-  .yours-wrap{position:sticky;top:96px}
+  .ours{grid-template-columns:repeat(3,1fr)}
+  .yours{grid-template-columns:repeat(4,1fr)}
   .why{grid-template-columns:1fr 1fr;gap:56px}
   .rail{padding-inline:calc(50% - 160px)}
 }
@@ -570,40 +586,40 @@ section.light{background:#F3EDE0;color:var(--ink);
       </div>
 
       <div class="ledger">
-        <div>
-          <div class="side-label rv"><h3 class="foil">علينا</h3><small>كل مهمة على القالب المطلوب إلها</small></div>
+        <div class="ours-side">
+          <div class="side-label rv"><h3 class="foil">علينا</h3><p><b><span class="foil">7</span>خدمات متكاملة</b><i class="dot" aria-hidden="true"></i>كل مهمة على القالب المطلوب إلها</p></div>
           <div class="ours">
             <article class="card d3"><div class="ico"><svg class="i"><use href="#i-tasks"/></svg></div><div><h4>المهام الأسبوعية</h4><p>بكل المساقات: خطط دروس، تحليل محتوى، دراسات حالة، وغيرها.</p></div></article>
             <article class="card d3"><div class="ico"><svg class="i"><use href="#i-forum"/></svg></div><div><h4>المنتديات النقاشية</h4><p>المشاركة الأساسية، والتعليقات على منشورات الزملاء.</p></div></article>
             <article class="card d3"><div class="ico"><svg class="i"><use href="#i-quiz"/></svg></div><div><h4>الاختبارات القصيرة</h4><p>الاختبارات اللي داخل المساقات.</p></div></article>
             <article class="card d3"><div class="ico"><svg class="i"><use href="#i-pen"/></svg></div><div><h4>المقالات</h4><p>مكتوبة إلك إنت، على تخصصك.</p></div></article>
-            <article class="card d3"><div class="ico"><svg class="i"><use href="#i-search"/></svg></div><div><h4>البحث الاستقصائي كامل</h4><p>من صياغة السؤال الاستقصائي والمخطط، لحد العرض التقديمي.</p></div></article>
             <article class="card d3"><div class="ico"><svg class="i"><use href="#i-gauge"/></svg></div><div><h4>أداة تقييم التطور المهني</h4><p>جاهزة كاملة، ومعها شرح لكل اللي بتحتاجه للجلسة.</p></div></article>
             <article class="card d3"><div class="ico"><svg class="i"><use href="#i-folder"/></svg></div><div><h4>ملف الإنجاز</h4><p>بيجمع شغلك كله بشكل مرتّب وجاهز للتسليم.</p></div></article>
+            <article class="card d3 feature"><div class="ico"><svg class="i"><use href="#i-search"/></svg></div><div><h4>البحث الاستقصائي كامل</h4><p>من صياغة السؤال الاستقصائي والمخطط، لحد العرض التقديمي.</p></div></article>
           </div>
         </div>
 
-        <div class="yours-wrap d3">
-          <div class="side-label"><h3>عليك</h3><small>4 أشياء بس</small></div>
+        <div>
+          <div class="yours-label rv"><h3>عليك</h3><small>4 أشياء بس… وحتى فيها بنساعدك</small></div>
           <ol class="yours">
-            <li>
+            <li class="d3">
               <div class="top"><span class="n">1</span><h4>المحاضرة الأسبوعية</h4></div>
-              <p>بتحضرها إنت على المنصة، لأنه الحضور بيكون باسمك ومع مرشدك.</p>
+              <p>بتحضرها إنت على المنصة، لأنه الحضور بيكون باسمك.</p>
             </li>
-            <li>
+            <li class="d3">
               <div class="top"><span class="n">2</span><h4>الجلستين الإرشاديتين</h4></div>
-              <p>جلسة خاصة مع مرشدك الأكاديمي بنص الدبلوم وبآخره، بتناقشوا فيها أداة تقييم التطور المهني.</p>
-              <div class="we-prep"><svg class="i"><use href="#i-check"/></svg>إحنا بنجهزلك الأداة كاملة، ومعها شرح لكل اللي بتحتاجه عشان تقدّم الجلسة بأفضل شكل.</div>
+              <p>مع مرشدك بنص الدبلوم وبآخره، عن أداة تقييم التطور المهني.</p>
+              <div class="we-prep"><svg class="i"><use href="#i-check"/></svg>بنجهزلك الأداة كاملة، ومعها الشرح.</div>
             </li>
-            <li>
+            <li class="d3">
               <div class="top"><span class="n">3</span><h4>جلستين التدريس المصغّر</h4></div>
               <p>مرة بنص الدبلوم ومرة بآخره، وإنت بس بتقدّم.</p>
-              <div class="we-prep"><svg class="i"><use href="#i-check"/></svg>إحنا بنجهزلك العرض التقديمي للدرس، والشرح، وسيناريو الدرس خطوة بخطوة.</div>
+              <div class="we-prep"><svg class="i"><use href="#i-check"/></svg>بنجهزلك العرض والشرح وسيناريو الدرس.</div>
             </li>
-            <li>
+            <li class="d3">
               <div class="top"><span class="n">4</span><h4>صور وفيديوهات التوثيق</h4></div>
-              <p>بعض المهام بتطلب توثيق للتطبيق داخل صفك، فبتصوّرها وبتبعتلنا ياها.</p>
-              <div class="we-prep"><svg class="i"><use href="#i-check"/></svg>وإحنا بنحكيلك قبلها شو المطلوب بالضبط.</div>
+              <p>لبعض المهام اللي بتطلب توثيق للتطبيق داخل صفك.</p>
+              <div class="we-prep"><svg class="i"><use href="#i-check"/></svg>وبنحكيلك قبلها شو المطلوب بالضبط.</div>
             </li>
           </ol>
         </div>
