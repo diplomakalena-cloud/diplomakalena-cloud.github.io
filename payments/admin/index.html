@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#00211C">
 <meta name="robots" content="noindex, nofollow">
+<!-- The page may only talk to this site and the GitHub API: nothing on it can send data anywhere else. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.github.com; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>لوحة الدفعات | دبلومك علينا</title>
 <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
@@ -708,7 +710,8 @@ let xlsxReady;
 function loadXLSX(){
   return xlsxReady = xlsxReady || new Promise((res, rej) => {
     const sc = document.createElement('script');
-    sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    // Served from this site, not a CDN, so no third party ever runs code on this page.
+    sc.src = '../vendor/xlsx-0.18.5.full.min.js';
     sc.onload = () => res(window.XLSX); sc.onerror = () => { xlsxReady = null; rej(new Error('xlsx')); };
     document.head.appendChild(sc);
   });
