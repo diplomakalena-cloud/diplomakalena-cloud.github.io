@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#00211C">
+<meta name="robots" content="noindex, nofollow">
+<title>كشف حسابك | دبلومك علينا</title>
+<meta name="description" content="كشف حساب المعلم في دبلومك علينا: المبلغ المتفق عليه، الدفعات، المتبقي، وموعد القسط القادم.">
+<meta property="og:title" content="كشف حسابك — دبلومك علينا">
+<meta property="og:description" content="شوف دفعاتك والمبلغ المتبقي وموعد القسط القادم.">
+<meta property="og:image" content="https://diplomakalena-cloud.github.io/og-image.jpg">
+<meta property="og:locale" content="ar_JO">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ================= Tokens (same as the main site) ================= */
+:root{
+  --forest:#00211C;
+  --green:#004D40;
+  --moss:#0A3A32;
+  --gold:#BF953F;
+  --gold-hi:#F3DFA2;
+  --ink:#F5EFE0;
+  --muted:rgba(245,239,224,.68);
+  --faint:rgba(245,239,224,.45);
+  --line:rgba(191,149,63,.24);
+  --glass:rgba(0,77,64,.28);
+  --field:rgba(0,20,17,.45);
+  --field-line:rgba(245,239,224,.14);
+  --error:#FFB4A2;
+  --late:#FFB48A;
+  --foil:linear-gradient(115deg,#AA771C 0%,#BF953F 20%,#FCF6BA 42%,#B38728 60%,#FBF5B7 80%,#AA771C 100%);
+  --f-display:'Alexandria',sans-serif;
+  --f-body:'IBM Plex Sans Arabic',sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --r-lg:28px; --r-md:20px; --r-sm:14px;
+  --gutter:16px;
+  color-scheme:dark;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--f-body);color:var(--ink);line-height:1.8;font-size:16px;
+  background:var(--forest);
+  background-image:
+    radial-gradient(120% 70% at 85% -10%, rgba(0,77,64,.85), transparent 60%),
+    radial-gradient(90% 60% at 0% 110%, rgba(0,77,64,.55), transparent 60%);
+  background-attachment:fixed;
+  min-height:100vh;overflow-x:hidden;
+}
+img{max-width:100%;display:block}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px;border-radius:8px}
+svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+[hidden]{display:none!important}
+.foil{background:var(--foil);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--gold)}
+@media (prefers-reduced-motion:no-preference){ .foil{animation:foil 7s linear infinite} }
+@keyframes foil{to{background-position:-220% 0}}
+.num{font-variant-numeric:tabular-nums}
+
+.wrap{width:100%;max-width:620px;margin:0 auto;padding:0 var(--gutter)}
+
+.test-banner{position:sticky;top:0;z-index:60;background:#5A2A12;color:#FFE3C7;font-size:.86rem;text-align:center;padding:8px var(--gutter);line-height:1.6}
+
+.top{padding:28px 0 8px;text-align:center}
+.top img{width:132px;height:auto;margin:0 auto}
+
+.screen{padding:12px 0 48px}
+@media (prefers-reduced-motion:no-preference){
+  .enter{animation:enter .55s var(--ease) both}
+  .enter:nth-child(2){animation-delay:.06s}
+  .enter:nth-child(3){animation-delay:.12s}
+  .enter:nth-child(4){animation-delay:.18s}
+  .enter:nth-child(5){animation-delay:.24s}
+  @keyframes enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+}
+
+.card{background:var(--glass);border:1px solid var(--line);border-radius:var(--r-md);padding:22px 18px;margin-bottom:14px;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+@media (min-width:560px){ .card{padding:26px 26px} }
+
+.kicker{display:inline-block;font-size:.8rem;font-weight:600;letter-spacing:.02em;color:var(--gold-hi);
+  border:1px solid var(--line);border-radius:99px;padding:3px 14px;margin-bottom:14px}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(1.5rem,6vw,2rem);line-height:1.45;margin-bottom:10px}
+h2{font-family:var(--f-display);font-weight:700;font-size:1.08rem;line-height:1.5;display:flex;align-items:center;gap:8px}
+h2 svg{color:var(--gold)}
+.lead{color:var(--muted);margin-bottom:18px}
+
+/* ================= Login ================= */
+.field{margin-bottom:14px}
+.field label{display:block;font-weight:600;font-size:.95rem;margin-bottom:6px}
+.field small{display:block;color:var(--faint);font-size:.8rem;margin-top:4px}
+.input-wrap{position:relative}
+input[type=text],input[type=tel],input[type=password]{
+  width:100%;min-height:54px;padding:12px 16px;border-radius:var(--r-sm);
+  background:var(--field);border:1px solid var(--field-line);color:var(--ink);
+  font:inherit;font-size:1.05rem;letter-spacing:.02em;direction:ltr;text-align:right;
+  transition:border-color .25s,box-shadow .25s,background .25s;-webkit-appearance:none;appearance:none}
+input::placeholder{color:var(--faint);letter-spacing:0}
+input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(191,149,63,.18);background:rgba(0,20,17,.6)}
+.field.invalid input{border-color:rgba(255,180,162,.5)}
+.peek{position:absolute;inset-inline-end:6px;top:50%;transform:translateY(-50%);width:42px;height:42px;display:grid;place-items:center;border-radius:10px;color:var(--faint)}
+.peek:hover{color:var(--gold-hi)}
+.peek svg{font-size:1.2rem}
+#pass{padding-inline-end:52px}
+.remember{display:flex;align-items:center;gap:10px;margin:4px 0 18px;font-size:.9rem;color:var(--muted);cursor:pointer;user-select:none}
+.remember input{width:20px;height:20px;accent-color:var(--gold);flex-shrink:0}
+.err{display:flex;align-items:flex-start;gap:8px;margin:0 0 14px;padding:12px 14px;border-radius:var(--r-sm);
+  color:var(--error);background:rgba(255,180,162,.08);border:1px solid rgba(255,180,162,.3);font-size:.92rem;font-weight:500;line-height:1.7}
+.err svg{margin-top:4px}
+@media (prefers-reduced-motion:no-preference){
+  .shake{animation:shake .4s}
+  @keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+}
+.privacy{display:flex;gap:8px;align-items:flex-start;margin-top:16px;color:var(--faint);font-size:.82rem;line-height:1.7}
+.privacy svg{margin-top:4px;color:var(--gold)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 26px;border-radius:99px;
+  font-family:var(--f-display);font-weight:700;font-size:1rem;transition:transform .35s var(--ease),box-shadow .35s,background .3s,opacity .3s;text-decoration:none}
+.btn-gold{background:var(--foil);background-size:200% 100%;color:#1d1406;box-shadow:0 10px 30px -8px rgba(191,149,63,.55),inset 0 1px 0 rgba(255,255,255,.5)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 18px 40px -10px rgba(191,149,63,.7),inset 0 1px 0 rgba(255,255,255,.5)}
+.btn-ghost{border:1px solid rgba(245,239,224,.22);background:rgba(0,33,28,.5);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold-hi)}
+.btn[disabled]{opacity:.6;pointer-events:none}
+.btn-block{width:100%}
+.spin{display:none;width:18px;height:18px;border-radius:50%;border:2px solid rgba(29,20,6,.3);border-top-color:#1d1406}
+.btn.loading .spin{display:inline-block}
+@media (prefers-reduced-motion:no-preference){ .spin{animation:spin .8s linear infinite} }
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ================= Account ================= */
+.hello{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:4px 0 14px}
+.hello p{font-family:var(--f-display);font-weight:700;font-size:1.2rem;line-height:1.5}
+.hello small{display:block;font-family:var(--f-body);font-weight:400;font-size:.84rem;color:var(--muted)}
+.out{display:inline-flex;align-items:center;gap:6px;font-size:.86rem;color:var(--faint);padding:8px 12px;border-radius:99px;border:1px solid var(--field-line);white-space:nowrap}
+.out:hover{color:var(--gold-hi);border-color:var(--line)}
+
+/* Balance */
+.balance{text-align:center;padding-top:26px}
+.balance .label{color:var(--muted);font-size:.92rem}
+.balance .big{font-family:var(--f-display);font-weight:800;font-size:clamp(2.4rem,12vw,3.2rem);line-height:1.2;margin:4px 0 2px}
+.balance .unit{font-size:.4em;font-weight:700;margin-inline-start:6px}
+.meter{height:10px;border-radius:10px;background:rgba(245,239,224,.1);overflow:hidden;margin:18px 0 8px}
+.meter i{display:block;height:100%;width:0;background:var(--foil);border-radius:10px;transition:width 1.1s var(--ease)}
+.meter-cap{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted)}
+.meter-cap b{color:var(--gold-hi);font-weight:600}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.stat{padding:12px 10px;border-radius:var(--r-sm);background:var(--field);border:1px solid var(--field-line);text-align:center}
+.stat span{display:block;font-size:.8rem;color:var(--muted)}
+.stat b{display:block;font-family:var(--f-display);font-weight:700;font-size:1.15rem;line-height:1.5}
+.stat b small{font-size:.7em;font-weight:500;color:var(--muted);margin-inline-start:4px}
+
+/* Next installment */
+.due{display:flex;gap:16px;align-items:center}
+.due-date{flex-shrink:0;width:84px;border-radius:16px;overflow:hidden;text-align:center;border:1px solid var(--line);background:var(--field)}
+.due-date .m{display:block;background:var(--foil);background-size:200% 100%;color:#1d1406;font-size:.74rem;font-weight:700;padding:3px 4px;line-height:1.5}
+.due-date .d{display:block;font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.25;padding-top:4px}
+.due-date .y{display:block;font-size:.74rem;color:var(--muted);padding-bottom:6px}
+.due-body{min-width:0}
+.due-body .what{font-size:.86rem;color:var(--gold-hi);font-weight:600}
+.due-body .when{font-family:var(--f-display);font-weight:700;font-size:1.08rem;line-height:1.55}
+.due-body .amt{color:var(--muted);font-size:.92rem;margin-top:2px}
+.due-body .amt b{color:var(--ink)}
+.pill{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:3px 12px;border-radius:99px;font-size:.82rem;font-weight:600;
+  color:var(--gold-hi);background:rgba(191,149,63,.12);border:1px solid rgba(191,149,63,.3)}
+.card.late{border-color:rgba(255,180,138,.45);background:linear-gradient(0deg,rgba(255,140,90,.07),rgba(255,140,90,.07)),var(--glass)}
+.card.late .due-date{border-color:rgba(255,180,138,.5)}
+.card.late .due-date .m{background:#E8956A}
+.card.late .pill{color:var(--late);background:rgba(255,140,90,.1);border-color:rgba(255,180,138,.4)}
+.card.late .due-body .what{color:var(--late)}
+.done{text-align:center}
+.done .seal{width:72px;height:72px;margin:4px auto 14px;border-radius:50%;display:grid;place-items:center;
+  background:var(--foil);background-size:200% 100%;box-shadow:0 18px 50px -12px rgba(191,149,63,.6)}
+.done .seal svg{width:34px;height:34px;stroke:#1d1406;stroke-width:2.6}
+.done p{color:var(--muted)}
+.done strong{display:block;font-family:var(--f-display);font-size:1.2rem;color:var(--ink);margin-bottom:4px}
+
+/* Payments list */
+.head-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}
+.head-row .count{font-size:.82rem;color:var(--faint)}
+.pay{list-style:none}
+.pay li{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--field-line)}
+.pay li:first-child{border-top:0}
+.pay .tick{flex-shrink:0;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(191,149,63,.12);color:var(--gold-hi)}
+.pay .tick svg{font-size:1rem}
+.pay .info{flex:1;min-width:0}
+.pay .info b{display:block;font-weight:600;font-size:.96rem}
+.pay .info small{display:block;color:var(--muted);font-size:.84rem;line-height:1.6;overflow-wrap:anywhere}
+.pay .val{font-family:var(--f-display);font-weight:700;white-space:nowrap}
+.pay .val small{font-size:.75em;font-weight:500;color:var(--muted);margin-inline-start:3px}
+.pay li.neg .tick{background:rgba(255,180,162,.1);color:var(--error)}
+.empty{color:var(--muted);font-size:.92rem;padding:6px 0}
+
+/* Notes */
+.notes p{white-space:pre-line;color:var(--ink);margin-top:8px;padding:12px 14px;border-radius:var(--r-sm);background:rgba(0,20,17,.3);border-inline-start:3px solid var(--gold)}
+
+.wa{display:inline-flex;align-items:center;gap:8px;justify-content:center;color:var(--muted);font-size:.9rem;text-decoration:none}
+.wa:hover{color:var(--gold-hi)}
+.wa svg{fill:currentColor;stroke:none;font-size:1.1rem}
+.help{text-align:center;margin-top:8px}
+
+footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gutter) 24px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 5.1A10.8 10.8 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4M6.6 6.6A17.4 17.4 0 0 0 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6M9.9 9.9a3 3 0 0 0 4.2 4.2"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><path d="M5 4h10l4 4v12H5z"/><path d="M14 4v5h5M8.5 13h7M8.5 16.5h5"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l-5-5 5-5M5 12h11"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.42.25-.69.25-1.29.18-1.41-.08-.13-.28-.2-.57-.35M12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88a9.82 9.82 0 0 1 9.88 9.89c0 5.45-4.44 9.88-9.88 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.9a11.82 11.82 0 0 0-3.48-8.41z"/></symbol>
+</svg>
+
+<div class="test-banner" id="testBanner" hidden>عرض تجريبي ببيانات وهمية.</div>
+
+<header class="top wrap">
+  <a href="../" aria-label="دبلومك علينا"><img src="../logo.webp" alt="دبلومك علينا" width="1291" height="775"></a>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ Login ============ -->
+  <section class="screen" id="login">
+    <form class="card enter" id="loginForm" novalidate>
+      <span class="kicker">كشف حساب المعلم</span>
+      <h1>دفعاتك <span class="foil">قدّام عينك</span></h1>
+      <p class="lead">ادخل بياناتك وبتشوف المبلغ المتفق عليه، الدفعات اللي دفعتها، المتبقي، وموعد قسطك القادم.</p>
+
+      <div class="field" id="f-phone">
+        <label for="phone">رقم الهاتف</label>
+        <input type="tel" id="phone" inputmode="tel" autocomplete="tel" placeholder="07XXXXXXXX" required>
+      </div>
+      <div class="field" id="f-ministry">
+        <label for="ministry">الرقم الوزاري</label>
+        <input type="text" id="ministry" inputmode="numeric" autocomplete="off" required>
+      </div>
+      <div class="field" id="f-pass">
+        <label for="pass">الرقم السري</label>
+        <div class="input-wrap">
+          <input type="password" id="pass" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="xxxx-xxxx" required>
+          <button class="peek" id="peek" type="button" aria-label="إظهار الرقم السري"><svg class="i"><use href="#i-eye"/></svg></button>
+        </div>
+        <small>الرقم السري بيوصلك منّا على واتساب.</small>
+      </div>
+      <label class="remember"><input type="checkbox" id="remember" checked>تذكّر رقم الهاتف والرقم الوزاري على هذا الجهاز</label>
+
+      <div class="err" id="loginErr" role="alert" hidden></div>
+
+      <button class="btn btn-gold btn-block" id="loginBtn" type="submit"><span class="spin" aria-hidden="true"></span><span>اعرض كشف حسابي</span><svg class="i"><use href="#i-next"/></svg></button>
+
+      <p class="privacy"><svg class="i"><use href="#i-lock"/></svg>بياناتك بتطلعلك إنت بس. الرقم السري ما بينحفظ على الجهاز.</p>
+    </form>
+    <p class="help"><a class="wa" href="https://wa.me/962779283635" target="_blank" rel="noopener"><svg class="i"><use href="#i-wa"/></svg>نسيت الرقم السري؟ احكي معنا</a></p>
+  </section>
+
+  <!-- ============ Account ============ -->
+  <section class="screen" id="account" hidden></section>
+
+</main>
+
+<footer>دبلومك علينا · إنت ركّز على صفك، والدبلوم علينا</footer>
+
+<script src="core.js"></script>
+<script>
+const DEMO = new URLSearchParams(location.search).has('demo');
+const WHATSAPP = 'https://wa.me/962779283635';
+const KEY_REMEMBER = 'dk-pay-remember-v1';
+const CURRENCY = 'دينار';
+const MONTHS = ['كانون الثاني','شباط','آذار','نيسان','أيار','حزيران','تموز','آب','أيلول','تشرين الأول','تشرين الثاني','كانون الأول'];
+const DAYS = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+
+const store = {
+  get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+};
+
+/* ---------- Helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toLatinDigits = DK.latin;
+const normPhone = DK.normPhone;
+const money = n => Number(n || 0).toLocaleString('en-US', { maximumFractionDigits: 2 });
+const parseISO = DK.parseISO;
+const longDate = d => `${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+const shortDate = d => `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+function daysWord(n){
+  if (n === 1) return 'يوم واحد';
+  if (n === 2) return 'يومين';
+  if (n >= 3 && n <= 10) return `${n} أيام`;
+  return `${n} يوم`;
+}
+
+function countWord(n){
+  if (n === 1) return 'دفعة وحدة';
+  if (n === 2) return 'دفعتين';
+  return n <= 10 ? `${n} دفعات` : `${n} دفعة`;
+}
+
+/* ---------- Login ---------- */
+function fieldErr(id, on){ $('#f-' + id).classList.toggle('invalid', on); }
+function showErr(msg){
+  const e = $('#loginErr');
+  e.innerHTML = `<svg class="i"><use href="#i-alert"/></svg><span>${msg}</span>`;
+  e.hidden = false;
+  e.classList.remove('shake'); void e.offsetWidth; e.classList.add('shake');
+}
+
+async function login(e){
+  e.preventDefault();
+  ['phone','ministry'].forEach(id => { const el = $('#' + id); const v = toLatinDigits(el.value).trim(); if (v !== el.value) el.value = v; });
+  const phone = normPhone($('#phone').value);
+  const ministry = $('#ministry').value.replace(/\D/g, '');
+  const pass = $('#pass').value.trim();
+  fieldErr('phone', !phone); fieldErr('ministry', !ministry); fieldErr('pass', !pass);
+  if (!phone) return showErr('اكتب رقم هاتفك الأردني (10 أرقام يبدأ بـ 07).');
+  if (!ministry) return showErr('اكتب الرقم الوزاري (أرقام بس).');
+  if (!pass) return showErr('اكتب الرقم السري اللي وصلك منّا.');
+  $('#loginErr').hidden = true;
+
+  if ($('#remember').checked) store.set(KEY_REMEMBER, { phone, ministry }); else store.del(KEY_REMEMBER);
+
+  const btn = $('#loginBtn');
+  btn.disabled = true; btn.classList.add('loading');
+  try {
+    const res = await fetchAccount({ phone, ministry, pass });
+    if (res.ok) { $('#pass').value = ''; renderAccount(res.account); }
+    else if (res.error === 'invalid') { fieldErr('pass', true); showErr('البيانات مش متطابقة. تأكد من رقم الهاتف والرقم الوزاري والرقم السري وجرّب مرة ثانية.'); }
+    else showErr('صار خلل من عنّا. جرّب كمان شوي، وإذا ضلّت المشكلة احكي معنا على واتساب.');
+  } catch (err) {
+    showErr('ما قدرنا نوصل للنت. تأكد من الاتصال وجرّب مرة ثانية.');
+  } finally {
+    btn.disabled = false; btn.classList.remove('loading');
+  }
+}
+
+// The file name and the key both come from the teacher's own details, so a wrong detail = no file.
+async function fetchAccount({ phone, ministry, pass }){
+  if (DEMO) { await new Promise(r => setTimeout(r, 600)); return { ok: true, account: demoAccount() }; }
+  const { id, key } = await DK.teacherKey(phone, ministry, pass);
+  const res = await fetch(`data/t/${id}.json?v=${Date.now()}`, { cache: 'no-store' });
+  if (res.status === 404) return { ok: false, error: 'invalid' };
+  if (!res.ok) return { ok: false, error: 'server' };
+  try { return { ok: true, account: DK.account(await DK.decryptJSON(key, await res.json())) }; }
+  catch (e) { return { ok: false, error: 'invalid' }; }
+}
+
+/* ---------- Account ---------- */
+function renderAccount(a){
+  const today = DK.today();
+  const pct = a.total > 0 ? Math.min(100, Math.round(a.paid / a.total * 100)) : 0;
+  const first = (a.name || '').split(/\s+/)[0];
+  const unit = `<small>${CURRENCY}</small>`;
+
+  let dueCard = '';
+  const due = parseISO(a.nextDue);
+  if (a.total > 0 && a.remaining <= 0) {
+    dueCard = `<div class="card done enter"><div class="seal"><svg class="i"><use href="#i-check"/></svg></div>
+      <strong>تم سداد المبلغ كامل</strong><p>شكراً إلك على التزامك. ما عليك ولا قسط.</p></div>`;
+  } else if (due) {
+    const diff = Math.round((due - today) / 864e5);
+    const late = diff < 0;
+    const status = late ? `متأخر ${daysWord(-diff)}` : diff === 0 ? 'موعده اليوم' : `بعد ${daysWord(diff)}`;
+    dueCard = `<div class="card enter${late ? ' late' : ''}">
+      <h2 style="margin-bottom:14px"><svg class="i"><use href="#i-cal"/></svg>${late ? 'قسط مستحق' : 'القسط القادم'}</h2>
+      <div class="due">
+        <div class="due-date" aria-hidden="true"><span class="m">${MONTHS[due.getMonth()]}</span><span class="d num">${due.getDate()}</span><span class="y num">${due.getFullYear()}</span></div>
+        <div class="due-body">
+          <div class="what">قسط راتب شهر ${due.getMonth() + 1}</div>
+          <div class="when">${longDate(due)}</div>
+          ${a.nextAmount > 0 ? `<div class="amt">المطلوب: <b class="num">${money(a.nextAmount)}</b> ${CURRENCY}</div>` : ''}
+          <span class="pill">${status}</span>
+        </div>
+      </div></div>`;
+  }
+
+  const list = a.payments.length
+    ? `<ul class="pay">${a.payments.map(p => {
+        const d = parseISO(p.date);
+        return `<li${p.amount < 0 ? ' class="neg"' : ''}><span class="tick"><svg class="i"><use href="#i-check"/></svg></span>
+          <span class="info"><b>${d ? shortDate(d) : 'بدون تاريخ'}</b>${p.note ? `<small>${esc(p.note)}</small>` : ''}</span>
+          <span class="val num">${money(p.amount)}<small>${CURRENCY}</small></span></li>`;
+      }).join('')}</ul>`
+    : `<p class="empty">لسا ما في دفعات مسجّلة.</p>`;
+
+  $('#account').innerHTML = `
+    <div class="hello enter">
+      <p>أهلاً${first ? '، ' + esc(first) : ''}<small>هاد كشف حسابك معنا</small></p>
+      <button class="out" id="logoutBtn" type="button"><svg class="i"><use href="#i-out"/></svg>خروج</button>
+    </div>
+    <div class="card balance enter">
+      <div class="label">المبلغ المتبقي</div>
+      <div class="big num"><span class="foil">${money(a.remaining)}</span><span class="unit">${CURRENCY}</span></div>
+      <div class="meter" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="نسبة المدفوع"><i id="meterFill"></i></div>
+      <div class="meter-cap"><span>دفعت <b class="num">${pct}%</b></span><span>من أصل <span class="num">${money(a.total)}</span> ${CURRENCY}</span></div>
+      <div class="stats">
+        <div class="stat"><span>المبلغ المتفق عليه</span><b class="num">${money(a.total)}${unit}</b></div>
+        <div class="stat"><span>المدفوع</span><b class="num">${money(a.paid)}${unit}</b></div>
+      </div>
+    </div>
+    ${dueCard}
+    <div class="card enter">
+      <div class="head-row"><h2><svg class="i"><use href="#i-list"/></svg>الدفعات المدفوعة</h2>${a.payments.length ? `<span class="count">${countWord(a.payments.length)}</span>` : ''}</div>
+      ${list}
+    </div>
+    ${a.notes ? `<div class="card notes enter"><h2><svg class="i"><use href="#i-note"/></svg>ملاحظات</h2><p>${esc(a.notes)}</p></div>` : ''}
+    <p class="help"><a class="wa" href="${WHATSAPP}" target="_blank" rel="noopener"><svg class="i"><use href="#i-wa"/></svg>عندك سؤال عن دفعاتك؟ احكي معنا</a></p>`;
+
+  $('#login').hidden = true;
+  $('#account').hidden = false;
+  $('#logoutBtn').onclick = logout;
+  window.scrollTo(0, 0);
+  requestAnimationFrame(() => requestAnimationFrame(() => { $('#meterFill').style.width = pct + '%'; }));
+}
+
+function logout(){
+  $('#account').hidden = true;
+  $('#account').innerHTML = '';
+  $('#login').hidden = false;
+  $('#pass').value = '';
+  window.scrollTo(0, 0);
+}
+
+/* ---------- Demo data (test mode only) ---------- */
+function demoAccount(){
+  const t = DK.today(), first = DK.addMonths(new Date(t.getFullYear(), t.getMonth(), 24), t.getDate() > 24 ? 0 : -1);
+  return DK.account({
+    name: 'محمد أحمد علي', total: 450, down: 100, installment: 50, firstDue: DK.iso(first),
+    notes: 'الدفعة الأولى كانت مقدّم عند التسجيل.\nإذا تأخر الراتب، احكيلنا وبنأجّل القسط.',
+    payments: [
+      { date: DK.iso(first), amount: 50, note: `قسط راتب شهر ${first.getMonth() + 1}` },
+      { date: DK.iso(DK.addMonths(first, -1)), amount: 100, note: 'مقدّم عند التسجيل' }
+    ]
+  });
+}
+
+/* ---------- Wiring ---------- */
+$('#loginForm').addEventListener('submit', login);
+$('#peek').onclick = () => {
+  const p = $('#pass'), show = p.type === 'password';
+  p.type = show ? 'text' : 'password';
+  $('#peek').setAttribute('aria-label', show ? 'إخفاء الرقم السري' : 'إظهار الرقم السري');
+  $('#peek use').setAttribute('href', show ? '#i-eye-off' : '#i-eye');
+};
+['phone','ministry','pass'].forEach(id => $('#' + id).addEventListener('input', () => fieldErr(id, false)));
+
+/* ---------- Boot ---------- */
+if (DEMO) $('#testBanner').hidden = false;
+const remembered = store.get(KEY_REMEMBER);
+if (remembered) {
+  $('#phone').value = remembered.phone || '';
+  $('#ministry').value = remembered.ministry || '';
+  if (remembered.phone && remembered.ministry) $('#pass').focus();
+}
+</script>
+</body>
+</html>
