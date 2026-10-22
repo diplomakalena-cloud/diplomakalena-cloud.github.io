@@ -121,7 +121,7 @@
         carried = Math.min(carried, nextAmount);
       }
     }
-    return { name: String(r.name || '').trim(), total, paid, remaining, installment, nextDue, nextAmount, carried, carriedFrom, notes: String(r.notes || '').trim(), payments };
+    return { name: String(r.name || '').trim(), title: String(r.title || '').trim(), total, paid, remaining, installment, nextDue, nextAmount, carried, carriedFrom, notes: String(r.notes || '').trim(), payments };
   }
 
   window.DK = { linkToken, readLinkToken, latin, digits, normPhone, normPass, material, sha256, encryptJSON, decryptJSON, teacherKey, adminKey, newSalt, genPassword, iso, parseISO, today, addMonths, num, account, b64, unb64 };

@@ -415,7 +415,7 @@ function renderAccount(a){
 
   $('#account').innerHTML = `
     <div class="hello enter">
-      <p>أهلاً${first ? '، ' + esc(first) : ''}<small>هاد كشف حسابك معنا</small></p>
+      <p>أهلاً${a.title && first ? ' ' + esc(a.title) + ' ' + esc(first) : first ? '، ' + esc(first) : ''}<small>هاد كشف حسابك معنا</small></p>
       <button class="out" id="logoutBtn" type="button"><svg class="i"><use href="#i-out"/></svg>خروج</button>
     </div>
     <div class="card balance enter">
@@ -454,7 +454,7 @@ function logout(){
 function demoAccount(){
   const t = DK.today(), first = DK.addMonths(new Date(t.getFullYear(), t.getMonth(), 24), t.getDate() > 24 ? 0 : -1);
   return DK.account({
-    name: 'محمد أحمد علي', total: 450, down: 100, installment: 50, firstDue: DK.iso(first),
+    name: 'محمد أحمد علي', title: 'أستاذ', total: 450, down: 100, installment: 50, firstDue: DK.iso(first),
     notes: 'الدفعة الأولى كانت مقدّم عند التسجيل.\nإذا تأخر الراتب، احكيلنا وبنأجّل القسط.',
     payments: [
       { date: DK.iso(first), amount: 50, note: `قسط راتب شهر ${first.getMonth() + 1}` },
