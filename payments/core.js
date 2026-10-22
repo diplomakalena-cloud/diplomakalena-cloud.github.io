@@ -91,7 +91,8 @@
 
   /* ---------- What the teacher sees ----------
      Each full installment paid after the down payment moves the due date one month on;
-     an unpaid month stays as the due date until its payment is recorded. */
+     an unpaid month stays as the due date until its payment is recorded.
+     With `carry` on, a month that was partly paid isn't late: what's left of it joins next month's installment. */
   function account(r) {
     const payments = (r.payments || [])
       .filter(p => num(p.amount) !== 0)
@@ -100,19 +101,27 @@
     const total = num(r.total), down = num(r.down), installment = num(r.installment);
     const paid = round(payments.reduce((s, p) => s + p.amount, 0));
     const remaining = round(Math.max(total - paid, 0));
-    let nextDue = '', nextAmount = 0;
+    let nextDue = '', nextAmount = 0, carried = 0, carriedFrom = '';
     if (remaining > 0) {
       const manual = parseISO(r.manualDue), first = parseISO(r.firstDue);
       if (manual) {
         nextDue = iso(manual);
         nextAmount = installment ? Math.min(installment, remaining) : remaining;
       } else if (first && installment > 0) {
-        const covered = Math.max(Math.floor((paid - down) / installment + 1e-9), 0);
-        nextDue = iso(addMonths(first, covered));
-        nextAmount = round(Math.min(down + installment * (covered + 1) - paid, remaining));
+        const net = paid - down;
+        let k = Math.max(Math.floor(net / installment + 1e-9), 0);
+        const part = round(net - k * installment);
+        if (r.carry && net > 0 && part > 0) {
+          carried = round(installment - part);
+          carriedFrom = iso(addMonths(first, k));
+          k++;
+        }
+        nextDue = iso(addMonths(first, k));
+        nextAmount = round(Math.min(down + installment * (k + 1) - paid, remaining));
+        carried = Math.min(carried, nextAmount);
       }
     }
-    return { name: String(r.name || '').trim(), total, paid, remaining, installment, nextDue, nextAmount, notes: String(r.notes || '').trim(), payments };
+    return { name: String(r.name || '').trim(), total, paid, remaining, installment, nextDue, nextAmount, carried, carriedFrom, notes: String(r.notes || '').trim(), payments };
   }
 
   window.DK = { linkToken, readLinkToken, latin, digits, normPhone, normPass, material, sha256, encryptJSON, decryptJSON, teacherKey, adminKey, newSalt, genPassword, iso, parseISO, today, addMonths, num, account, b64, unb64 };

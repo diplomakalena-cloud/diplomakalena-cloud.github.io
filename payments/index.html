@@ -169,6 +169,7 @@ input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(191,
 .due-body .when{font-family:var(--f-display);font-weight:700;font-size:1.08rem;line-height:1.55}
 .due-body .amt{color:var(--muted);font-size:.92rem;margin-top:2px}
 .due-body .amt b{color:var(--ink)}
+.due-body .amt.carry{font-size:.84rem;color:var(--faint)}
 .pill{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:3px 12px;border-radius:99px;font-size:.82rem;font-weight:600;
   color:var(--gold-hi);background:rgba(191,149,63,.12);border:1px solid rgba(191,149,63,.3)}
 .card.late{border-color:rgba(255,180,138,.45);background:linear-gradient(0deg,rgba(255,140,90,.07),rgba(255,140,90,.07)),var(--glass)}
@@ -395,6 +396,7 @@ function renderAccount(a){
           <div class="what">قسط راتب شهر ${due.getMonth() + 1}</div>
           <div class="when">${longDate(due)}</div>
           ${a.nextAmount > 0 ? `<div class="amt">المطلوب: <b class="num">${money(a.nextAmount)}</b> ${CURRENCY}</div>` : ''}
+          ${a.carried > 0 ? `<div class="amt carry">منها <b class="num">${money(a.carried)}</b> ${CURRENCY} باقي قسط شهر ${DK.parseISO(a.carriedFrom).getMonth() + 1}</div>` : ''}
           <span class="pill">${status}</span>
         </div>
       </div></div>`;

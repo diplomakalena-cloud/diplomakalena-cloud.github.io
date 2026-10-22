@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#00211C">
+<meta name="robots" content="noindex">
+<title>الصفحة مش موجودة | دبلومك علينا</title>
+<script>
+  // Links pasted from a chat often pick up a trailing dot or comma (…/payments/admin/.) — drop it and go to the real page.
+  (function () {
+    var path = location.pathname;
+    try { path = decodeURIComponent(path); } catch (e) {}
+    var clean = path.replace(/[\s.,،؛:;!?)\]}»"'…]+$/, '');
+    if (clean && clean !== path) location.replace(encodeURI(clean) + location.search + location.hash);
+  })();
+</script>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@700;800&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--forest:#00211C;--gold:#BF953F;--gold-hi:#F3DFA2;--ink:#F5EFE0;--muted:rgba(245,239,224,.68);
+  --foil:linear-gradient(115deg,#AA771C 0%,#BF953F 20%,#FCF6BA 42%,#B38728 60%,#FBF5B7 80%,#AA771C 100%);color-scheme:dark}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'IBM Plex Sans Arabic',sans-serif;color:var(--ink);line-height:1.8;min-height:100vh;display:grid;place-items:center;text-align:center;padding:24px 16px;
+  background:var(--forest);background-image:radial-gradient(120% 70% at 85% -10%, rgba(0,77,64,.85), transparent 60%),radial-gradient(90% 60% at 0% 110%, rgba(0,77,64,.55), transparent 60%)}
+img{width:130px;height:auto;margin:0 auto 26px;display:block}
+.code{font-family:'Alexandria',sans-serif;font-weight:800;font-size:4.5rem;line-height:1.1;background:var(--foil);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--gold)}
+h1{font-family:'Alexandria',sans-serif;font-weight:700;font-size:1.4rem;margin:8px 0 6px}
+p{color:var(--muted);max-width:420px;margin:0 auto}
+a.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 28px;margin-top:24px;border-radius:99px;text-decoration:none;
+  font-family:'Alexandria',sans-serif;font-weight:700;color:#1d1406;background:var(--foil);background-size:200% 100%}
+</style>
+</head>
+<body>
+<main>
+  <a href="/"><img src="/logo.webp" alt="دبلومك علينا" width="1291" height="775"></a>
+  <div class="code">404</div>
+  <h1>الصفحة اللي بتدوّر عليها مش موجودة</h1>
+  <p>تأكد إنه الرابط صحيح ومكتمل، وإذا وصلك منّا ولسا ما فتح، احكي معنا على واتساب.</p>
+  <a class="btn" href="/">الصفحة الرئيسية</a>
+</main>
+</body>
+</html>
