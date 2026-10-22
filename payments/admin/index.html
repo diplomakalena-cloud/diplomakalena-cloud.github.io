@@ -85,6 +85,10 @@ input[type=checkbox]{width:20px;height:20px;min-height:0;accent-color:var(--gold
 .field.invalid input{border-color:rgba(255,180,162,.6)}
 .with-btn{display:flex;gap:8px}
 .with-btn input{flex:1;min-width:0}
+.howto{margin-top:8px;font-size:.86rem;color:var(--muted)}
+.howto summary{cursor:pointer;color:var(--gold-hi);font-weight:600}
+.howto ol{margin:8px 0 10px;padding-inline-start:20px;line-height:1.9}
+.howto b{color:var(--ink);font-weight:600;direction:ltr;unicode-bidi:isolate}
 .check{display:flex;align-items:center;gap:10px;font-size:.88rem;color:var(--muted);cursor:pointer;margin:12px 0}
 
 /* Buttons */
@@ -201,7 +205,16 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
         <div class="field">
           <label for="token">مفتاح جيت هب (Token)</label>
           <input type="password" id="token" class="ltr" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
-          <small>طريقة عمله بملف <a href="https://github.com/diplomakalena-cloud/diplomakalena-cloud.github.io/blob/main/payments/SETUP.md" target="_blank" rel="noopener">payments/SETUP.md</a>. بتعمله مرة وحدة.</small>
+          <details class="howto" id="howto">
+            <summary>ما عندك مفتاح؟ بتعمله مرة وحدة بدقيقة</summary>
+            <ol>
+              <li>اضغط الزر تحت (بيفتح جيت هب وكل الإعدادات معبّاية).</li>
+              <li>عند <b>Repository access</b> اختار <b>Only select repositories</b> وبعدين اختار <b>diplomakalena-cloud.github.io</b>.</li>
+              <li>تأكد إنه تحت <b>Permissions</b> مكتوب <b>Contents: Read and write</b>.</li>
+              <li>انزل لتحت واضغط <b>Generate token</b>، انسخ المفتاح، وارجع الصقه هون.</li>
+            </ol>
+            <a class="btn btn-ghost btn-sm" id="tokenLink" target="_blank" rel="noopener"><svg class="i"><use href="#i-key"/></svg>اعمل المفتاح على جيت هب</a>
+          </details>
         </div>
         <div class="field">
           <label for="master">كلمة السر الرئيسية</label>
@@ -263,6 +276,10 @@ const BRANCH = 'main';
 const DATA = 'payments/data';
 const PAGE_URL = 'https://diplomakalena-cloud.github.io/payments/';
 const KEY_TOKEN = 'dk-admin-token-v1';
+// Opens GitHub's new-token form pre-filled for this site: write access to files only, valid for a year.
+const TOKEN_URL = 'https://github.com/settings/personal-access-tokens/new?' + new URLSearchParams({
+  name: 'لوحة الدفعات - دبلومك علينا', description: 'تحفظ كشوف دفعات المعلمين على الموقع', target_name: OWNER, expires_in: '366', contents: 'write'
+});
 const CURRENCY = 'دينار';
 const MONTHS = ['كانون الثاني','شباط','آذار','نيسان','أيار','حزيران','تموز','آب','أيلول','تشرين الأول','تشرين الثاني','كانون الأول'];
 
@@ -304,8 +321,8 @@ async function connect(e){
   const btn = $('#connectBtn'); btn.disabled = true; btn.classList.add('loading');
   try {
     const repo = await gh('');
-    if (repo.status === 401) return out.innerHTML = msgHTML('err', 'مفتاح جيت هب غلط أو منتهي. اعمل مفتاح جديد.');
-    if (!repo.ok) return out.innerHTML = msgHTML('err', 'المفتاح ما إله صلاحية على ريبو الموقع. تأكد إنك اخترت الريبو لما عملته.');
+    if (repo.status === 401) { $('#howto').open = true; return out.innerHTML = msgHTML('err', 'مفتاح جيت هب غلط أو منتهي. اعمل مفتاح جديد من الخطوات فوق.'); }
+    if (!repo.ok) { $('#howto').open = true; return out.innerHTML = msgHTML('err', 'المفتاح ما إله صلاحية على الموقع. اعمل مفتاح جديد، وانتبه تختار diplomakalena-cloud.github.io بخطوة 2.'); }
     if (repo.data.permissions && !repo.data.permissions.push) return out.innerHTML = msgHTML('err', 'المفتاح بيقرأ بس. لازم تعطيه صلاحية Contents: Read and write.');
     if ($('#rememberToken').checked) store.set(KEY_TOKEN, token); else store.del(KEY_TOKEN);
 
@@ -556,7 +573,7 @@ async function save(){
     if (!ref.ok) throw new Error('ref');
     const base = await gh(`/git/commits/${ref.data.object.sha}`);
     const tree = await gh('/git/trees', { method: 'POST', body: { base_tree: base.data.tree.sha, tree: entries } });
-    if (!tree.ok) throw new Error('tree');
+    if (!tree.ok) throw new Error(tree.status === 403 || tree.status === 404 ? 'perm' : 'tree');
     const commit = await gh('/git/commits', { method: 'POST', body: { message: 'تحديث كشوف الدفعات', tree: tree.data.sha, parents: [ref.data.object.sha] } });
     if (!commit.ok) throw new Error('commit');
     const upd = await gh(`/git/refs/heads/${BRANCH}`, { method: 'PATCH', body: { sha: commit.data.sha } });
@@ -566,7 +583,9 @@ async function save(){
   } catch (err) {
     db.teachers.forEach((t, i) => t.pub = backup[i]);
     btn.disabled = false;
-    saveState('bad', err.message === 'race' ? 'صار تعديل ثاني على الموقع بنفس الوقت. اضغط «احفظ وانشر» مرة ثانية.' : 'ما انحفظ. تأكد من النت وجرّب مرة ثانية.');
+    saveState('bad', err.message === 'race' ? 'صار تعديل ثاني على الموقع بنفس الوقت. اضغط «احفظ وانشر» مرة ثانية.'
+      : err.message === 'perm' ? 'المفتاح ما إله صلاحية حفظ (Contents: Read and write). اعمل مفتاح جديد.'
+      : 'ما انحفظ. تأكد من النت وجرّب مرة ثانية.');
   } finally { btn.classList.remove('loading'); }
 }
 function saveState(cls, text){ const s = $('#saveStatus'); s.className = 'status' + (cls ? ' ' + cls : ''); s.textContent = text; }
@@ -621,8 +640,9 @@ $('#editor').addEventListener('click', e => {
 window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
 
 /* ---------- Boot ---------- */
+$('#tokenLink').href = TOKEN_URL;
 const saved = store.get(KEY_TOKEN);
-if (saved) { $('#token').value = saved; $('#master').focus(); }
+if (saved) { $('#token').value = saved; $('#master').focus(); } else $('#howto').open = true;
 </script>
 </body>
 </html>
