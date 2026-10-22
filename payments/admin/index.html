@@ -91,6 +91,12 @@ input[type=checkbox]{width:20px;height:20px;min-height:0;accent-color:var(--gold
 .howto summary{cursor:pointer;color:var(--gold-hi);font-weight:600}
 .howto ol{margin:8px 0 10px;padding-inline-start:20px;line-height:1.9}
 .howto b{color:var(--ink);font-weight:600;direction:ltr;unicode-bidi:isolate}
+.perm{border-color:rgba(255,180,162,.45)}
+.perm h2{color:var(--error)}
+.perm h2 svg{color:var(--error)}
+.perm p{color:var(--muted);font-size:.92rem;margin:6px 0 4px}
+ol.fix{padding-inline-start:20px;font-size:.9rem;color:var(--muted);line-height:1.9;margin-top:6px}
+ol.fix b{color:var(--ink);font-weight:600;direction:ltr;unicode-bidi:isolate}
 .check.setting{align-items:flex-start;padding:12px 14px;border-radius:var(--r-sm);background:var(--glass);border:1px solid var(--field-line);margin:0 0 12px;color:var(--ink)}
 .check.setting input{margin-top:4px}
 .check.setting small{display:block;color:var(--faint);font-size:.78rem}
@@ -268,6 +274,18 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
     </form>
   </section>
 
+  <!-- ============ Token can read but not write ============ -->
+  <div class="card perm" id="permHelp" hidden>
+    <h2><svg class="i"><use href="#i-alert"/></svg>المفتاح بيقرأ بس وما بيقدر يحفظ</h2>
+    <p>لا تسكّر الصفحة، تعديلاتك لسا موجودة. عدّل نفس المفتاح على جيت هب، وبعدين ارجع اضغط «احفظ وانشر» (ما في داعي تلصقه من جديد):</p>
+    <ol class="fix">
+        <li>افتح <a href="https://github.com/settings/personal-access-tokens" target="_blank" rel="noopener">صفحة المفاتيح على جيت هب</a> واضغط على اسم المفتاح، وبعدين <b>Edit</b>.</li>
+        <li>عند <b>Repository access</b> اختار <b>Only select repositories</b> وبعدين <b>diplomakalena-cloud.github.io</b>.</li>
+        <li>عند <b>Permissions</b> اضغط <b>Add permissions</b> ← <b>Contents</b> وخلّيها <b>Read and write</b>.</li>
+        <li>اضغط <b>Update</b> تحت.</li>
+      </ol>
+  </div>
+
   <!-- ============ Dashboard ============ -->
   <section class="screen" id="dash" hidden>
     <div class="stats" id="stats"></div>
@@ -358,7 +376,10 @@ async function connect(e){
     const repo = await gh('');
     if (repo.status === 401) { $('#howto').open = true; return out.innerHTML = msgHTML('err', 'مفتاح جيت هب غلط أو منتهي. اعمل مفتاح جديد من الخطوات فوق.'); }
     if (!repo.ok) { $('#howto').open = true; return out.innerHTML = msgHTML('err', 'المفتاح ما إله صلاحية على الموقع. اعمل مفتاح جديد، وانتبه تختار diplomakalena-cloud.github.io بخطوة 2.'); }
-    if (repo.data.permissions && !repo.data.permissions.push) return out.innerHTML = msgHTML('err', 'المفتاح بيقرأ بس. لازم تعطيه صلاحية Contents: Read and write.');
+    // A token limited to "Public repositories" can still read this public repo, so check writing up front:
+    // an unreferenced blob changes nothing on the site and is cleaned up by GitHub.
+    const probe = await gh('/git/blobs', { method: 'POST', body: { content: 'write-check', encoding: 'utf-8' } });
+    if (!probe.ok) return out.innerHTML = msgHTML('err', 'المفتاح بيقرأ بس وما بيقدر يحفظ. عدّله على جيت هب بهاي الخطوات، وارجع اضغط «دخول»:') + `<ol class="fix">         <li>افتح <a href="https://github.com/settings/personal-access-tokens" target="_blank" rel="noopener">صفحة المفاتيح على جيت هب</a> واضغط على اسم المفتاح، وبعدين <b>Edit</b>.</li>         <li>عند <b>Repository access</b> اختار <b>Only select repositories</b> وبعدين <b>diplomakalena-cloud.github.io</b>.</li>         <li>عند <b>Permissions</b> اضغط <b>Add permissions</b> ← <b>Contents</b> وخلّيها <b>Read and write</b>.</li>         <li>اضغط <b>Update</b> تحت.</li>       </ol>`;
     if ($('#rememberToken').checked) store.set(KEY_TOKEN, token); else store.del(KEY_TOKEN);
 
     const file = await gh(`/contents/${DATA}/admin.json?ref=${BRANCH}`);
@@ -635,12 +656,14 @@ async function save(){
     const upd = await gh(`/git/refs/heads/${BRANCH}`, { method: 'PATCH', body: { sha: commit.data.sha } });
     if (!upd.ok) throw new Error(upd.status === 422 ? 'race' : 'ref-update');
     setDirty(false);
+    $('#permHelp').hidden = true;
     saveState('good', 'انحفظ ✓ بيوصل للمعلمين خلال دقيقة أو دقيقتين.' + (skipped ? ` (${skipped} ما انتشروا لأنه بياناتهم ناقصة)` : ''));
   } catch (err) {
     db.teachers.forEach((t, i) => t.pub = backup[i]);
     btn.disabled = false;
+    if (err.message === 'perm') { $('#permHelp').hidden = false; window.scrollTo(0, 0); }
     saveState('bad', err.message === 'race' ? 'صار تعديل ثاني على الموقع بنفس الوقت. اضغط «احفظ وانشر» مرة ثانية.'
-      : err.message === 'perm' ? 'المفتاح ما إله صلاحية حفظ (Contents: Read and write). اعمل مفتاح جديد.'
+      : err.message === 'perm' ? 'ما انحفظ: المفتاح بيقرأ بس. الخطوات فوق.'
       : 'ما انحفظ. تأكد من النت وجرّب مرة ثانية.');
   } finally { btn.classList.remove('loading'); }
 }
