@@ -62,6 +62,21 @@
     return s.slice(0, 4) + '-' + s.slice(4);
   }
 
+  /* ---------- Personal link ----------
+     The teacher's details ride in the part of the link after «#», which browsers never send to any server.
+     Opening the link is the same as typing the details, so it is shared exactly like the password. */
+  const b64url = s => b64(enc.encode(s)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  function linkToken(phone, ministry, pass) {
+    return b64url([normPhone(phone), digits(ministry), String(pass || '').trim()].join('|'));
+  }
+  function readLinkToken(tok) {
+    try {
+      const parts = dec.decode(unb64(String(tok).replace(/-/g, '+').replace(/_/g, '/'))).split('|');
+      if (parts.length !== 3 || !normPhone(parts[0]) || !digits(parts[1]) || !parts[2]) return null;
+      return { phone: parts[0], ministry: parts[1], pass: parts[2] };
+    } catch (e) { return null; }
+  }
+
   /* ---------- Dates ---------- */
   const pad = n => String(n).padStart(2, '0');
   const iso = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -100,5 +115,5 @@
     return { name: String(r.name || '').trim(), total, paid, remaining, installment, nextDue, nextAmount, notes: String(r.notes || '').trim(), payments };
   }
 
-  window.DK = { latin, digits, normPhone, normPass, material, sha256, encryptJSON, decryptJSON, teacherKey, adminKey, newSalt, genPassword, iso, parseISO, today, addMonths, num, account, b64, unb64 };
+  window.DK = { linkToken, readLinkToken, latin, digits, normPhone, normPass, material, sha256, encryptJSON, decryptJSON, teacherKey, adminKey, newSalt, genPassword, iso, parseISO, today, addMonths, num, account, b64, unb64 };
 })();
