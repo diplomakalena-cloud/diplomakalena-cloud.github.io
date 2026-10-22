@@ -89,6 +89,9 @@ input[type=checkbox]{width:20px;height:20px;min-height:0;accent-color:var(--gold
 .howto summary{cursor:pointer;color:var(--gold-hi);font-weight:600}
 .howto ol{margin:8px 0 10px;padding-inline-start:20px;line-height:1.9}
 .howto b{color:var(--ink);font-weight:600;direction:ltr;unicode-bidi:isolate}
+.check.setting{align-items:flex-start;padding:12px 14px;border-radius:var(--r-sm);background:var(--glass);border:1px solid var(--field-line);margin:0 0 12px;color:var(--ink)}
+.check.setting input{margin-top:4px}
+.check.setting small{display:block;color:var(--faint);font-size:.78rem}
 .check{display:flex;align-items:center;gap:10px;font-size:.88rem;color:var(--muted);cursor:pointer;margin:12px 0}
 
 /* Buttons */
@@ -275,6 +278,8 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
       <button class="btn btn-ghost btn-sm" id="exportBtn" type="button"><svg class="i"><use href="#i-down"/></svg>تنزيل Excel</button>
       <input type="file" id="importFile" accept=".xlsx,.xls,.csv" hidden>
     </div>
+    <label class="check setting"><input type="checkbox" id="carryOpt">
+      <span>إذا المعلم دفع جزء من القسط، باقيه بينضاف لقسط الشهر الجاي (وما بينحسب متأخر)<small>إذا طفّيتها، أي قسط ما اندفع كامل بموعده بيطلع متأخر.</small></span></label>
     <ul class="list" id="list"></ul>
   </section>
 
@@ -378,7 +383,7 @@ async function createDb(e){
   if (a !== b) return out.innerHTML = msgHTML('err', 'كلمتين السر مش متطابقات.');
   salt = DK.newSalt();
   masterKey = await DK.adminKey(a, salt);
-  db = { v: 1, teachers: [] };
+  db = { v: 1, teachers: [], settings: { carry: true } };
   dirty = true;
   openDash();
   toast('جاهزة. أضف أول معلم واضغط «احفظ وانشر».');
@@ -407,20 +412,22 @@ function problems(t){
   if (DK.normPass(t.pass).length < 6) p.push('الرقم السري');
   return p;
 }
+const carryOn = () => !db.settings || db.settings.carry !== false;
+const acct = t => DK.account({ ...t, carry: carryOn() });
 function status(t){
   if (problems(t).length) return { cls: 'warn', text: 'بيانات ناقصة', order: 0 };
-  const a = DK.account(t);
+  const a = acct(t);
   if (a.total > 0 && a.remaining <= 0) return { cls: 'ok', text: 'مسدّد كامل', order: 4, a };
   const due = DK.parseISO(a.nextDue);
   if (!due) return { cls: '', text: 'ما في موعد قسط', order: 3, a };
   const diff = Math.round((due - DK.today()) / 864e5);
   if (diff < 0) return { cls: 'late', text: `متأخر ${-diff} يوم · ${due.getDate()}/${due.getMonth() + 1}`, order: 1, a, due };
   if (diff === 0) return { cls: 'late', text: 'موعده اليوم', order: 1, a, due };
-  return { cls: '', text: `${due.getDate()}/${due.getMonth() + 1} · بعد ${diff} يوم`, order: 2, a, due };
+  return { cls: '', text: `${due.getDate()}/${due.getMonth() + 1} · بعد ${diff} يوم${a.carried ? ` · مرحّل ${money(a.carried)}` : ''}`, order: 2, a, due };
 }
 
 /* ---------- Dashboard ---------- */
-function openDash(){ current = null; show('dash'); setDirty(dirty); renderDash(); }
+function openDash(){ current = null; show('dash'); setDirty(dirty); $('#carryOpt').checked = carryOn(); renderDash(); }
 function renderDash(){
   const all = db.teachers.map(t => ({ t, s: status(t) }));
   const remaining = all.reduce((s, x) => s + (x.s.a ? x.s.a.remaining : 0), 0);
@@ -526,11 +533,11 @@ function renderLive(){
   ['name','phone','ministry','pass'].forEach(k => {
     const el = $('#fld-' + k); if (el) el.classList.toggle('invalid', p.includes({name:'الاسم',phone:'رقم الهاتف',ministry:'الرقم الوزاري',pass:'الرقم السري'}[k]) && String(current[k] || '') !== '');
   });
-  const a = s.a || DK.account(current);
+  const a = s.a || acct(current);
   $('#live').innerHTML = `
     <div><span>المتبقي</span><b class="num">${money(a.remaining)} ${CURRENCY}</b><span class="num">دفع ${money(a.paid)} من ${money(a.total)}</span></div>
     <div><span>القسط القادم</span><b class="num">${a.nextDue ? shortDate(a.nextDue) : '—'}</b>
-      ${p.length ? `<span class="pill warn">ناقص: ${p.join('، ')}</span>` : `<span class="pill ${s.cls}">${esc(s.text)}</span>${a.nextAmount ? `<span class="num">المطلوب ${money(a.nextAmount)} ${CURRENCY}</span>` : ''}`}</div>`;
+      ${p.length ? `<span class="pill warn">ناقص: ${p.join('، ')}</span>` : `<span class="pill ${s.cls}">${esc(s.text)}</span>${a.nextAmount ? `<span class="num">المطلوب ${money(a.nextAmount)} ${CURRENCY}${a.carried ? ` (منها ${money(a.carried)} باقي شهر ${DK.parseISO(a.carriedFrom).getMonth() + 1})` : ''}</span>` : ''}`}</div>`;
   const amt = $('#p-amount'), note = $('#p-note');
   if (amt && !amt.dataset.touched) amt.value = a.nextAmount || current.installment || '';
   if (note && !note.dataset.touched) note.value = a.nextDue ? `قسط راتب شهر ${DK.parseISO(a.nextDue).getMonth() + 1}` : '';
@@ -573,7 +580,7 @@ function renderShare(){
 /* ---------- Save & publish ---------- */
 function publicRecord(t){
   return { name: String(t.name || '').trim(), total: DK.num(t.total), down: DK.num(t.down), installment: DK.num(t.installment),
-    firstDue: t.firstDue || '', manualDue: t.manualDue || '', notes: String(t.notes || '').trim(),
+    firstDue: t.firstDue || '', manualDue: t.manualDue || '', carry: carryOn(), notes: String(t.notes || '').trim(),
     payments: t.payments.map(p => ({ date: p.date, amount: DK.num(p.amount), note: String(p.note || '').trim() })) };
 }
 
@@ -638,6 +645,7 @@ function saveState(cls, text){ const s = $('#saveStatus'); s.className = 'status
 $('#connectForm').addEventListener('submit', connect);
 $('#createForm').addEventListener('submit', createDb);
 $('#search').addEventListener('input', renderDash);
+$('#carryOpt').addEventListener('change', e => { db.settings = { ...(db.settings || {}), carry: e.target.checked }; setDirty(true); renderDash(); });
 $('#addBtn').onclick = addTeacher;
 $('#list').addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) openEditor(b.dataset.id); });
 $('#saveBtn').onclick = save;
@@ -797,7 +805,7 @@ $('#exportBtn').onclick = async () => {
   let XLSX;
   try { XLSX = await loadXLSX(); } catch (e) { return toast('ما قدرنا نحمّل Excel. تأكد من النت.'); }
   const rows = db.teachers.map(t => {
-    const s = status(t), a = DK.account(t), ok = !problems(t).length;
+    const s = status(t), a = acct(t), ok = !problems(t).length;
     return { 'الاسم': t.name, 'رقم الهاتف': t.phone, 'الرقم الوزاري': t.ministry, 'الرقم السري': t.pass,
       'الرابط الخاص': ok ? magicLink(t) : '', 'المبلغ المتفق عليه': a.total, 'المدفوع': a.paid, 'المتبقي': a.remaining,
       'القسط القادم': a.nextDue, 'المطلوب': a.nextAmount || '', 'الحالة': s.text, 'انبعتله الرابط': t.sentAt || '', 'ملاحظات للمعلم': t.notes || '', 'ملاحظات خاصة': t.privateNotes || '' };
