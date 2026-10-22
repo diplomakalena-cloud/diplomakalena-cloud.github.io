@@ -328,7 +328,19 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
 
 <footer>دبلومك علينا · لوحة الدفعات</footer>
 
-<script src="../core.js"></script>
+<script>
+// GitHub Pages lets browsers keep a page for ~10 minutes. If a newer version is live, reload once to pick it up,
+// so a teacher never sees new data through old code. Bump APP_VERSION here and in payments/version.json together.
+const APP_VERSION = 3;
+fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(({ v }) => {
+  let seen = null; try { seen = sessionStorage.getItem('dk-reloaded'); } catch (e) {}
+  if (v > APP_VERSION && seen !== String(v) && !(typeof db !== 'undefined' && db)) {
+    try { sessionStorage.setItem('dk-reloaded', String(v)); } catch (e) {}
+    location.reload();
+  }
+}).catch(() => {});
+</script>
+<script src="../core.js?v=3"></script>
 <script>
 const OWNER = 'diplomakalena-cloud';
 const REPO = 'diplomakalena-cloud.github.io';
