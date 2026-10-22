@@ -74,6 +74,9 @@ h2 svg{color:var(--gold)}
 @media (min-width:560px){ .grid.g2{grid-template-columns:1fr 1fr} }
 .field label{display:block;font-weight:600;font-size:.88rem;margin-bottom:5px}
 .field small{display:block;color:var(--faint);font-size:.78rem;margin-top:3px;line-height:1.6}
+select{width:100%;min-height:48px;padding:10px 14px;border-radius:var(--r-sm);background:var(--field);border:1px solid var(--field-line);color:var(--ink);font:inherit;font-size:1rem;cursor:pointer}
+select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(191,149,63,.18)}
+select option{background:#0A3A32;color:var(--ink)}
 input,textarea{
   width:100%;min-height:48px;padding:10px 14px;border-radius:var(--r-sm);
   background:var(--field);border:1px solid var(--field-line);color:var(--ink);
@@ -333,6 +336,7 @@ const BRANCH = 'main';
 const DATA = 'payments/data';
 const PAGE_URL = 'https://diplomakalena-cloud.github.io/payments/';
 const KEY_TOKEN = 'dk-admin-token-v1';
+const PUBLISH_VERSION = 2; // bump when the published record gains fields, so existing statements get re-published
 // Opens GitHub's new-token form pre-filled for this site: write access to files only, valid for a year.
 const TOKEN_URL = 'https://github.com/settings/personal-access-tokens/new?' + new URLSearchParams({
   name: 'لوحة الدفعات - دبلومك علينا', description: 'تحفظ كشوف دفعات المعلمين على الموقع', target_name: OWNER, expires_in: '366', contents: 'write'
@@ -439,6 +443,8 @@ function problems(t){
   if (DK.normPass(t.pass).length < 6) p.push('الرقم السري');
   return p;
 }
+// أستاذ / أستاذة: set in the editor, or taken from «الصفة» in the subscribers sheet.
+const titleOf = t => t.title !== undefined ? t.title : /المعلمة|الطالبة/.test(t.role || '') ? 'أستاذة' : /المعلم|الطالب/.test(t.role || '') ? 'أستاذ' : '';
 const carryOn = () => !db.settings || db.settings.carry !== false;
 const acct = t => DK.account({ ...t, carry: carryOn() });
 function status(t){
@@ -454,7 +460,15 @@ function status(t){
 }
 
 /* ---------- Dashboard ---------- */
-function openDash(){ current = null; show('dash'); setDirty(dirty); $('#carryOpt').checked = carryOn(); renderDash(); }
+function openDash(){
+  current = null; show('dash');
+  // Statements published before a format change (e.g. the title) need one re-publish to pick it up.
+  const stale = db.teachers.length && db.publishVersion !== PUBLISH_VERSION;
+  const hadEdits = dirty;
+  setDirty(hadEdits || !!stale);
+  if (stale && !hadEdits) saveState('dirty', 'في تحديث جديد لكشوف المعلمين. اضغط «احفظ وانشر» مرة وحدة عشان يوصلهم.');
+  $('#carryOpt').checked = carryOn(); renderDash();
+}
 function renderDash(){
   const all = db.teachers.map(t => ({ t, s: status(t) }));
   const remaining = all.reduce((s, x) => s + (x.s.a ? x.s.a.remaining : 0), 0);
@@ -530,7 +544,11 @@ function renderEditor(){
     <div class="card">
       <h2 style="margin-bottom:14px"><svg class="i"><use href="#i-user"/></svg>بيانات المعلم</h2>
       <div class="grid g2">
-        ${FIELDS.slice(0, 3).map(field).join('')}
+        ${FIELDS.slice(0, 1).map(field).join('')}
+        <div class="field"><label for="f-title">اللقب</label>
+          <select id="f-title" data-f="title">${['أستاذ', 'أستاذة', ''].map(v => `<option value="${v}" ${titleOf(t) === v ? 'selected' : ''}>${v || 'بدون لقب'}</option>`).join('')}</select>
+          <small>بيطلع بكشف المعلم وبالرسائل، مثل «أهلاً أستاذ أحمد».</small></div>
+        ${FIELDS.slice(1, 3).map(field).join('')}
         <div class="field" id="fld-pass"><label for="f-pass">الرقم السري</label>
           <div class="with-btn"><input id="f-pass" data-f="pass" class="ltr" value="${esc(t.pass)}" autocomplete="off" spellcheck="false">
           <button class="btn btn-ghost btn-sm" id="genBtn" type="button"><svg class="i"><use href="#i-key"/></svg>جديد</button></div>
@@ -600,8 +618,8 @@ function dinars(n){
 }
 function greeting(t){
   const first = String(t.name || '').trim().split(/\s+/)[0] || '';
-  const title = /المعلمة|الطالبة/.test(t.role || '') ? 'أستاذة ' : /المعلم|الطالب/.test(t.role || '') ? 'أستاذ ' : '';
-  return `مرحبًا ${title}${first} 🌿`.replace(/\s+🌿/, ' 🌿');
+  const title = titleOf(t);
+  return `مرحبًا ${title ? title + ' ' : ''}${first} 🌿`.replace(/\s+🌿/, ' 🌿');
 }
 const SIGN = '\n\nمع التحية،\nفريق دبلومك علينا';
 const dueLine = a => `${dinars(a.nextAmount)}${a.carried ? ` (منها ${dinars(a.carried)} متبقية من قسط شهر ${monthNo(a.carriedFrom)})` : ''}`;
@@ -675,7 +693,7 @@ function renderShare(){
 
 /* ---------- Save & publish ---------- */
 function publicRecord(t){
-  return { name: String(t.name || '').trim(), total: DK.num(t.total), down: DK.num(t.down), installment: DK.num(t.installment),
+  return { name: String(t.name || '').trim(), title: titleOf(t), total: DK.num(t.total), down: DK.num(t.down), installment: DK.num(t.installment),
     firstDue: t.firstDue || '', manualDue: t.manualDue || '', carry: carryOn(), notes: String(t.notes || '').trim(),
     payments: t.payments.map(p => ({ date: p.date, amount: DK.num(p.amount), note: String(p.note || '').trim() })) };
 }
@@ -713,6 +731,7 @@ async function save(){
     }
     existing.forEach(name => { if (!keep.has(name.replace(/\.json$/, ''))) entries.push({ path: `${DATA}/t/${name}`, mode: '100644', type: 'blob', sha: null }); });
     db.savedAt = new Date().toISOString();
+    db.publishVersion = PUBLISH_VERSION;
     entries.push({ path: `${DATA}/admin.json`, mode: '100644', type: 'blob', content: JSON.stringify({ ...(await DK.encryptJSON(masterKey, db)), salt }) });
 
     saveState('', 'عم نرفع على جيت هب…');
