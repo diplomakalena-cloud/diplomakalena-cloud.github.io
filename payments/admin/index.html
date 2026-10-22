@@ -445,7 +445,10 @@ function renderDash(){
       <span class="who"><b>${esc(t.name || 'بدون اسم')}</b><small class="num">${esc(t.phone || '—')}${s.a ? ` · متبقي ${money(s.a.remaining)} ${CURRENCY}` : ''}</small>${!t.sentAt && s.cls !== 'warn' ? '<small class="nosend">لسا ما انبعتله الرابط</small>' : ''}</span>
       <span class="pill ${s.cls}">${esc(s.text)}</span>
     </button></li>`).join('')
-    : `<li class="empty">${db.teachers.length ? 'ما في نتائج.' : 'لسا ما في معلمين. اضغط «معلم جديد».'}</li>`;
+    : db.teachers.length ? `<li class="empty">ما في نتائج.</li>`
+    : `<li class="empty">لسا ما في معلمين.<br>عندك ملف المشتركين؟ ضيفهم كلهم مرة وحدة:
+        <button class="btn btn-gold btn-block" type="button" data-import style="margin-top:14px"><svg class="i"><use href="#i-up"/></svg>استيراد من Excel</button>
+        <small style="display:block;margin-top:10px;color:var(--faint)">أو اضغط «معلم جديد» لتضيف واحد واحد.</small></li>`;
 }
 
 function nextTwentyFourth(){
@@ -647,7 +650,10 @@ $('#createForm').addEventListener('submit', createDb);
 $('#search').addEventListener('input', renderDash);
 $('#carryOpt').addEventListener('change', e => { db.settings = { ...(db.settings || {}), carry: e.target.checked }; setDirty(true); renderDash(); });
 $('#addBtn').onclick = addTeacher;
-$('#list').addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) openEditor(b.dataset.id); });
+$('#list').addEventListener('click', e => {
+  if (e.target.closest('[data-import]')) return $('#importBtn').click();
+  const b = e.target.closest('[data-id]'); if (b) openEditor(b.dataset.id);
+});
 $('#saveBtn').onclick = save;
 
 $('#editor').addEventListener('input', e => {
