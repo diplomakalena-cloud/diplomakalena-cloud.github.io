@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#00211C">
+<meta name="robots" content="noindex, nofollow">
+<title>لوحة الدفعات | دبلومك علينا</title>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ================= Tokens (same as the main site) ================= */
+:root{
+  --forest:#00211C;
+  --green:#004D40;
+  --gold:#BF953F;
+  --gold-hi:#F3DFA2;
+  --ink:#F5EFE0;
+  --muted:rgba(245,239,224,.68);
+  --faint:rgba(245,239,224,.45);
+  --line:rgba(191,149,63,.24);
+  --glass:rgba(0,77,64,.28);
+  --field:rgba(0,20,17,.45);
+  --field-line:rgba(245,239,224,.14);
+  --error:#FFB4A2;
+  --late:#FFB48A;
+  --ok:#9FE0C0;
+  --foil:linear-gradient(115deg,#AA771C 0%,#BF953F 20%,#FCF6BA 42%,#B38728 60%,#FBF5B7 80%,#AA771C 100%);
+  --f-display:'Alexandria',sans-serif;
+  --f-body:'IBM Plex Sans Arabic',sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --r-md:20px; --r-sm:14px;
+  --gutter:16px;
+  color-scheme:dark;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--f-body);color:var(--ink);line-height:1.75;font-size:16px;
+  background:var(--forest);
+  background-image:radial-gradient(120% 70% at 85% -10%, rgba(0,77,64,.85), transparent 60%),radial-gradient(90% 60% at 0% 110%, rgba(0,77,64,.55), transparent 60%);
+  background-attachment:fixed;min-height:100vh;overflow-x:hidden;
+}
+img{max-width:100%;display:block}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:var(--gold-hi)}
+:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px;border-radius:8px}
+svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+[hidden]{display:none!important}
+.foil{background:var(--foil);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--gold)}
+.num{font-variant-numeric:tabular-nums}
+.wrap{width:100%;max-width:720px;margin:0 auto;padding:0 var(--gutter)}
+
+.top{padding:22px 0 6px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.top img{width:96px;height:auto}
+.top .tag{font-size:.8rem;font-weight:600;color:var(--gold-hi);border:1px solid var(--line);border-radius:99px;padding:3px 12px}
+
+.screen{padding:10px 0 130px}
+.card{background:var(--glass);border:1px solid var(--line);border-radius:var(--r-md);padding:20px 16px;margin-bottom:14px;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+@media (min-width:560px){ .card{padding:24px 24px} }
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(1.4rem,5.5vw,1.8rem);line-height:1.45;margin-bottom:8px}
+h2{font-family:var(--f-display);font-weight:700;font-size:1.05rem;line-height:1.5;display:flex;align-items:center;gap:8px}
+h2 svg{color:var(--gold)}
+.lead{color:var(--muted);margin-bottom:16px;font-size:.95rem}
+
+/* Fields */
+.grid{display:grid;gap:12px}
+@media (min-width:560px){ .grid.g2{grid-template-columns:1fr 1fr} }
+.field label{display:block;font-weight:600;font-size:.88rem;margin-bottom:5px}
+.field small{display:block;color:var(--faint);font-size:.78rem;margin-top:3px;line-height:1.6}
+input,textarea{
+  width:100%;min-height:48px;padding:10px 14px;border-radius:var(--r-sm);
+  background:var(--field);border:1px solid var(--field-line);color:var(--ink);
+  font:inherit;font-size:1rem;transition:border-color .25s,box-shadow .25s;-webkit-appearance:none;appearance:none}
+textarea{min-height:90px;resize:vertical;line-height:1.7}
+input::placeholder,textarea::placeholder{color:var(--faint)}
+input:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(191,149,63,.18)}
+input.ltr{direction:ltr;text-align:right}
+input[type=date]{direction:ltr;text-align:right;color-scheme:dark}
+input[type=checkbox]{width:20px;height:20px;min-height:0;accent-color:var(--gold);-webkit-appearance:auto;appearance:auto;flex-shrink:0}
+.field.invalid input{border-color:rgba(255,180,162,.6)}
+.with-btn{display:flex;gap:8px}
+.with-btn input{flex:1;min-width:0}
+.check{display:flex;align-items:center;gap:10px;font-size:.88rem;color:var(--muted);cursor:pointer;margin:12px 0}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:99px;
+  font-family:var(--f-display);font-weight:700;font-size:.95rem;transition:transform .3s var(--ease),box-shadow .3s,background .3s,opacity .3s;text-decoration:none;white-space:nowrap}
+.btn-gold{background:var(--foil);background-size:200% 100%;color:#1d1406;box-shadow:0 10px 30px -10px rgba(191,149,63,.55),inset 0 1px 0 rgba(255,255,255,.5)}
+.btn-gold:hover{transform:translateY(-1px)}
+.btn-ghost{border:1px solid rgba(245,239,224,.22);background:rgba(0,33,28,.5);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold-hi)}
+.btn-danger{border:1px solid rgba(255,180,162,.35);color:var(--error)}
+.btn-danger:hover{background:rgba(255,180,162,.08)}
+.btn-sm{min-height:40px;padding:0 14px;font-size:.86rem}
+.btn[disabled]{opacity:.5;pointer-events:none}
+.btn-block{width:100%}
+.icon-btn{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;color:var(--faint);flex-shrink:0}
+.icon-btn:hover{color:var(--error);background:rgba(255,180,162,.08)}
+
+.msg{display:flex;align-items:flex-start;gap:8px;margin:12px 0 0;padding:10px 14px;border-radius:var(--r-sm);font-size:.9rem;line-height:1.7}
+.msg.err{color:var(--error);background:rgba(255,180,162,.08);border:1px solid rgba(255,180,162,.3)}
+.msg.info{color:var(--gold-hi);background:rgba(191,149,63,.08);border:1px solid rgba(191,149,63,.3)}
+.msg svg{margin-top:4px}
+
+/* Summary */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.stat{padding:12px 8px;border-radius:var(--r-sm);background:var(--glass);border:1px solid var(--line);text-align:center}
+.stat span{display:block;font-size:.76rem;color:var(--muted)}
+.stat b{display:block;font-family:var(--f-display);font-weight:700;font-size:1.2rem;line-height:1.5}
+.stat.late b{color:var(--late)}
+
+.toolbar{display:flex;gap:10px;margin-bottom:12px}
+.toolbar input{flex:1;min-width:0}
+
+/* Teacher list */
+.list{list-style:none}
+.row{display:flex;align-items:center;gap:12px;width:100%;text-align:start;padding:14px 14px;margin-bottom:8px;border-radius:var(--r-sm);
+  background:var(--glass);border:1px solid var(--field-line);transition:border-color .2s}
+.row:hover{border-color:var(--line)}
+.row .who{flex:1;min-width:0}
+.row .who b{display:block;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .who small{display:block;color:var(--muted);font-size:.82rem}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:99px;font-size:.78rem;font-weight:600;white-space:nowrap;
+  color:var(--gold-hi);background:rgba(191,149,63,.12);border:1px solid rgba(191,149,63,.3)}
+.pill.late{color:var(--late);background:rgba(255,140,90,.1);border-color:rgba(255,180,138,.4)}
+.pill.ok{color:var(--ok);background:rgba(159,224,192,.08);border-color:rgba(159,224,192,.3)}
+.pill.warn{color:var(--error);background:rgba(255,180,162,.08);border-color:rgba(255,180,162,.35)}
+.empty{color:var(--muted);text-align:center;padding:26px 10px}
+
+/* Editor */
+.ed-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 12px}
+.live{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.live div{padding:10px;border-radius:var(--r-sm);background:var(--field);border:1px solid var(--field-line);text-align:center}
+.live span{display:block;font-size:.76rem;color:var(--muted)}
+.live b{display:block;font-family:var(--f-display);font-weight:700;font-size:1.05rem;line-height:1.6}
+.live .pill{margin-top:4px}
+.pays{list-style:none;margin-top:8px}
+.pays li{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--field-line)}
+.pays li:first-child{border-top:0}
+.pays .info{flex:1;min-width:0}
+.pays .info b{display:block;font-weight:600;font-size:.94rem}
+.pays .info small{display:block;color:var(--muted);font-size:.82rem;overflow-wrap:anywhere}
+.pays .val{font-family:var(--f-display);font-weight:700;white-space:nowrap}
+.add-pay{margin-top:14px;padding:14px;border-radius:var(--r-sm);background:rgba(0,20,17,.3);border:1px dashed var(--line)}
+.add-pay .grid{grid-template-columns:1fr 1fr}
+.add-pay .full{grid-column:1/-1}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+pre.share{white-space:pre-wrap;font:inherit;font-size:.9rem;color:var(--muted);background:var(--field);border:1px solid var(--field-line);border-radius:var(--r-sm);padding:12px 14px;margin:10px 0}
+
+/* Save bar */
+.savebar{position:fixed;bottom:0;inset-inline:0;z-index:40;padding:10px 0 calc(10px + env(safe-area-inset-bottom));
+  background:rgba(0,33,28,.88);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid rgba(191,149,63,.16)}
+.savebar .wrap{display:flex;align-items:center;gap:12px}
+.savebar .status{flex:1;min-width:0;font-size:.84rem;color:var(--muted);line-height:1.6}
+.savebar .status.dirty{color:var(--gold-hi)}
+.savebar .status.bad{color:var(--error)}
+.savebar .status.good{color:var(--ok)}
+.spin{display:none;width:16px;height:16px;border-radius:50%;border:2px solid rgba(29,20,6,.3);border-top-color:#1d1406}
+.btn.loading .spin{display:inline-block}
+@media (prefers-reduced-motion:no-preference){ .spin{animation:spin .8s linear infinite} }
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:80;background:#0A3A32;border:1px solid var(--line);color:var(--ink);
+  padding:8px 18px;border-radius:99px;font-size:.88rem;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gutter) 24px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m10.8 12.2 8.2-8.2M16 7l2 2M14 9l2 2"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+</svg>
+
+<header class="top wrap">
+  <a href="../../" aria-label="دبلومك علينا"><img src="../../logo.webp" alt="دبلومك علينا" width="1291" height="775"></a>
+  <span class="tag">لوحة الدفعات</span>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ Connect ============ -->
+  <section class="screen" id="connect">
+    <form class="card" id="connectForm" novalidate>
+      <h1>أهلاً فيك <span class="foil">بلوحة الدفعات</span></h1>
+      <p class="lead">من هون بتضيف المعلمين ودفعاتهم، ولما تحفظ بتنحفظ مشفّرة على جيت هب، وكل معلم بيشوف كشفه على صفحة <a href="../" target="_blank">/payments/</a>.</p>
+      <div class="grid">
+        <div class="field">
+          <label for="token">مفتاح جيت هب (Token)</label>
+          <input type="password" id="token" class="ltr" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+          <small>طريقة عمله بملف <a href="https://github.com/diplomakalena-cloud/diplomakalena-cloud.github.io/blob/main/payments/SETUP.md" target="_blank" rel="noopener">payments/SETUP.md</a>. بتعمله مرة وحدة.</small>
+        </div>
+        <div class="field">
+          <label for="master">كلمة السر الرئيسية</label>
+          <input type="password" id="master" autocomplete="current-password">
+          <small>هي اللي بتشفّر قائمة المعلمين كاملة. إذا ضاعت، ما في طريقة نرجّع البيانات، فاحفظها بمكان آمن.</small>
+        </div>
+      </div>
+      <label class="check"><input type="checkbox" id="rememberToken" checked>تذكّر مفتاح جيت هب على هذا الجهاز</label>
+      <button class="btn btn-gold btn-block" id="connectBtn" type="submit"><span class="spin" aria-hidden="true"></span><svg class="i"><use href="#i-lock"/></svg>دخول</button>
+      <div id="connectMsg"></div>
+    </form>
+  </section>
+
+  <!-- ============ First run ============ -->
+  <section class="screen" id="create" hidden>
+    <form class="card" id="createForm" novalidate>
+      <h1>أول مرة؟ <span class="foil">خلّينا نجهّزها</span></h1>
+      <p class="lead">ما في قاعدة بيانات للدفعات لسا. اختار كلمة سر رئيسية (8 أحرف أو أكثر)، وأكّدها.</p>
+      <div class="grid">
+        <div class="field"><label for="newMaster">كلمة السر الرئيسية</label><input type="password" id="newMaster" autocomplete="new-password"></div>
+        <div class="field"><label for="newMaster2">أكّد كلمة السر</label><input type="password" id="newMaster2" autocomplete="new-password"></div>
+      </div>
+      <div style="height:14px"></div>
+      <button class="btn btn-gold btn-block" type="submit">جهّز قاعدة البيانات</button>
+      <div id="createMsg"></div>
+    </form>
+  </section>
+
+  <!-- ============ Dashboard ============ -->
+  <section class="screen" id="dash" hidden>
+    <div class="stats" id="stats"></div>
+    <div class="toolbar">
+      <input type="search" id="search" placeholder="دوّر بالاسم أو الرقم" aria-label="دوّر بالاسم أو الهاتف أو الرقم الوزاري">
+      <button class="btn btn-gold" id="addBtn" type="button"><svg class="i"><use href="#i-plus"/></svg>معلم جديد</button>
+    </div>
+    <ul class="list" id="list"></ul>
+  </section>
+
+  <!-- ============ Editor ============ -->
+  <section class="screen" id="editor" hidden></section>
+
+</main>
+
+<div class="savebar" id="savebar" hidden>
+  <div class="wrap">
+    <div class="status" id="saveStatus">كل شي محفوظ.</div>
+    <button class="btn btn-gold" id="saveBtn" type="button" disabled><span class="spin" aria-hidden="true"></span>احفظ وانشر</button>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<footer>دبلومك علينا · لوحة الدفعات</footer>
+
+<script src="../core.js"></script>
+<script>
+const OWNER = 'diplomakalena-cloud';
+const REPO = 'diplomakalena-cloud.github.io';
+const BRANCH = 'main';
+const DATA = 'payments/data';
+const PAGE_URL = 'https://diplomakalena-cloud.github.io/payments/';
+const KEY_TOKEN = 'dk-admin-token-v1';
+const CURRENCY = 'دينار';
+const MONTHS = ['كانون الثاني','شباط','آذار','نيسان','أيار','حزيران','تموز','آب','أيلول','تشرين الأول','تشرين الثاني','كانون الأول'];
+
+const store = {
+  get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+};
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money = n => Number(n || 0).toLocaleString('en-US', { maximumFractionDigits: 2 });
+const shortDate = s => { const d = DK.parseISO(s); return d ? `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}` : 'بدون تاريخ'; };
+const uid = () => DK.b64(crypto.getRandomValues(new Uint8Array(9))).replace(/[+/=]/g, '');
+function msgHTML(kind, text){ return `<div class="msg ${kind}"><svg class="i"><use href="#i-${kind === 'err' ? 'alert' : 'lock'}"/></svg><span>${text}</span></div>`; }
+function toast(text){ const t = $('#toast'); t.textContent = text; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 2200); }
+
+/* ---------- State ---------- */
+let token = '', masterKey = null, salt = '', db = null, dirty = false, current = null;
+
+/* ---------- GitHub API ---------- */
+async function gh(path, opts = {}){
+  const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}${path}`, {
+    method: opts.method || 'GET', cache: 'no-store',
+    headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', ...(opts.body ? { 'Content-Type': 'application/json' } : {}) },
+    body: opts.body ? JSON.stringify(opts.body) : undefined
+  });
+  let data = null; try { data = await res.json(); } catch (e) {}
+  return { status: res.status, ok: res.ok, data };
+}
+const fromB64Text = s => new TextDecoder().decode(DK.unb64(s.replace(/\s/g, '')));
+
+/* ---------- Connect ---------- */
+async function connect(e){
+  e.preventDefault();
+  token = $('#token').value.trim();
+  const master = $('#master').value;
+  const out = $('#connectMsg'); out.innerHTML = '';
+  if (!token) return out.innerHTML = msgHTML('err', 'الصق مفتاح جيت هب.');
+  const btn = $('#connectBtn'); btn.disabled = true; btn.classList.add('loading');
+  try {
+    const repo = await gh('');
+    if (repo.status === 401) return out.innerHTML = msgHTML('err', 'مفتاح جيت هب غلط أو منتهي. اعمل مفتاح جديد.');
+    if (!repo.ok) return out.innerHTML = msgHTML('err', 'المفتاح ما إله صلاحية على ريبو الموقع. تأكد إنك اخترت الريبو لما عملته.');
+    if (repo.data.permissions && !repo.data.permissions.push) return out.innerHTML = msgHTML('err', 'المفتاح بيقرأ بس. لازم تعطيه صلاحية Contents: Read and write.');
+    if ($('#rememberToken').checked) store.set(KEY_TOKEN, token); else store.del(KEY_TOKEN);
+
+    const file = await gh(`/contents/${DATA}/admin.json?ref=${BRANCH}`);
+    if (file.status === 404) { show('create'); $('#newMaster').value = master; return; }
+    if (!file.ok) return out.innerHTML = msgHTML('err', 'ما قدرنا نقرأ قاعدة البيانات. جرّب كمان شوي.');
+    if (!master) return out.innerHTML = msgHTML('err', 'اكتب كلمة السر الرئيسية.');
+    const box = JSON.parse(fromB64Text(file.data.content));
+    try {
+      masterKey = await DK.adminKey(master, box.salt);
+      db = await DK.decryptJSON(masterKey, box);
+      salt = box.salt;
+    } catch (err) { return out.innerHTML = msgHTML('err', 'كلمة السر الرئيسية غلط.'); }
+    $('#master').value = '';
+    openDash();
+  } catch (err) {
+    out.innerHTML = msgHTML('err', 'ما قدرنا نوصل لجيت هب. تأكد من النت.');
+  } finally { btn.disabled = false; btn.classList.remove('loading'); }
+}
+
+async function createDb(e){
+  e.preventDefault();
+  const a = $('#newMaster').value, b = $('#newMaster2').value, out = $('#createMsg');
+  if (a.length < 8) return out.innerHTML = msgHTML('err', 'كلمة السر لازم تكون 8 أحرف أو أكثر.');
+  if (a !== b) return out.innerHTML = msgHTML('err', 'كلمتين السر مش متطابقات.');
+  salt = DK.newSalt();
+  masterKey = await DK.adminKey(a, salt);
+  db = { v: 1, teachers: [] };
+  dirty = true;
+  openDash();
+  toast('جاهزة. أضف أول معلم واضغط «احفظ وانشر».');
+}
+
+/* ---------- Screens ---------- */
+function show(id){
+  ['connect','create','dash','editor'].forEach(s => $('#' + s).hidden = s !== id);
+  $('#savebar').hidden = !(id === 'dash' || id === 'editor');
+  window.scrollTo(0, 0);
+}
+function setDirty(v){
+  dirty = v;
+  $('#saveBtn').disabled = !v;
+  const s = $('#saveStatus');
+  s.className = 'status' + (v ? ' dirty' : '');
+  s.textContent = v ? 'في تعديلات مش محفوظة.' : 'كل شي محفوظ.';
+}
+
+/* ---------- Teacher status ---------- */
+function problems(t){
+  const p = [];
+  if (!String(t.name || '').trim()) p.push('الاسم');
+  if (!DK.normPhone(t.phone)) p.push('رقم الهاتف');
+  if (!DK.digits(t.ministry)) p.push('الرقم الوزاري');
+  if (DK.normPass(t.pass).length < 6) p.push('الرقم السري');
+  return p;
+}
+function status(t){
+  if (problems(t).length) return { cls: 'warn', text: 'بيانات ناقصة', order: 0 };
+  const a = DK.account(t);
+  if (a.total > 0 && a.remaining <= 0) return { cls: 'ok', text: 'مسدّد كامل', order: 4, a };
+  const due = DK.parseISO(a.nextDue);
+  if (!due) return { cls: '', text: 'ما في موعد قسط', order: 3, a };
+  const diff = Math.round((due - DK.today()) / 864e5);
+  if (diff < 0) return { cls: 'late', text: `متأخر ${-diff} يوم · ${due.getDate()}/${due.getMonth() + 1}`, order: 1, a, due };
+  if (diff === 0) return { cls: 'late', text: 'موعده اليوم', order: 1, a, due };
+  return { cls: '', text: `${due.getDate()}/${due.getMonth() + 1} · بعد ${diff} يوم`, order: 2, a, due };
+}
+
+/* ---------- Dashboard ---------- */
+function openDash(){ current = null; show('dash'); setDirty(dirty); renderDash(); }
+function renderDash(){
+  const all = db.teachers.map(t => ({ t, s: status(t) }));
+  const remaining = all.reduce((s, x) => s + (x.s.a ? x.s.a.remaining : 0), 0);
+  const late = all.filter(x => x.s.cls === 'late').length;
+  $('#stats').innerHTML = `
+    <div class="stat"><span>المعلمين</span><b class="num">${all.length}</b></div>
+    <div class="stat"><span>مجموع المتبقي</span><b class="num">${money(remaining)}</b></div>
+    <div class="stat${late ? ' late' : ''}"><span>متأخرين / اليوم</span><b class="num">${late}</b></div>`;
+  const q = DK.latin($('#search').value).trim().toLowerCase();
+  const rows = all
+    .filter(x => !q || [x.t.name, x.t.phone, x.t.ministry].some(v => DK.latin(v).toLowerCase().includes(q)))
+    .sort((a, b) => a.s.order - b.s.order || String(a.s.due ? DK.iso(a.s.due) : '').localeCompare(b.s.due ? DK.iso(b.s.due) : '') || String(a.t.name).localeCompare(b.t.name, 'ar'));
+  $('#list').innerHTML = rows.length ? rows.map(({ t, s }) => `
+    <li><button class="row" type="button" data-id="${esc(t.id)}">
+      <span class="who"><b>${esc(t.name || 'بدون اسم')}</b><small class="num">${esc(t.phone || '—')}${s.a ? ` · متبقي ${money(s.a.remaining)} ${CURRENCY}` : ''}</small></span>
+      <span class="pill ${s.cls}">${esc(s.text)}</span>
+    </button></li>`).join('')
+    : `<li class="empty">${db.teachers.length ? 'ما في نتائج.' : 'لسا ما في معلمين. اضغط «معلم جديد».'}</li>`;
+}
+
+function nextTwentyFourth(){
+  const t = DK.today();
+  return DK.iso(new Date(t.getFullYear(), t.getMonth() + (t.getDate() > 24 ? 1 : 0), 24));
+}
+function addTeacher(){
+  const t = { id: uid(), name: '', phone: '', ministry: '', pass: DK.genPassword(), total: '', down: '', installment: '', firstDue: nextTwentyFourth(), manualDue: '', notes: '', payments: [] };
+  db.teachers.push(t);
+  setDirty(true);
+  openEditor(t.id);
+}
+
+/* ---------- Editor ---------- */
+const FIELDS = [
+  ['name', 'الاسم', 'text', ''],
+  ['phone', 'رقم الهاتف', 'tel', 'ltr', '07XXXXXXXX'],
+  ['ministry', 'الرقم الوزاري', 'text', 'ltr'],
+  ['total', 'المبلغ المتفق عليه', 'text', 'ltr', 'مثال: 450'],
+  ['down', 'الدفعة المقدّمة (إن وجدت)', 'text', 'ltr', 'اتركها فاضية إذا ما في'],
+  ['installment', 'قيمة القسط الشهري', 'text', 'ltr', 'مثال: 50'],
+  ['firstDue', 'تاريخ أول قسط', 'date', ''],
+  ['manualDue', 'موعد القسط القادم يدوياً (اختياري)', 'date', '']
+];
+const HINTS = {
+  down: 'إذا دفع مبلغ عند التسجيل قبل الأقساط. سجّله كمان كدفعة تحت، عشان ينحسب من المدفوع.',
+  manualDue: 'اتركه فاضي عادةً. إذا عبّيته بيطلع بدل الحساب التلقائي (مثلاً لو أجّلت قسط).',
+  ministry: 'هو والهاتف والرقم السري بيفتحوا كشف المعلم.'
+};
+
+function openEditor(id){
+  current = db.teachers.find(t => t.id === id);
+  if (!current) return openDash();
+  show('editor');
+  renderEditor();
+}
+function renderEditor(){
+  const t = current;
+  const field = ([k, label, type, cls, ph]) => `
+    <div class="field" id="fld-${k}"><label for="f-${k}">${label}</label>
+      <input id="f-${k}" data-f="${k}" type="${type}" class="${cls}" value="${esc(t[k])}" ${ph ? `placeholder="${esc(ph)}"` : ''} ${type === 'text' && cls ? 'inputmode="decimal"' : ''}>
+      ${HINTS[k] ? `<small>${HINTS[k]}</small>` : ''}</div>`;
+  $('#editor').innerHTML = `
+    <div class="ed-head">
+      <button class="btn btn-ghost btn-sm" id="backBtn" type="button"><svg class="i"><use href="#i-back"/></svg>القائمة</button>
+      <button class="btn btn-danger btn-sm" id="delBtn" type="button">حذف المعلم</button>
+    </div>
+    <div class="card"><div class="live" id="live"></div></div>
+    <div class="card">
+      <h2 style="margin-bottom:14px"><svg class="i"><use href="#i-user"/></svg>بيانات المعلم</h2>
+      <div class="grid g2">
+        ${FIELDS.slice(0, 3).map(field).join('')}
+        <div class="field" id="fld-pass"><label for="f-pass">الرقم السري</label>
+          <div class="with-btn"><input id="f-pass" data-f="pass" class="ltr" value="${esc(t.pass)}" autocomplete="off" spellcheck="false">
+          <button class="btn btn-ghost btn-sm" id="genBtn" type="button"><svg class="i"><use href="#i-key"/></svg>جديد</button></div>
+          <small>8 أحرف وأرقام عشوائية أقوى من رقم قصير، لأنه الصفحة عامة.</small></div>
+        ${FIELDS.slice(3).map(field).join('')}
+      </div>
+      <div class="field" style="margin-top:12px"><label for="f-notes">ملاحظات للمعلم</label>
+        <textarea id="f-notes" data-f="notes" placeholder="أي نص بدك المعلم يشوفه بكشفه">${esc(t.notes)}</textarea></div>
+    </div>
+    <div class="card">
+      <h2><svg class="i"><use href="#i-list"/></svg>الدفعات</h2>
+      <ul class="pays" id="pays"></ul>
+      <div class="add-pay">
+        <div class="grid">
+          <div class="field"><label for="p-date">التاريخ</label><input type="date" id="p-date" value="${DK.iso(DK.today())}"></div>
+          <div class="field"><label for="p-amount">المبلغ</label><input id="p-amount" class="ltr" inputmode="decimal"></div>
+          <div class="field full"><label for="p-note">ملاحظة (بتطلع للمعلم)</label><input id="p-note"></div>
+        </div>
+        <button class="btn btn-gold btn-block" id="addPayBtn" type="button" style="margin-top:12px"><svg class="i"><use href="#i-plus"/></svg>سجّل الدفعة</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2><svg class="i"><use href="#i-send"/></svg>بيانات الدخول للمعلم</h2>
+      <pre class="share" id="share"></pre>
+      <div class="actions">
+        <a class="btn btn-gold btn-sm" id="waBtn" target="_blank" rel="noopener"><svg class="i"><use href="#i-send"/></svg>ابعتها واتساب</a>
+        <button class="btn btn-ghost btn-sm" id="copyBtn" type="button"><svg class="i"><use href="#i-copy"/></svg>نسخ</button>
+      </div>
+      <p style="color:var(--faint);font-size:.8rem;margin-top:10px">لازم تضغط «احفظ وانشر» قبل ما يقدر المعلم يدخل.</p>
+    </div>`;
+  renderLive(); renderPays(); renderShare();
+}
+
+function renderLive(){
+  const s = status(current), p = problems(current);
+  ['name','phone','ministry','pass'].forEach(k => {
+    const el = $('#fld-' + k); if (el) el.classList.toggle('invalid', p.includes({name:'الاسم',phone:'رقم الهاتف',ministry:'الرقم الوزاري',pass:'الرقم السري'}[k]) && String(current[k] || '') !== '');
+  });
+  const a = s.a || DK.account(current);
+  $('#live').innerHTML = `
+    <div><span>المتبقي</span><b class="num">${money(a.remaining)} ${CURRENCY}</b><span class="num">دفع ${money(a.paid)} من ${money(a.total)}</span></div>
+    <div><span>القسط القادم</span><b class="num">${a.nextDue ? shortDate(a.nextDue) : '—'}</b>
+      ${p.length ? `<span class="pill warn">ناقص: ${p.join('، ')}</span>` : `<span class="pill ${s.cls}">${esc(s.text)}</span>${a.nextAmount ? `<span class="num">المطلوب ${money(a.nextAmount)} ${CURRENCY}</span>` : ''}`}</div>`;
+  const amt = $('#p-amount'), note = $('#p-note');
+  if (amt && !amt.dataset.touched) amt.value = a.nextAmount || current.installment || '';
+  if (note && !note.dataset.touched) note.value = a.nextDue ? `قسط راتب شهر ${DK.parseISO(a.nextDue).getMonth() + 1}` : '';
+}
+function renderPays(){
+  const list = current.payments.map((p, i) => ({ p, i })).sort((x, y) => (x.p.date < y.p.date ? 1 : -1));
+  $('#pays').innerHTML = list.length ? list.map(({ p, i }) => `
+    <li><span class="info"><b>${shortDate(p.date)}</b>${p.note ? `<small>${esc(p.note)}</small>` : ''}</span>
+      <span class="val num">${money(p.amount)} ${CURRENCY}</span>
+      <button class="icon-btn" type="button" data-del="${i}" aria-label="حذف الدفعة"><svg class="i"><use href="#i-x"/></svg></button></li>`).join('')
+    : `<li style="color:var(--muted);font-size:.9rem">لسا ما في دفعات.</li>`;
+}
+function shareText(){
+  const t = current;
+  return `أهلاً ${String(t.name || '').trim().split(/\s+/)[0] || ''} 👋\nهاد رابط كشف حسابك مع «دبلومك علينا»، بتشوف فيه دفعاتك والمتبقي وموعد القسط القادم:\n${PAGE_URL}\n\nرقم الهاتف: ${DK.normPhone(t.phone) || t.phone}\nالرقم الوزاري: ${DK.digits(t.ministry)}\nالرقم السري: ${t.pass}`;
+}
+function renderShare(){
+  $('#share').textContent = shareText();
+  const ph = DK.normPhone(current.phone);
+  $('#waBtn').href = `https://wa.me/${ph ? '962' + ph.slice(1) : ''}?text=${encodeURIComponent(shareText())}`;
+}
+
+/* ---------- Save & publish ---------- */
+function publicRecord(t){
+  return { name: String(t.name || '').trim(), total: DK.num(t.total), down: DK.num(t.down), installment: DK.num(t.installment),
+    firstDue: t.firstDue || '', manualDue: t.manualDue || '', notes: String(t.notes || '').trim(),
+    payments: t.payments.map(p => ({ date: p.date, amount: DK.num(p.amount), note: String(p.note || '').trim() })) };
+}
+
+async function save(){
+  const bad = db.teachers.find(t => problems(t).length);
+  if (bad) { openEditor(bad.id); return saveState('bad', `بيانات ${bad.name || 'معلم'} ناقصة: ${problems(bad).join('، ')}.`); }
+  const seen = new Map();
+  for (const t of db.teachers) {
+    const m = DK.material(t.phone, t.ministry, t.pass);
+    if (seen.has(m)) return saveState('bad', `${t.name} و${seen.get(m)} إلهم نفس الهاتف والرقم الوزاري والرقم السري. غيّر الرقم السري لواحد منهم.`);
+    seen.set(m, t.name);
+  }
+  const btn = $('#saveBtn'); btn.disabled = true; btn.classList.add('loading');
+  const backup = db.teachers.map(t => t.pub);
+  try {
+    saveState('', 'عم نجهّز…');
+    const listing = await gh(`/contents/${DATA}/t?ref=${BRANCH}`);
+    if (!listing.ok && listing.status !== 404) throw new Error('list');
+    const existing = new Set(listing.ok ? listing.data.map(f => f.name) : []);
+    const entries = [], keep = new Set();
+    let n = 0;
+    for (const t of db.teachers) {
+      n++;
+      const rec = publicRecord(t);
+      const h = await DK.sha256(DK.material(t.phone, t.ministry, t.pass) + '\n' + JSON.stringify(rec));
+      if (t.pub && t.pub.h === h && existing.has(t.pub.id + '.json')) { keep.add(t.pub.id); continue; }
+      saveState('', `عم نشفّر بيانات ${t.name} (${n}/${db.teachers.length})…`);
+      const { id, key } = await DK.teacherKey(t.phone, t.ministry, t.pass);
+      entries.push({ path: `${DATA}/t/${id}.json`, mode: '100644', type: 'blob', content: JSON.stringify(await DK.encryptJSON(key, rec)) });
+      t.pub = { id, h };
+      keep.add(id);
+    }
+    existing.forEach(name => { if (!keep.has(name.replace(/\.json$/, ''))) entries.push({ path: `${DATA}/t/${name}`, mode: '100644', type: 'blob', sha: null }); });
+    db.savedAt = new Date().toISOString();
+    entries.push({ path: `${DATA}/admin.json`, mode: '100644', type: 'blob', content: JSON.stringify({ ...(await DK.encryptJSON(masterKey, db)), salt }) });
+
+    saveState('', 'عم نرفع على جيت هب…');
+    const ref = await gh(`/git/ref/heads/${BRANCH}`);
+    if (!ref.ok) throw new Error('ref');
+    const base = await gh(`/git/commits/${ref.data.object.sha}`);
+    const tree = await gh('/git/trees', { method: 'POST', body: { base_tree: base.data.tree.sha, tree: entries } });
+    if (!tree.ok) throw new Error('tree');
+    const commit = await gh('/git/commits', { method: 'POST', body: { message: 'تحديث كشوف الدفعات', tree: tree.data.sha, parents: [ref.data.object.sha] } });
+    if (!commit.ok) throw new Error('commit');
+    const upd = await gh(`/git/refs/heads/${BRANCH}`, { method: 'PATCH', body: { sha: commit.data.sha } });
+    if (!upd.ok) throw new Error(upd.status === 422 ? 'race' : 'ref-update');
+    setDirty(false);
+    saveState('good', 'انحفظ ✓ بيوصل للمعلمين خلال دقيقة أو دقيقتين.');
+  } catch (err) {
+    db.teachers.forEach((t, i) => t.pub = backup[i]);
+    btn.disabled = false;
+    saveState('bad', err.message === 'race' ? 'صار تعديل ثاني على الموقع بنفس الوقت. اضغط «احفظ وانشر» مرة ثانية.' : 'ما انحفظ. تأكد من النت وجرّب مرة ثانية.');
+  } finally { btn.classList.remove('loading'); }
+}
+function saveState(cls, text){ const s = $('#saveStatus'); s.className = 'status' + (cls ? ' ' + cls : ''); s.textContent = text; }
+
+/* ---------- Wiring ---------- */
+$('#connectForm').addEventListener('submit', connect);
+$('#createForm').addEventListener('submit', createDb);
+$('#search').addEventListener('input', renderDash);
+$('#addBtn').onclick = addTeacher;
+$('#list').addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) openEditor(b.dataset.id); });
+$('#saveBtn').onclick = save;
+
+$('#editor').addEventListener('input', e => {
+  const f = e.target.dataset.f;
+  if (f) { current[f] = e.target.value; setDirty(true); renderLive(); renderShare(); }
+  if (e.target.id === 'p-amount' || e.target.id === 'p-note') e.target.dataset.touched = '1';
+});
+$('#editor').addEventListener('change', e => {
+  const f = e.target.dataset.f;
+  if (f === 'phone' && DK.normPhone(current.phone)) e.target.value = current.phone = DK.normPhone(current.phone);
+  if (f === 'ministry') e.target.value = current.ministry = DK.digits(current.ministry);
+  if (f && ['phone','ministry'].includes(f)) { renderLive(); renderShare(); }
+});
+$('#editor').addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.id === 'backBtn') return openDash();
+  if (t.id === 'delBtn') {
+    if (!confirm(`أكيد بدك تحذف ${current.name || 'هاد المعلم'} وكل دفعاته؟`)) return;
+    db.teachers = db.teachers.filter(x => x !== current); setDirty(true); return openDash();
+  }
+  if (t.id === 'genBtn') {
+    if (current.pass && !confirm('الرقم السري القديم رح يوقف يشتغل بعد الحفظ. أكمل؟')) return;
+    current.pass = DK.genPassword(); $('#f-pass').value = current.pass; setDirty(true); renderLive(); renderShare(); return;
+  }
+  if (t.id === 'addPayBtn') {
+    const date = $('#p-date').value, amount = DK.num($('#p-amount').value);
+    if (!date || !amount) return toast('اكتب التاريخ والمبلغ.');
+    current.payments.push({ date, amount, note: $('#p-note').value.trim() });
+    delete $('#p-amount').dataset.touched; delete $('#p-note').dataset.touched;
+    setDirty(true); renderPays(); renderLive(); toast(`تسجّلت دفعة ${money(amount)} ${CURRENCY}`);
+    return;
+  }
+  if (t.dataset.del !== undefined) {
+    const p = current.payments[+t.dataset.del];
+    if (!confirm(`حذف دفعة ${money(p.amount)} ${CURRENCY} (${shortDate(p.date)})؟`)) return;
+    current.payments.splice(+t.dataset.del, 1); setDirty(true); renderPays(); renderLive(); return;
+  }
+  if (t.id === 'copyBtn') {
+    (navigator.clipboard ? navigator.clipboard.writeText(shareText()) : Promise.reject()).then(() => toast('انسخت ✓'), () => toast('ما زبط النسخ، انسخها بإيدك.'));
+  }
+});
+window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+/* ---------- Boot ---------- */
+const saved = store.get(KEY_TOKEN);
+if (saved) { $('#token').value = saved; $('#master').focus(); }
+</script>
+</body>
+</html>
