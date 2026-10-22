@@ -119,6 +119,20 @@ input[type=checkbox]{width:20px;height:20px;min-height:0;accent-color:var(--gold
 .stat.late b{color:var(--late)}
 
 .toolbar{display:flex;gap:10px;margin-bottom:12px}
+.toolbar.sub{gap:8px;margin-top:-2px}
+.toolbar.sub .btn{flex:1}
+.imp-file{display:block;color:var(--faint);font-size:.8rem;font-weight:400;font-family:var(--f-body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr;text-align:right;margin-bottom:4px}
+.linkbox{display:flex;gap:8px;margin:10px 0}
+.linkbox input{flex:1;min-width:0;font-size:.82rem;direction:ltr;text-align:left;color:var(--muted)}
+.sent{font-size:.8rem;color:var(--faint);margin-top:10px}
+.sent b{color:var(--ok);font-weight:600}
+.imp-opts{display:grid;gap:12px;margin:14px 0}
+@media (min-width:560px){ .imp-opts{grid-template-columns:1fr 1fr} }
+.imp-table{width:100%;border-collapse:collapse;font-size:.86rem;margin-top:8px}
+.imp-table th{color:var(--muted);font-weight:500;text-align:start;padding:6px 6px;border-bottom:1px solid var(--field-line)}
+.imp-table td{padding:8px 6px;border-bottom:1px solid var(--field-line);vertical-align:top}
+.imp-table td small{display:block;color:var(--faint);font-size:.76rem}
+.imp-wrap{overflow-x:auto;margin:0 -4px}
 .toolbar input{flex:1;min-width:0}
 
 /* Teacher list */
@@ -129,6 +143,8 @@ input[type=checkbox]{width:20px;height:20px;min-height:0;accent-color:var(--gold
 .row .who{flex:1;min-width:0}
 .row .who b{display:block;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .row .who small{display:block;color:var(--muted);font-size:.82rem}
+.row .who small.nosend{color:var(--gold-hi);font-size:.76rem;display:flex;align-items:center;gap:6px}
+.row .who small.nosend::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold)}
 .pill{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:99px;font-size:.78rem;font-weight:600;white-space:nowrap;
   color:var(--gold-hi);background:rgba(191,149,63,.12);border:1px solid rgba(191,149,63,.3)}
 .pill.late{color:var(--late);background:rgba(255,140,90,.1);border-color:rgba(255,180,138,.4)}
@@ -154,7 +170,7 @@ input[type=checkbox]{width:20px;height:20px;min-height:0;accent-color:var(--gold
 .add-pay .grid{grid-template-columns:1fr 1fr}
 .add-pay .full{grid-column:1/-1}
 .actions{display:flex;flex-wrap:wrap;gap:10px}
-pre.share{white-space:pre-wrap;font:inherit;font-size:.9rem;color:var(--muted);background:var(--field);border:1px solid var(--field-line);border-radius:var(--r-sm);padding:12px 14px;margin:10px 0}
+pre.share{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;font:inherit;font-size:.9rem;color:var(--muted);background:var(--field);border:1px solid var(--field-line);border-radius:var(--r-sm);padding:12px 14px;margin:10px 0}
 
 /* Save bar */
 .savebar{position:fixed;bottom:0;inset-inline:0;z-index:40;padding:10px 0 calc(10px + env(safe-area-inset-bottom));
@@ -186,6 +202,10 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
   <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
   <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></symbol>
   <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v12M7 11l5 5 5-5M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
 </svg>
 
@@ -250,8 +270,16 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
       <input type="search" id="search" placeholder="دوّر بالاسم أو الرقم" aria-label="دوّر بالاسم أو الهاتف أو الرقم الوزاري">
       <button class="btn btn-gold" id="addBtn" type="button"><svg class="i"><use href="#i-plus"/></svg>معلم جديد</button>
     </div>
+    <div class="toolbar sub">
+      <button class="btn btn-ghost btn-sm" id="importBtn" type="button"><svg class="i"><use href="#i-up"/></svg>استيراد من Excel</button>
+      <button class="btn btn-ghost btn-sm" id="exportBtn" type="button"><svg class="i"><use href="#i-down"/></svg>تنزيل Excel</button>
+      <input type="file" id="importFile" accept=".xlsx,.xls,.csv" hidden>
+    </div>
     <ul class="list" id="list"></ul>
   </section>
+
+  <!-- ============ Import ============ -->
+  <section class="screen" id="import" hidden></section>
 
   <!-- ============ Editor ============ -->
   <section class="screen" id="editor" hidden></section>
@@ -358,7 +386,7 @@ async function createDb(e){
 
 /* ---------- Screens ---------- */
 function show(id){
-  ['connect','create','dash','editor'].forEach(s => $('#' + s).hidden = s !== id);
+  ['connect','create','dash','import','editor'].forEach(s => $('#' + s).hidden = s !== id);
   $('#savebar').hidden = !(id === 'dash' || id === 'editor');
   window.scrollTo(0, 0);
 }
@@ -407,7 +435,7 @@ function renderDash(){
     .sort((a, b) => a.s.order - b.s.order || String(a.s.due ? DK.iso(a.s.due) : '').localeCompare(b.s.due ? DK.iso(b.s.due) : '') || String(a.t.name).localeCompare(b.t.name, 'ar'));
   $('#list').innerHTML = rows.length ? rows.map(({ t, s }) => `
     <li><button class="row" type="button" data-id="${esc(t.id)}">
-      <span class="who"><b>${esc(t.name || 'بدون اسم')}</b><small class="num">${esc(t.phone || '—')}${s.a ? ` · متبقي ${money(s.a.remaining)} ${CURRENCY}` : ''}</small></span>
+      <span class="who"><b>${esc(t.name || 'بدون اسم')}</b><small class="num">${esc(t.phone || '—')}${s.a ? ` · متبقي ${money(s.a.remaining)} ${CURRENCY}` : ''}</small>${!t.sentAt && s.cls !== 'warn' ? '<small class="nosend">لسا ما انبعتله الرابط</small>' : ''}</span>
       <span class="pill ${s.cls}">${esc(s.text)}</span>
     </button></li>`).join('')
     : `<li class="empty">${db.teachers.length ? 'ما في نتائج.' : 'لسا ما في معلمين. اضغط «معلم جديد».'}</li>`;
@@ -418,7 +446,7 @@ function nextTwentyFourth(){
   return DK.iso(new Date(t.getFullYear(), t.getMonth() + (t.getDate() > 24 ? 1 : 0), 24));
 }
 function addTeacher(){
-  const t = { id: uid(), name: '', phone: '', ministry: '', pass: DK.genPassword(), total: '', down: '', installment: '', firstDue: nextTwentyFourth(), manualDue: '', notes: '', payments: [] };
+  const t = { id: uid(), name: '', phone: '', ministry: '', pass: DK.genPassword(), total: '', down: '', installment: '', firstDue: nextTwentyFourth(), manualDue: '', notes: '', privateNotes: '', payments: [] };
   db.teachers.push(t);
   setDirty(true);
   openEditor(t.id);
@@ -471,6 +499,8 @@ function renderEditor(){
       </div>
       <div class="field" style="margin-top:12px"><label for="f-notes">ملاحظات للمعلم</label>
         <textarea id="f-notes" data-f="notes" placeholder="أي نص بدك المعلم يشوفه بكشفه">${esc(t.notes)}</textarea></div>
+      <div class="field" style="margin-top:12px"><label for="f-privateNotes">ملاحظات خاصة (إلك إنت، ما بتطلع للمعلم)</label>
+        <textarea id="f-privateNotes" data-f="privateNotes" placeholder="مثلاً: سجّل عن طريق فلان، تم تأكيد الاتفاق هاتفياً">${esc(t.privateNotes)}</textarea></div>
     </div>
     <div class="card">
       <h2><svg class="i"><use href="#i-list"/></svg>الدفعات</h2>
@@ -485,13 +515,8 @@ function renderEditor(){
       </div>
     </div>
     <div class="card">
-      <h2><svg class="i"><use href="#i-send"/></svg>بيانات الدخول للمعلم</h2>
-      <pre class="share" id="share"></pre>
-      <div class="actions">
-        <a class="btn btn-gold btn-sm" id="waBtn" target="_blank" rel="noopener"><svg class="i"><use href="#i-send"/></svg>ابعتها واتساب</a>
-        <button class="btn btn-ghost btn-sm" id="copyBtn" type="button"><svg class="i"><use href="#i-copy"/></svg>نسخ</button>
-      </div>
-      <p style="color:var(--faint);font-size:.8rem;margin-top:10px">لازم تضغط «احفظ وانشر» قبل ما يقدر المعلم يدخل.</p>
+      <h2><svg class="i"><use href="#i-link"/></svg>الرابط الخاص بالمعلم</h2>
+      <div id="shareBody"></div>
     </div>`;
   renderLive(); renderPays(); renderShare();
 }
@@ -518,14 +543,31 @@ function renderPays(){
       <button class="icon-btn" type="button" data-del="${i}" aria-label="حذف الدفعة"><svg class="i"><use href="#i-x"/></svg></button></li>`).join('')
     : `<li style="color:var(--muted);font-size:.9rem">لسا ما في دفعات.</li>`;
 }
-function shareText(){
-  const t = current;
-  return `أهلاً ${String(t.name || '').trim().split(/\s+/)[0] || ''} 👋\nهاد رابط كشف حسابك مع «دبلومك علينا»، بتشوف فيه دفعاتك والمتبقي وموعد القسط القادم:\n${PAGE_URL}\n\nرقم الهاتف: ${DK.normPhone(t.phone) || t.phone}\nالرقم الوزاري: ${DK.digits(t.ministry)}\nالرقم السري: ${t.pass}`;
+const magicLink = t => `${PAGE_URL}#k=${DK.linkToken(t.phone, t.ministry, t.pass)}`;
+function shareText(t){
+  const first = String(t.name || '').trim().split(/\s+/)[0] || '';
+  // «الصفة» from the subscribers sheet decides أستاذ / أستاذة; without it the greeting stays neutral.
+  const title = /المعلمة|الطالبة/.test(t.role || '') ? 'أستاذة ' : /المعلم|الطالب/.test(t.role || '') ? 'أستاذ ' : '';
+  return `أهلاً ${title}${first} 🌿\n\n` +
+    `هاد رابط كشف حسابك مع «دبلومك علينا». اضغط عليه وبيفتحلك على طول: المبلغ المتفق عليه، دفعاتك، المتبقي، وموعد القسط القادم.\n\n` +
+    `${magicLink(t)}\n\n` +
+    `🔒 الرابط خاص فيك، لا تبعته لحدا.\n` +
+    `وإذا فتحت الصفحة من غير الرابط، رقمك السري: ${t.pass}`;
 }
+const waHref = t => { const ph = DK.normPhone(t.phone); return `https://wa.me/${ph ? '962' + ph.slice(1) : ''}?text=${encodeURIComponent(shareText(t))}`; };
 function renderShare(){
-  $('#share').textContent = shareText();
-  const ph = DK.normPhone(current.phone);
-  $('#waBtn').href = `https://wa.me/${ph ? '962' + ph.slice(1) : ''}?text=${encodeURIComponent(shareText())}`;
+  const t = current, p = problems(t);
+  if (p.length) { $('#shareBody').innerHTML = `<p class="sent">بيطلع الرابط لما تكمّل: ${p.join('، ')}.</p>`; return; }
+  $('#shareBody').innerHTML = `
+    <div class="linkbox"><input id="linkOut" readonly value="${esc(magicLink(t))}" aria-label="الرابط الخاص">
+      <button class="btn btn-ghost btn-sm" id="copyLinkBtn" type="button"><svg class="i"><use href="#i-copy"/></svg>نسخ</button></div>
+    <pre class="share">${esc(shareText(t))}</pre>
+    <div class="actions">
+      <a class="btn btn-gold btn-sm" id="waBtn" href="${esc(waHref(t))}" target="_blank" rel="noopener"><svg class="i"><use href="#i-send"/></svg>ابعت الرابط واتساب</a>
+      <button class="btn btn-ghost btn-sm" id="copyBtn" type="button"><svg class="i"><use href="#i-copy"/></svg>نسخ الرسالة</button>
+      <a class="btn btn-ghost btn-sm" href="${esc(magicLink(t))}" target="_blank" rel="noopener"><svg class="i"><use href="#i-eye"/></svg>افتح كشفه</a>
+    </div>
+    <p class="sent">${t.sentAt ? `<b>✓ انبعت الرابط</b> بتاريخ ${shortDate(t.sentAt)}.` : 'لسا ما انبعتله الرابط.'} الرابط بيشتغل بعد «احفظ وانشر» بدقيقة أو دقيقتين، وإذا غيّرت الرقم السري لازم تبعتله رابط جديد.</p>`;
 }
 
 /* ---------- Save & publish ---------- */
@@ -536,10 +578,11 @@ function publicRecord(t){
 }
 
 async function save(){
-  const bad = db.teachers.find(t => problems(t).length);
-  if (bad) { openEditor(bad.id); return saveState('bad', `بيانات ${bad.name || 'معلم'} ناقصة: ${problems(bad).join('، ')}.`); }
+  // Teachers with missing details stay in the list but aren't published until they're complete.
+  const ready = db.teachers.filter(t => !problems(t).length);
+  const skipped = db.teachers.length - ready.length;
   const seen = new Map();
-  for (const t of db.teachers) {
+  for (const t of ready) {
     const m = DK.material(t.phone, t.ministry, t.pass);
     if (seen.has(m)) return saveState('bad', `${t.name} و${seen.get(m)} إلهم نفس الهاتف والرقم الوزاري والرقم السري. غيّر الرقم السري لواحد منهم.`);
     seen.set(m, t.name);
@@ -553,12 +596,13 @@ async function save(){
     const existing = new Set(listing.ok ? listing.data.map(f => f.name) : []);
     const entries = [], keep = new Set();
     let n = 0;
-    for (const t of db.teachers) {
+    db.teachers.forEach(t => { if (problems(t).length) t.pub = null; });
+    for (const t of ready) {
       n++;
       const rec = publicRecord(t);
       const h = await DK.sha256(DK.material(t.phone, t.ministry, t.pass) + '\n' + JSON.stringify(rec));
       if (t.pub && t.pub.h === h && existing.has(t.pub.id + '.json')) { keep.add(t.pub.id); continue; }
-      saveState('', `عم نشفّر بيانات ${t.name} (${n}/${db.teachers.length})…`);
+      saveState('', `عم نشفّر بيانات ${t.name} (${n}/${ready.length})…`);
       const { id, key } = await DK.teacherKey(t.phone, t.ministry, t.pass);
       entries.push({ path: `${DATA}/t/${id}.json`, mode: '100644', type: 'blob', content: JSON.stringify(await DK.encryptJSON(key, rec)) });
       t.pub = { id, h };
@@ -579,7 +623,7 @@ async function save(){
     const upd = await gh(`/git/refs/heads/${BRANCH}`, { method: 'PATCH', body: { sha: commit.data.sha } });
     if (!upd.ok) throw new Error(upd.status === 422 ? 'race' : 'ref-update');
     setDirty(false);
-    saveState('good', 'انحفظ ✓ بيوصل للمعلمين خلال دقيقة أو دقيقتين.');
+    saveState('good', 'انحفظ ✓ بيوصل للمعلمين خلال دقيقة أو دقيقتين.' + (skipped ? ` (${skipped} ما انتشروا لأنه بياناتهم ناقصة)` : ''));
   } catch (err) {
     db.teachers.forEach((t, i) => t.pub = backup[i]);
     btn.disabled = false;
@@ -633,10 +677,143 @@ $('#editor').addEventListener('click', e => {
     if (!confirm(`حذف دفعة ${money(p.amount)} ${CURRENCY} (${shortDate(p.date)})؟`)) return;
     current.payments.splice(+t.dataset.del, 1); setDirty(true); renderPays(); renderLive(); return;
   }
-  if (t.id === 'copyBtn') {
-    (navigator.clipboard ? navigator.clipboard.writeText(shareText()) : Promise.reject()).then(() => toast('انسخت ✓'), () => toast('ما زبط النسخ، انسخها بإيدك.'));
-  }
+  if (t.id === 'copyBtn') copy(shareText(current));
+  if (t.id === 'copyLinkBtn') copy(magicLink(current));
 });
+$('#editor').addEventListener('click', e => {
+  if (!e.target.closest('#waBtn')) return;
+  current.sentAt = DK.iso(DK.today()); setDirty(true);
+  setTimeout(renderShare, 300);
+});
+function copy(text){
+  (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(() => toast('انسخ ✓'), () => toast('ما زبط النسخ، انسخه بإيدك.'));
+}
+
+/* ---------- Excel (import & export run on this device only) ---------- */
+let xlsxReady;
+function loadXLSX(){
+  return xlsxReady = xlsxReady || new Promise((res, rej) => {
+    const sc = document.createElement('script');
+    sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    sc.onload = () => res(window.XLSX); sc.onerror = () => { xlsxReady = null; rej(new Error('xlsx')); };
+    document.head.appendChild(sc);
+  });
+}
+const normHead = h => String(h || '').replace(/[\s:：()（）\/_-]+/g, '').replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه');
+function pickCol(headers, names){
+  const hs = headers.map(normHead);
+  for (const n of names.map(normHead)) { const i = hs.indexOf(n); if (i !== -1) return headers[i]; }
+  for (const n of names.map(normHead)) { const i = hs.findIndex(h => h.includes(n)); if (i !== -1) return headers[i]; }
+  return null;
+}
+function amountFrom(text){
+  const s = DK.latin(text);
+  const m = /المبلغ\s*المتفق\s*عليه\s*[:：]?\s*(\d+(?:[.,]\d+)?)/.exec(s) || /(\d+(?:[.,]\d+)?)\s*(?:دينار|د\.?\s*أ|JD)/i.exec(s);
+  return m ? DK.num(m[1].replace(',', '.')) : 0;
+}
+let importRows = [];
+async function readImport(file){
+  let XLSX;
+  try { XLSX = await loadXLSX(); } catch (e) { return toast('ما قدرنا نحمّل قارئ Excel. تأكد من النت.'); }
+  const wb = XLSX.read(await file.arrayBuffer(), { type: 'array' });
+  const ws = wb.Sheets[wb.SheetNames[0]];
+  const rows = XLSX.utils.sheet_to_json(ws, { defval: '', raw: false });
+  if (!rows.length) return toast('الملف فاضي.');
+  const headers = Object.keys(rows[0]);
+  const col = {
+    name: pickCol(headers, ['الاسم الرباعي', 'الاسم', 'اسم المعلم']),
+    phone: pickCol(headers, ['رقم الهاتف (واتساب)', 'رقم الهاتف', 'الهاتف', 'واتساب', 'الموبايل']),
+    ministry: pickCol(headers, ['الرقم الوزاري']),
+    amount: pickCol(headers, ['المبلغ المتفق عليه']),
+    notes: pickCol(headers, ['ملاحظات', 'ملاحظة']),
+    role: pickCol(headers, ['الصفة'])
+  };
+  if (!col.name || !col.phone) return toast('ما لقينا عمود الاسم أو رقم الهاتف بالملف.');
+  importRows = rows.map(r => {
+    const t = {
+      name: String(r[col.name] || '').trim().replace(/\s+/g, ' '),
+      phone: DK.normPhone(r[col.phone]) || String(r[col.phone] || '').trim(),
+      ministry: col.ministry ? DK.digits(r[col.ministry]) : '',
+      total: (col.amount && DK.num(r[col.amount])) || amountFrom(col.notes ? r[col.notes] : ''),
+      privateNotes: col.notes ? String(r[col.notes] || '').trim() : '',
+      role: col.role ? String(r[col.role] || '').trim() : ''
+    };
+    const dup = db.teachers.find(x => (t.ministry && DK.digits(x.ministry) === t.ministry) || (DK.normPhone(t.phone) && DK.normPhone(x.phone) === DK.normPhone(t.phone)));
+    return { t, dup, on: !dup };
+  }).filter(x => x.t.name || x.t.phone);
+  renderImport(file.name);
+}
+function renderImport(fileName){
+  const fresh = importRows.filter(x => !x.dup);
+  $('#import').innerHTML = `
+    <div class="ed-head"><button class="btn btn-ghost btn-sm" id="impBack" type="button"><svg class="i"><use href="#i-back"/></svg>رجوع</button></div>
+    <div class="card">
+      <h2><svg class="i"><use href="#i-up"/></svg>استيراد المشتركين من Excel</h2>
+      <span class="imp-file">${esc(fileName)}</span>
+      <p class="lead" style="margin:6px 0 0">لقينا ${importRows.length} مشترك: <b>${fresh.length} جديد</b>${importRows.length - fresh.length ? ` و${importRows.length - fresh.length} موجودين أصلاً (ما رح نكررهم)` : ''}. الملف ما بينرفع لأي مكان. بنقرأ منه الاسم والهاتف والرقم الوزاري والمبلغ بس، وكل معلم بياخد رقم سري جديد.</p>
+      <div class="imp-opts">
+        <div class="field"><label for="impInst">قيمة القسط الشهري للكل (اختياري)</label><input id="impInst" class="ltr" inputmode="decimal" placeholder="مثال: 50"><small>بتقدر تغيّرها لكل معلم بعدين.</small></div>
+        <div class="field"><label for="impFirst">تاريخ أول قسط للكل</label><input id="impFirst" type="date" value="${nextTwentyFourth()}"></div>
+      </div>
+      <div class="imp-wrap"><table class="imp-table">
+        <thead><tr><th></th><th>الاسم</th><th>الهاتف</th><th>الرقم الوزاري</th><th>المبلغ</th></tr></thead>
+        <tbody>${importRows.map((x, i) => `<tr>
+          <td><input type="checkbox" data-imp="${i}" ${x.on ? 'checked' : ''} ${x.dup ? 'disabled' : ''} aria-label="استيراد"></td>
+          <td>${esc(x.t.name || '—')}${x.dup ? '<small>موجود أصلاً</small>' : ''}</td>
+          <td class="num">${esc(x.t.phone || '—')}${DK.normPhone(x.t.phone) ? '' : '<small style="color:var(--error)">رقم غير صحيح</small>'}</td>
+          <td class="num">${esc(x.t.ministry) || '<small style="color:var(--error)">ناقص</small>'}</td>
+          <td class="num">${x.t.total ? money(x.t.total) : '<small style="color:var(--error)">ناقص</small>'}</td></tr>`).join('')}</tbody>
+      </table></div>
+      <p class="sent">اللي بياناته ناقصة بينضاف للقائمة، بس ما بينتشر كشفه إلا لما تكمّلها.</p>
+      <button class="btn btn-gold btn-block" id="impGo" type="button" style="margin-top:14px"></button>
+    </div>`;
+  updateImportBtn();
+  show('import');
+}
+function updateImportBtn(){
+  const n = importRows.filter(x => x.on).length;
+  const b = $('#impGo'); b.disabled = !n; b.textContent = n ? `استورد ${n} معلم` : 'اختار معلم واحد على الأقل';
+}
+function doImport(){
+  const inst = DK.num($('#impInst').value), first = $('#impFirst').value;
+  const picked = importRows.filter(x => x.on);
+  picked.forEach(({ t }) => db.teachers.push({ id: uid(), name: t.name, phone: t.phone, ministry: t.ministry, role: t.role,
+    pass: DK.genPassword(), total: t.total || '', down: '', installment: inst || '', firstDue: first, manualDue: '',
+    notes: '', privateNotes: t.privateNotes, payments: [] }));
+  importRows = [];
+  setDirty(true);
+  openDash();
+  toast(`انضافوا ${picked.length} معلم. اضغط «احفظ وانشر».`);
+}
+$('#importBtn').onclick = () => { $('#importFile').value = ''; $('#importFile').click(); };
+$('#importFile').addEventListener('change', e => { const f = e.target.files[0]; if (f) readImport(f); });
+$('#import').addEventListener('change', e => { const i = e.target.dataset.imp; if (i !== undefined) { importRows[+i].on = e.target.checked; updateImportBtn(); } });
+$('#import').addEventListener('click', e => {
+  if (e.target.closest('#impBack')) { importRows = []; openDash(); }
+  if (e.target.closest('#impGo')) doImport();
+});
+
+$('#exportBtn').onclick = async () => {
+  let XLSX;
+  try { XLSX = await loadXLSX(); } catch (e) { return toast('ما قدرنا نحمّل Excel. تأكد من النت.'); }
+  const rows = db.teachers.map(t => {
+    const s = status(t), a = DK.account(t), ok = !problems(t).length;
+    return { 'الاسم': t.name, 'رقم الهاتف': t.phone, 'الرقم الوزاري': t.ministry, 'الرقم السري': t.pass,
+      'الرابط الخاص': ok ? magicLink(t) : '', 'المبلغ المتفق عليه': a.total, 'المدفوع': a.paid, 'المتبقي': a.remaining,
+      'القسط القادم': a.nextDue, 'المطلوب': a.nextAmount || '', 'الحالة': s.text, 'انبعتله الرابط': t.sentAt || '', 'ملاحظات للمعلم': t.notes || '', 'ملاحظات خاصة': t.privateNotes || '' };
+  });
+  const ws = XLSX.utils.json_to_sheet(rows);
+  ws['!cols'] = [24, 13, 12, 12, 40, 10, 10, 10, 12, 10, 22, 14, 30, 40].map(w => ({ wch: w }));
+  const wb = XLSX.utils.book_new();
+  wb.Workbook = { Views: [{ RTL: true }] };
+  XLSX.utils.book_append_sheet(wb, ws, 'المعلمين');
+  const blob = new Blob([XLSX.write(wb, { type: 'array', bookType: 'xlsx' })], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = `diplomakalena-payments-${DK.iso(DK.today())}.xlsx`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+};
+
 window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
 
 /* ---------- Boot ---------- */

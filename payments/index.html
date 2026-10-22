@@ -116,6 +116,10 @@ input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(191,
   .shake{animation:shake .4s}
   @keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
 }
+.opening{text-align:center;padding:44px 18px}
+.opening p{color:var(--muted);margin-top:16px}
+.ring{display:inline-block;width:46px;height:46px;border-radius:50%;border:3px solid rgba(191,149,63,.2);border-top-color:var(--gold)}
+@media (prefers-reduced-motion:no-preference){ .ring{animation:spin .9s linear infinite} }
 .privacy{display:flex;gap:8px;align-items:flex-start;margin-top:16px;color:var(--faint);font-size:.82rem;line-height:1.7}
 .privacy svg{margin-top:4px;color:var(--gold)}
 
@@ -263,6 +267,11 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
     <p class="help"><a class="wa" href="https://wa.me/962779283635" target="_blank" rel="noopener"><svg class="i"><use href="#i-wa"/></svg>نسيت الرقم السري؟ احكي معنا</a></p>
   </section>
 
+  <!-- ============ Opening from a personal link ============ -->
+  <section class="screen" id="opening" hidden>
+    <div class="card opening enter"><span class="ring" aria-hidden="true"></span><p>عم نفتح كشف حسابك…</p></div>
+  </section>
+
   <!-- ============ Account ============ -->
   <section class="screen" id="account" hidden></section>
 
@@ -316,7 +325,7 @@ function showErr(msg){
   e.classList.remove('shake'); void e.offsetWidth; e.classList.add('shake');
 }
 
-async function login(e){
+function login(e){
   e.preventDefault();
   ['phone','ministry'].forEach(id => { const el = $('#' + id); const v = toLatinDigits(el.value).trim(); if (v !== el.value) el.value = v; });
   const phone = normPhone($('#phone').value);
@@ -329,20 +338,27 @@ async function login(e){
   $('#loginErr').hidden = true;
 
   if ($('#remember').checked) store.set(KEY_REMEMBER, { phone, ministry }); else store.del(KEY_REMEMBER);
+  openAccount({ phone, ministry, pass }, false);
+}
 
+async function openAccount(creds, fromLink){
   const btn = $('#loginBtn');
   btn.disabled = true; btn.classList.add('loading');
   try {
-    const res = await fetchAccount({ phone, ministry, pass });
-    if (res.ok) { $('#pass').value = ''; renderAccount(res.account); }
-    else if (res.error === 'invalid') { fieldErr('pass', true); showErr('البيانات مش متطابقة. تأكد من رقم الهاتف والرقم الوزاري والرقم السري وجرّب مرة ثانية.'); }
-    else showErr('صار خلل من عنّا. جرّب كمان شوي، وإذا ضلّت المشكلة احكي معنا على واتساب.');
+    const res = await fetchAccount(creds);
+    if (res.ok) { $('#pass').value = ''; renderAccount(res.account); return; }
+    showScreen('login');
+    if (res.error !== 'invalid') showErr('صار خلل من عنّا. جرّب كمان شوي، وإذا ضلّت المشكلة احكي معنا على واتساب.');
+    else if (fromLink) showErr('هاد الرابط ما عاد يشتغل، غالباً لأنه تغيّر رقمك السري. اطلب منّا رابط جديد على واتساب، أو ادخل بياناتك تحت.');
+    else { fieldErr('pass', true); showErr('البيانات مش متطابقة. تأكد من رقم الهاتف والرقم الوزاري والرقم السري وجرّب مرة ثانية.'); }
   } catch (err) {
+    showScreen('login');
     showErr('ما قدرنا نوصل للنت. تأكد من الاتصال وجرّب مرة ثانية.');
   } finally {
     btn.disabled = false; btn.classList.remove('loading');
   }
 }
+function showScreen(id){ ['login','opening','account'].forEach(s => $('#' + s).hidden = s !== id); }
 
 // The file name and the key both come from the teacher's own details, so a wrong detail = no file.
 async function fetchAccount({ phone, ministry, pass }){
@@ -416,18 +432,17 @@ function renderAccount(a){
     ${a.notes ? `<div class="card notes enter"><h2><svg class="i"><use href="#i-note"/></svg>ملاحظات</h2><p>${esc(a.notes)}</p></div>` : ''}
     <p class="help"><a class="wa" href="${WHATSAPP}" target="_blank" rel="noopener"><svg class="i"><use href="#i-wa"/></svg>عندك سؤال عن دفعاتك؟ احكي معنا</a></p>`;
 
-  $('#login').hidden = true;
-  $('#account').hidden = false;
+  showScreen('account');
   $('#logoutBtn').onclick = logout;
   window.scrollTo(0, 0);
   requestAnimationFrame(() => requestAnimationFrame(() => { $('#meterFill').style.width = pct + '%'; }));
 }
 
 function logout(){
-  $('#account').hidden = true;
+  showScreen('login');
   $('#account').innerHTML = '';
-  $('#login').hidden = false;
   $('#pass').value = '';
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
   window.scrollTo(0, 0);
 }
 
@@ -462,6 +477,17 @@ if (remembered) {
   $('#ministry').value = remembered.ministry || '';
   if (remembered.phone && remembered.ministry) $('#pass').focus();
 }
+// Personal link from WhatsApp: …/payments/#k=… opens the statement straight away.
+function openFromLink(){
+  const linked = DK.readLinkToken((/[#&]k=([\w-]+)/.exec(location.hash) || [])[1] || '');
+  if (!linked) return;
+  $('#phone').value = linked.phone; $('#ministry').value = linked.ministry;
+  $('#loginErr').hidden = true;
+  showScreen('opening');
+  openAccount(linked, true);
+}
+openFromLink();
+window.addEventListener('hashchange', openFromLink);
 </script>
 </body>
 </html>
