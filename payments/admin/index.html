@@ -133,6 +133,10 @@ ol.fix b{color:var(--ink);font-weight:600;direction:ltr;unicode-bidi:isolate}
 .toolbar.sub{gap:8px;margin-top:-2px}
 .toolbar.sub .btn{flex:1}
 .imp-file{display:block;color:var(--faint);font-size:.8rem;font-weight:400;font-family:var(--f-body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr;text-align:right;margin-bottom:4px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 2px}
+.tab{padding:6px 14px;border-radius:99px;font-size:.86rem;font-weight:600;color:var(--muted);border:1px solid var(--field-line);background:var(--field)}
+.tab.on{color:#1d1406;background:var(--foil);background-size:200% 100%;border-color:transparent}
+.tab[disabled]{opacity:.4;cursor:not-allowed}
 .linkbox{display:flex;gap:8px;margin:10px 0}
 .linkbox input{flex:1;min-width:0;font-size:.82rem;direction:ltr;text-align:left;color:var(--muted)}
 .sent{font-size:.8rem;color:var(--faint);margin-top:10px}
@@ -505,6 +509,9 @@ const HINTS = {
 function openEditor(id){
   current = db.teachers.find(t => t.id === id);
   if (!current) return openDash();
+  // Start on what this teacher most likely needs: the link first, then a reminder once a due date is near or past.
+  const st = status(current);
+  msgKind = !current.sentAt ? 'link' : st.due && Math.round((st.due - DK.today()) / 864e5) <= 3 ? 'reminder' : 'link';
   show('editor');
   renderEditor();
 }
@@ -548,7 +555,7 @@ function renderEditor(){
       </div>
     </div>
     <div class="card">
-      <h2><svg class="i"><use href="#i-link"/></svg>الرابط الخاص بالمعلم</h2>
+      <h2><svg class="i"><use href="#i-send"/></svg>رسائل للمعلم</h2>
       <div id="shareBody"></div>
     </div>`;
   renderLive(); renderPays(); renderShare();
@@ -577,30 +584,93 @@ function renderPays(){
     : `<li style="color:var(--muted);font-size:.9rem">لسا ما في دفعات.</li>`;
 }
 const magicLink = t => `${PAGE_URL}#k=${DK.linkToken(t.phone, t.ministry, t.pass)}`;
-function shareText(t){
-  const first = String(t.name || '').trim().split(/\s+/)[0] || '';
-  // «الصفة» from the subscribers sheet decides أستاذ / أستاذة; without it the greeting stays neutral.
-  const title = /المعلمة|الطالبة/.test(t.role || '') ? 'أستاذة ' : /المعلم|الطالب/.test(t.role || '') ? 'أستاذ ' : '';
-  return `أهلاً ${title}${first} 🌿\n\n` +
-    `هاد رابط كشف حسابك مع «دبلومك علينا». اضغط عليه وبيفتحلك على طول: المبلغ المتفق عليه، دفعاتك، المتبقي، وموعد القسط القادم.\n\n` +
-    `${magicLink(t)}\n\n` +
-    `🔒 الرابط خاص فيك، لا تبعته لحدا.\n` +
-    `وإذا فتحت الصفحة من غير الرابط، رقمك السري: ${t.pass}`;
+/* ---------- Messages to the teacher ----------
+   Plain, polite Arabic that reads the same for both genders; only the title follows «الصفة». */
+const DAYS = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const longDate = s => { const d = DK.parseISO(s); return d ? `${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}` : ''; };
+const monthNo = s => DK.parseISO(s).getMonth() + 1;
+// Arabic counted noun: 100 دينار، 5 دنانير، 50 دينارًا.
+function dinars(n){
+  n = Number(n) || 0;
+  if (n === 1) return 'دينار واحد';
+  if (n === 2) return 'ديناران';
+  if (!Number.isInteger(n)) return `${money(n)} دينار`;
+  const r = n % 100;
+  return `${money(n)} ${r >= 3 && r <= 10 ? 'دنانير' : r >= 11 ? 'دينارًا' : 'دينار'}`;
 }
-const waHref = t => { const ph = DK.normPhone(t.phone); return `https://wa.me/${ph ? '962' + ph.slice(1) : ''}?text=${encodeURIComponent(shareText(t))}`; };
+function greeting(t){
+  const first = String(t.name || '').trim().split(/\s+/)[0] || '';
+  const title = /المعلمة|الطالبة/.test(t.role || '') ? 'أستاذة ' : /المعلم|الطالب/.test(t.role || '') ? 'أستاذ ' : '';
+  return `مرحبًا ${title}${first} 🌿`.replace(/\s+🌿/, ' 🌿');
+}
+const SIGN = '\n\nمع التحية،\nفريق دبلومك علينا';
+const dueLine = a => `${dinars(a.nextAmount)}${a.carried ? ` (منها ${dinars(a.carried)} متبقية من قسط شهر ${monthNo(a.carriedFrom)})` : ''}`;
+const lastPayment = t => t.payments[t.payments.length - 1];
+
+const MESSAGES = {
+  link: {
+    label: 'رابط الكشف',
+    ok: () => true,
+    text: t => `${greeting(t)}\n\n` +
+      `يسعدنا أن نشاركك رابط كشف حسابك في «دبلومك علينا»، ويمكنك من خلاله الاطلاع في أي وقت على:\n` +
+      `• المبلغ المتفق عليه\n• الدفعات المسجّلة\n• المبلغ المتبقي\n• موعد القسط القادم\n\n` +
+      `${magicLink(t)}\n\n` +
+      `🔒 هذا الرابط خاص بك ويفتح الكشف مباشرة، لذا يُرجى عدم مشاركته مع أحد.\n` +
+      `وفي حال فتح الصفحة من دون الرابط، فالرقم السري هو: ${t.pass}\n\n` +
+      `لأي استفسار، يسعدنا تواصلك معنا على هذا الرقم.${SIGN}`
+  },
+  receipt: {
+    label: 'تأكيد دفعة',
+    ok: t => t.payments.length > 0,
+    text: t => {
+      const a = acct(t), p = lastPayment(t);
+      let body = `نؤكد استلام دفعتك بقيمة ${dinars(DK.num(p.amount))} بتاريخ ${shortDate(p.date)}، شكرًا لالتزامك.`;
+      if (a.total > 0 && a.remaining <= 0) {
+        body += `\n\nوبهذه الدفعة يكون المبلغ المتفق عليه (${dinars(a.total)}) قد سُدِّد بالكامل. نشكر ثقتك بنا، ونتمنى لك التوفيق في الدبلوم.`;
+      } else {
+        body += `\n\n• المدفوع حتى الآن: ${money(a.paid)} من ${dinars(a.total)}\n• المتبقي: ${dinars(a.remaining)}`;
+        if (a.nextDue) body += `\n• القسط القادم: ${dueLine(a)}، بتاريخ ${longDate(a.nextDue)}`;
+      }
+      return `${greeting(t)}\n\n${body}\n\nكشف حسابك المحدَّث على الرابط:\n${magicLink(t)}${SIGN}`;
+    }
+  },
+  reminder: {
+    label: 'تذكير بالقسط',
+    ok: t => { const a = acct(t); return !!a.nextDue && a.remaining > 0; },
+    text: t => {
+      const a = acct(t), m = monthNo(a.nextDue);
+      const diff = Math.round((DK.parseISO(a.nextDue) - DK.today()) / 864e5);
+      let body;
+      if (diff < 0) {
+        body = `نودّ تذكيرك بقسط راتب شهر ${m}، المستحق بتاريخ ${longDate(a.nextDue)}.\n\n• المبلغ المطلوب: ${dueLine(a)}\n\n` +
+          `إن كان الدفع قد تمّ، نرجو إعلامنا لتحديث كشف حسابك. وإن كان لديك أي ظرف، يسعدنا التنسيق معك.`;
+      } else if (diff === 0) {
+        body = `نذكّرك بأن موعد قسط راتب شهر ${m} هو اليوم، ${longDate(a.nextDue)}.\n\n• المبلغ المطلوب: ${dueLine(a)}\n\nشكرًا لالتزامك.`;
+      } else {
+        body = `تذكير لطيف بموعد القسط القادم:\n\n• المبلغ: ${dueLine(a)}\n• الموعد: ${longDate(a.nextDue)} (قسط راتب شهر ${m})\n\nشكرًا لالتزامك.`;
+      }
+      return `${greeting(t)}\n\n${body}\n\nتفاصيل حسابك على الرابط:\n${magicLink(t)}${SIGN}`;
+    }
+  }
+};
+let msgKind = 'link';
+const waHref = (t, text) => { const ph = DK.normPhone(t.phone); return `https://wa.me/${ph ? '962' + ph.slice(1) : ''}?text=${encodeURIComponent(text)}`; };
 function renderShare(){
   const t = current, p = problems(t);
-  if (p.length) { $('#shareBody').innerHTML = `<p class="sent">بيطلع الرابط لما تكمّل: ${p.join('، ')}.</p>`; return; }
+  if (p.length) { $('#shareBody').innerHTML = `<p class="sent">بتطلع الرسائل لما تكمّل: ${p.join('، ')}.</p>`; return; }
+  if (!MESSAGES[msgKind].ok(t)) msgKind = 'link';
+  const text = MESSAGES[msgKind].text(t);
   $('#shareBody').innerHTML = `
-    <div class="linkbox"><input id="linkOut" readonly value="${esc(magicLink(t))}" aria-label="الرابط الخاص">
-      <button class="btn btn-ghost btn-sm" id="copyLinkBtn" type="button"><svg class="i"><use href="#i-copy"/></svg>نسخ</button></div>
-    <pre class="share">${esc(shareText(t))}</pre>
+    <div class="tabs" role="tablist">${Object.entries(MESSAGES).map(([k, m]) =>
+      `<button class="tab${k === msgKind ? ' on' : ''}" type="button" role="tab" aria-selected="${k === msgKind}" data-kind="${k}" ${m.ok(t) ? '' : 'disabled'}>${m.label}</button>`).join('')}</div>
+    <pre class="share">${esc(text)}</pre>
     <div class="actions">
-      <a class="btn btn-gold btn-sm" id="waBtn" href="${esc(waHref(t))}" target="_blank" rel="noopener"><svg class="i"><use href="#i-send"/></svg>ابعت الرابط واتساب</a>
+      <a class="btn btn-gold btn-sm" id="waBtn" href="${esc(waHref(t, text))}" target="_blank" rel="noopener"><svg class="i"><use href="#i-send"/></svg>ابعتها واتساب</a>
       <button class="btn btn-ghost btn-sm" id="copyBtn" type="button"><svg class="i"><use href="#i-copy"/></svg>نسخ الرسالة</button>
+      <button class="btn btn-ghost btn-sm" id="copyLinkBtn" type="button"><svg class="i"><use href="#i-link"/></svg>نسخ الرابط بس</button>
       <a class="btn btn-ghost btn-sm" href="${esc(magicLink(t))}" target="_blank" rel="noopener"><svg class="i"><use href="#i-eye"/></svg>افتح كشفه</a>
     </div>
-    <p class="sent">${t.sentAt ? `<b>✓ انبعت الرابط</b> بتاريخ ${shortDate(t.sentAt)}.` : 'لسا ما انبعتله الرابط.'} الرابط بيشتغل بعد «احفظ وانشر» بدقيقة أو دقيقتين، وإذا غيّرت الرقم السري لازم تبعتله رابط جديد.</p>`;
+    <p class="sent">${t.sentAt ? `<b>✓ انبعت الرابط</b> بتاريخ ${shortDate(t.sentAt)}.` : 'لسا ما انبعتله الرابط.'} التعديلات بتوصل لكشفه بعد «احفظ وانشر» بدقيقة أو دقيقتين، وإذا غيّرت الرقم السري لازم تبعتله الرابط من جديد.</p>`;
 }
 
 /* ---------- Save & publish ---------- */
@@ -708,7 +778,8 @@ $('#editor').addEventListener('click', e => {
     if (!date || !amount) return toast('اكتب التاريخ والمبلغ.');
     current.payments.push({ date, amount, note: $('#p-note').value.trim() });
     delete $('#p-amount').dataset.touched; delete $('#p-note').dataset.touched;
-    setDirty(true); renderPays(); renderLive(); toast(`تسجّلت دفعة ${money(amount)} ${CURRENCY}`);
+    msgKind = 'receipt';
+    setDirty(true); renderPays(); renderLive(); renderShare(); toast(`تسجّلت دفعة ${money(amount)} ${CURRENCY}. رسالة التأكيد جاهزة تحت.`);
     return;
   }
   if (t.dataset.del !== undefined) {
@@ -716,11 +787,13 @@ $('#editor').addEventListener('click', e => {
     if (!confirm(`حذف دفعة ${money(p.amount)} ${CURRENCY} (${shortDate(p.date)})؟`)) return;
     current.payments.splice(+t.dataset.del, 1); setDirty(true); renderPays(); renderLive(); return;
   }
-  if (t.id === 'copyBtn') copy(shareText(current));
+  if (t.id === 'copyBtn') copy(MESSAGES[msgKind].text(current));
   if (t.id === 'copyLinkBtn') copy(magicLink(current));
 });
 $('#editor').addEventListener('click', e => {
-  if (!e.target.closest('#waBtn')) return;
+  const tab = e.target.closest('[data-kind]');
+  if (tab && !tab.disabled) { msgKind = tab.dataset.kind; return renderShare(); }
+  if (!e.target.closest('#waBtn') || msgKind !== 'link') return;
   current.sentAt = DK.iso(DK.today()); setDirty(true);
   setTimeout(renderShare, 300);
 });
