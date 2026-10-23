@@ -121,8 +121,27 @@
         carried = Math.min(carried, nextAmount);
       }
     }
-    return { name: String(r.name || '').trim(), title: String(r.title || '').trim(), total, paid, remaining, installment, nextDue, nextAmount, carried, carriedFrom, notes: String(r.notes || '').trim(), payments };
+    return { name: String(r.name || '').trim(), title: String(r.title || '').trim(), total, paid, remaining, installment, nextDue, nextAmount, carried, carriedFrom, notes: String(r.notes || '').trim(), payments, tasks: taskList(r.tasks) };
   }
 
-  window.DK = { linkToken, readLinkToken, latin, digits, normPhone, normPass, material, sha256, encryptJSON, decryptJSON, teacherKey, adminKey, newSalt, genPassword, iso, parseISO, today, addMonths, num, account, b64, unb64 };
+  /* ---------- Tasks ----------
+     The diploma's task list lives in the admin database. A teacher's file carries only their own tasks, in order,
+     each with its status; tasks marked «مش مطلوبة» aren't published at all. Statements from before tasks have none. */
+  const TASK_STATES = ['todo', 'doing', 'ready', 'done', 'fix'];
+  // What the teacher reads for each status (the admin panel has its own, plainer names).
+  const TASK_SHOWN = { todo: 'بالانتظار', doing: 'قيد التجهيز', ready: 'جاهزة', done: 'تم التسليم', fix: 'قيد التعديل' };
+  function taskList(list) {
+    return (Array.isArray(list) ? list : []).map(x => ({
+      group: String(x.group || '').trim(), title: String(x.title || '').trim(), due: parseISO(x.due) ? x.due : '',
+      status: TASK_STATES.includes(x.status) ? x.status : 'todo', at: parseISO(x.at) ? x.at : '',
+      grade: String(x.grade || '').trim(), note: String(x.note || '').trim()
+    })).filter(x => x.title);
+  }
+  function taskCounts(list) {
+    const c = { total: list.length, todo: 0, doing: 0, ready: 0, done: 0, fix: 0 };
+    list.forEach(x => { c[x.status]++; });
+    return c;
+  }
+
+  window.DK = { linkToken, readLinkToken, latin, digits, normPhone, normPass, material, sha256, encryptJSON, decryptJSON, teacherKey, adminKey, newSalt, genPassword, iso, parseISO, today, addMonths, num, account, b64, unb64, TASK_STATES, TASK_SHOWN, taskList, taskCounts };
 })();
