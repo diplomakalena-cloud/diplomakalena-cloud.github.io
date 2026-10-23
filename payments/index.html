@@ -342,7 +342,7 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
 <script>
 // GitHub Pages lets browsers keep a page for ~10 minutes. If a newer version is live, reload once to pick it up,
 // so a teacher never sees new data through old code. Bump APP_VERSION here and in payments/version.json together.
-const APP_VERSION = 5;
+const APP_VERSION = 6;
 fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(({ v }) => {
   let seen = null; try { seen = sessionStorage.getItem('dk-reloaded'); } catch (e) {}
   if (v > APP_VERSION && seen !== String(v)) {
@@ -351,7 +351,7 @@ fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json())
   }
 }).catch(() => {});
 </script>
-<script src="core.js?v=5"></script>
+<script src="core.js?v=6"></script>
 <script>
 const DEMO = new URLSearchParams(location.search).has('demo');
 const WHATSAPP = 'https://wa.me/962779283635';
