@@ -487,7 +487,7 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
 <script>
 // GitHub Pages lets browsers keep a page for ~10 minutes. If a newer version is live, reload once to pick it up,
 // so a teacher never sees new data through old code. Bump APP_VERSION here and in payments/version.json together.
-const APP_VERSION = 4;
+const APP_VERSION = 5;
 fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(({ v }) => {
   let seen = null; try { seen = sessionStorage.getItem('dk-reloaded'); } catch (e) {}
   if (v > APP_VERSION && seen !== String(v) && !(typeof db !== 'undefined' && db)) {
@@ -496,7 +496,7 @@ fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json
   }
 }).catch(() => {});
 </script>
-<script src="../core.js?v=4"></script>
+<script src="../core.js?v=5"></script>
 <script>
 const OWNER = 'diplomakalena-cloud';
 const REPO = 'diplomakalena-cloud.github.io';
@@ -524,6 +524,11 @@ const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp
 const money = n => Number(n || 0).toLocaleString('en-US', { maximumFractionDigits: 2 });
 const shortDate = s => { const d = DK.parseISO(s); return d ? `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}` : 'بدون تاريخ'; };
 const uid = () => DK.b64(crypto.getRandomValues(new Uint8Array(9))).replace(/[+/=]/g, '');
+// Counted nouns as the panel says them: «مهمة وحدة»، «مهمتين»، «3 مهام»، «12 مهمة».
+const counted = (n, [one, two, few, many]) => n === 1 ? one : n === 2 ? two : `${n} ${n % 100 >= 3 && n % 100 <= 10 ? few : many}`;
+const tasksN = n => counted(n, ['مهمة وحدة', 'مهمتين', 'مهام', 'مهمة']);
+const teachersN = n => counted(n, ['معلم واحد', 'معلمَين', 'معلمين', 'معلم']);
+const daysN = n => counted(n, ['يوم', 'يومين', 'أيام', 'يوم']);
 function msgHTML(kind, text){ return `<div class="msg ${kind}"><svg class="i"><use href="#i-${kind === 'err' ? 'alert' : 'lock'}"/></svg><span>${text}</span></div>`; }
 // With `undoable`, the toast offers «تراجع» for the last change to task statuses.
 function toast(text, undoable){
@@ -871,8 +876,8 @@ const MESSAGES = {
       const ks = announce(t, 'ready'), today = DK.iso(DK.today());
       const when = k => { const d = dueOf(t, k); return d >= today ? longDate(d) : ''; };
       const body = ks.length === 1
-        ? `يسعدنا إعلامك بأننا انتهينا من تجهيز مهمة «${taskName(t, ks[0])}»، وسنسلّمها على المنصة ${when(ks[0]) ? `قبل موعدها (${when(ks[0])})` : dueOf(t, ks[0]) ? 'قريبًا' : 'في موعدها'}.`
-        : `يسعدنا إعلامك بأننا انتهينا من تجهيز المهام التالية، وسنسلّمها على المنصة في مواعيدها:\n${ks.map(k => `• ${taskName(t, k)}${when(k) ? `، موعد تسليمها ${when(k)}` : ''}`).join('\n')}`;
+        ? `يسعدنا إعلامك بأننا انتهينا من تجهيز ${taskRef(t, ks[0])}، وسنسلّمها على المنصة ${when(ks[0]) ? `قبل موعد تسليمها (${when(ks[0])})` : 'قريبًا'}.`
+        : `يسعدنا إعلامك بأننا انتهينا من تجهيز المهام التالية، وسنسلّمها على المنصة ${ks.some(when) ? 'قبل مواعيد تسليمها' : 'قريبًا'}:\n${ks.map(k => `• ${taskName(t, k)}${when(k) ? ` (موعد التسليم: ${when(k)})` : ''}`).join('\n')}`;
       return `${greeting(t)}\n\n${body}\n\nيمكنك متابعة حالة مهامك على الرابط:\n${magicLink(t)}${SIGN}`;
     }
   },
@@ -884,10 +889,10 @@ const MESSAGES = {
       const ks = announce(t, 'done'), on = k => (cellOf(t, k).d || {}).done || '';
       const sameDay = ks.every(k => on(k) === on(ks[0]));
       let body = ks.length === 1
-        ? `يسعدنا إعلامك بأنه تم تسليم مهمة «${taskName(t, ks[0])}» على المنصة${on(ks[0]) ? ` بتاريخ ${longDate(on(ks[0]))}` : ''}.`
+        ? `يسعدنا إعلامك بأنه تم تسليم ${taskRef(t, ks[0])} على المنصة${on(ks[0]) ? ` بتاريخ ${longDate(on(ks[0]))}` : ''}.`
         : `يسعدنا إعلامك بأنه تم تسليم المهام التالية على المنصة${sameDay && on(ks[0]) ? ` بتاريخ ${longDate(on(ks[0]))}` : ''}:\n${ks.map(k => `• ${taskName(t, k)}${!sameDay && on(k) ? ` (${longDate(on(k))})` : ''}`).join('\n')}`;
       const p = taskProgress(t);
-      body += p.done === p.total ? '\n\nوبذلك تكون جميع مهامك حتى الآن قد سُلِّمت، ونتمنى لك التوفيق في الدبلوم.'
+      body += p.done === p.total ? '\n\nوبذلك يكون قد تمّ تسليم جميع مهامك حتى الآن، ونتمنى لك التوفيق في الدبلوم.'
         : `\n\nوبذلك أصبح عدد مهامك المسلَّمة ${p.done} من أصل ${p.total}.`;
       return `${greeting(t)}\n\n${body}\n\nيمكنك متابعة حالة جميع مهامك على الرابط:\n${magicLink(t)}${SIGN}`;
     }
@@ -898,8 +903,8 @@ const MESSAGES = {
     ok: t => myTasks(t).length > 0,
     text: t => {
       const ks = myTasks(t), n = s => ks.filter(k => stateOf(t, k) === s).length, today = DK.iso(DK.today());
-      const lines = [`• تم تسليمها: ${n('done')} من ${ks.length}`,
-        ...[['ready', 'جاهزة للتسليم'], ['doing', 'قيد التجهيز'], ['fix', 'قيد التعديل'], ['todo', 'بالانتظار']].filter(([s]) => n(s)).map(([s, label]) => `• ${label}: ${n(s)}`)];
+      const lines = [`• تم التسليم: ${n('done')} من ${ks.length}`,
+        ...[['ready', 'جاهزة للتسليم'], ['doing', 'قيد التجهيز'], ['fix', 'قيد التعديل'], ['todo', 'قيد الانتظار']].filter(([s]) => n(s)).map(([s, label]) => `• ${label}: ${n(s)}`)];
       const next = ks.filter(k => stateOf(t, k) !== 'done' && dueOf(t, k) >= today).sort((a, b) => dueOf(t, a).localeCompare(dueOf(t, b)))[0];
       return `${greeting(t)}\n\nإليك ملخص مهامك في «دبلومك علينا»:\n\n${lines.join('\n')}` +
         (next ? `\n\nأقرب موعد تسليم: «${taskName(t, next)}»، ${longDate(dueOf(t, next))}.` : '') +
@@ -968,6 +973,8 @@ function taskName(t, k){
   const g = groupById(k.gid), twin = myTasks(t).filter(x => x.title.trim() === k.title.trim()).length > 1;
   return k.title.trim() + (twin && g ? ` (${g.name.trim()})` : '');
 }
+// «مهمة «X»» in a sentence, or just «X» when the name already starts with «مهمة»/«المهمة».
+const taskRef = (t, k) => { const n = taskName(t, k); return /^(ال)?مهم/.test(n) ? `«${n}»` : `مهمة «${n}»`; };
 
 function setState(t, k, s, date){
   const c = ensureCell(t, k), d = { ...(c.d || {}) };
@@ -1082,7 +1089,7 @@ const FILTERS = [
   ['tell', 'لازم أبلّغهم', null],
   ['doing', 'قيد التجهيز', x => x.s === 'doing'],
   ['todo', 'لم تبدأ', x => x.s === 'todo'],
-  ['open', 'كل اللي ما انسلّم', x => x.s !== 'done'],
+  ['open', 'لسا ما سلّمناها', x => x.s !== 'done'],
   ['done', 'تم التسليم', x => x.s === 'done']
 ];
 const BULK = { ready: 'سلّمتها كلها', doing: 'كلها صارت جاهزة', fix: 'عدّلتها كلها', todo: 'بلّشت فيها كلها' };
@@ -1108,7 +1115,7 @@ function dueText(iso, s){
   const d = DK.parseISO(iso);
   if (!d) return '';
   const diff = Math.round((d - DK.today()) / 864e5);
-  const rel = s === 'done' ? '' : diff < 0 ? ` · متأخرة ${-diff} يوم` : diff === 0 ? ' · اليوم' : diff === 1 ? ' · بكرة' : ` · بعد ${diff} يوم`;
+  const rel = s === 'done' ? '' : diff < 0 ? ` · متأخرة ${daysN(-diff)}` : diff === 0 ? ' · اليوم' : diff === 1 ? ' · بكرة' : ` · بعد ${daysN(diff)}`;
   return `موعدها ${d.getDate()}/${d.getMonth() + 1}${rel}`;
 }
 function workHTML(){
@@ -1121,7 +1128,7 @@ function workHTML(){
     `<button class="chip${k === taskFilter ? ' on' : ''}${counts[k] ? '' : ' zero'}${k === 'late' && counts[k] ? ' hot' : ''}" type="button" role="tab" aria-selected="${k === taskFilter}" data-filter="${k}">${label} <b class="num">${counts[k]}</b></button>`).join('')}</div>`;
   if (taskFilter === 'tell') {
     return chips + (tell.length
-      ? `<ul class="work">${tell.map(tellRow).join('')}</ul><p class="sent">الرسالة بتجمع كل المهام اللي لسا ما بلّغته فيها. إذا ما بدك تبلّغه، اضغط ✕ وبينشال من هون.</p>`
+      ? `<ul class="work">${tell.map(tellRow).join('')}</ul><p class="sent">الرسالة بتجمع كل المهام اللي لسا ما بلّغته فيها. إذا ما بدك تبلّغه، اضغط ✕ وبنشيله من هون.</p>`
       : '<p class="empty">بلّغت الكل ✓</p>');
   }
   const rows = filteredRows(items), shown = showAllRows ? rows : rows.slice(0, 60);
@@ -1140,7 +1147,7 @@ function workRow(x){
 }
 function tellRow({ t, ready, done }){
   const ok = !problems(t).length;
-  const what = [done.length ? `انسلّم ${done.length}` : '', ready.length ? `جاهز ${ready.length}` : ''].filter(Boolean).join(' · ');
+  const what = [done.length ? `سلّمنا ${done.length}` : '', ready.length ? `جاهزة ${ready.length}` : ''].filter(Boolean).join(' · ');
   const wa = (kind, label) => `<a class="btn btn-gold btn-sm" href="${esc(waHref(t, MESSAGES[kind].text(t)))}" target="_blank" rel="noopener" data-tell="${t.id}|${kind}"><svg class="i"><use href="#i-send"/></svg>${label}</a>`;
   return `<li class="wrow"><span class="who"><b>${esc(t.name || 'بدون اسم')}</b><small>${what}</small></span>
     <span class="tell-acts">${ok ? (done.length ? wa('tasksDone', 'بلّغه بالتسليم') : '') + (ready.length ? wa('tasksReady', 'إنها جاهزة') : '') : '<small class="lt">كمّل بياناته</small>'}
@@ -1217,9 +1224,9 @@ $('#tasks').addEventListener('click', e => {
   }
   if (b.id === 'bulkNext') {
     const rows = filteredRows(workItems()), s = NEXT_STEP[taskFilter][0];
-    if (!confirm(`${rows.length} مهمة رح تصير «${STATE_LABEL[s]}» بتاريخ اليوم. أكمل؟`)) return;
+    if (!confirm(`${tasksN(rows.length)} رح تصير «${STATE_LABEL[s]}» بتاريخ اليوم. أكمل؟`)) return;
     const n = applyStates(rows, s); renderTaskBody(); updateBadge();
-    return toast(`صارت ${n} مهمة «${STATE_LABEL[s]}».`, true);
+    return toast(`صارت ${tasksN(n)} «${STATE_LABEL[s]}».`, true);
   }
   if (d.tell) {
     const [ti, kind] = d.tell.split('|');
@@ -1231,7 +1238,7 @@ $('#tasks').addEventListener('click', e => {
     const t = teacherById(d.untell);
     ['ready', 'done'].forEach(s => pending(t, s).forEach(k => { ensureCell(t, k).told = s; }));
     setDirty(true); renderTaskBody();
-    return toast(`تمام، ${firstName(t)} انشال من «لازم أبلّغهم».`);
+    return toast(`تمام، شلنا ${firstName(t)} من «لازم أبلّغهم».`);
   }
 });
 
@@ -1293,7 +1300,7 @@ function renderGroupSheet(){
   const n = taskDefs().filter(k => k.gid === g.id).length;
   $('#sheetIn').innerHTML = `
     <h3>لمين «${esc(g.name || 'بدون اسم')}»؟</h3>
-    <p class="sub">${n} مهمة</p>
+    <p class="sub">${tasksN(n)}</p>
     <label class="check setting"><input type="checkbox" id="gAll" ${g.all !== false ? 'checked' : ''}>
       <span>لكل المعلمين، وللي بتضيفهم بعدين<small>إذا شلتها، المجموعة بتطلع بس للي بتختارهم تحت.</small></span></label>
     <div class="checklist">${db.teachers.map(t => `<label class="check"><input type="checkbox" data-gt="${t.id}" ${groupOn(t, g) ? 'checked' : ''}><span>${esc(t.name || 'بدون اسم')}</span></label>`).join('') || '<p class="empty">لسا ما في معلمين.</p>'}</div>
@@ -1324,7 +1331,7 @@ sheet.addEventListener('click', e => {
       if (!picked.length) { $('#colErr').hidden = false; return; }
       const n = applyStates(picked.map(t => ({ t, k })), d.apply, $('#colDate').value);
       sheet.close();
-      return toast(n ? `صارت «${STATE_LABEL[d.apply]}» عند ${n} معلم.` : 'ما تغيّر إشي، هي أصلاً هيك.', !!n);
+      return toast(n ? `صارت «${STATE_LABEL[d.apply]}» عند ${teachersN(n)}.` : 'ما تغيّر إشي، هي أصلاً هيك.', !!n);
     }
     if (d.editk !== undefined) { sheet.close(); return openCatalog(); }
   }
@@ -1390,7 +1397,7 @@ function renderEdTasks(){
 function openCatalog(){ current = null; show('catalog'); renderCatalog(); }
 function whoText(g){
   const n = db.teachers.filter(t => groupOn(t, g)).length;
-  return g.all !== false && n === db.teachers.length ? 'لكل المعلمين' : `لـ ${n} من ${db.teachers.length} معلم`;
+  return g.all !== false && n === db.teachers.length ? 'لكل المعلمين' : `لـ ${n} من ${teachersN(db.teachers.length)}`;
 }
 function renderCatalog(){
   const gs = groupsList(), up = '<svg class="i flip"><use href="#i-chev"/></svg>', down = '<svg class="i"><use href="#i-chev"/></svg>', x = '<svg class="i"><use href="#i-x"/></svg>';
@@ -1475,7 +1482,7 @@ $('#catalog').addEventListener('click', e => {
   }
   if (d.kdel) {
     const k = taskById(d.kdel), n = usedBy(k);
-    if (!confirm(n ? `«${k.title || 'المهمة'}» إلها حالة أو ملاحظات عند ${n} معلم، ورح تنمسح كلها. أكيد بدك تحذفها؟` : `حذف «${k.title || 'المهمة'}»؟`)) return;
+    if (!confirm(n ? `«${k.title || 'المهمة'}» إلها حالة أو ملاحظات عند ${teachersN(n)}، ورح تنمسح كلها. أكيد بدك تحذفها؟` : `حذف «${k.title || 'المهمة'}»؟`)) return;
     dropTask(k); setDirty(true); return renderCatalog();
   }
   if (d.gdel) {
@@ -1581,7 +1588,7 @@ function renderTimpPreview(){
       <thead><tr><th>المجموعة</th><th>المهمة</th><th>الموعد</th></tr></thead>
       <tbody>${items.map(x => `<tr><td>${esc(x.groupName)}${x.g ? '' : '<small>جديدة</small>'}</td><td>${esc(x.title)}${x.dup ? '<small>موجودة، ما رح تتكرر</small>' : ''}</td><td class="num">${x.due ? shortDate(x.due) : '—'}</td></tr>`).join('')}</tbody>
     </table></div>
-    <button class="btn btn-gold btn-block" id="timpGo" type="button" style="margin-top:14px" ${fresh ? '' : 'disabled'}>${fresh ? `ضيف ${fresh} مهمة` : 'كل هالمهام موجودة'}</button>`
+    <button class="btn btn-gold btn-block" id="timpGo" type="button" style="margin-top:14px" ${fresh ? '' : 'disabled'}>${fresh ? `ضيف ${tasksN(fresh)}` : 'كل هالمهام موجودة'}</button>`
     : '<p class="sent">بتطلع المهام هون أول ما تكتبها.</p>';
 }
 function doTaskImport(){
@@ -1595,7 +1602,7 @@ function doTaskImport(){
   });
   timp = { text: '', gid: null };
   setDirty(true); openCatalog();
-  toast(`انضافت ${items.length} مهمة. لما تخلص اضغط «احفظ وانشر».`);
+  toast(`ضفنا ${tasksN(items.length)}. لما تخلص اضغط «احفظ وانشر».`);
 }
 $('#taskImport').addEventListener('input', e => {
   if (e.target.id === 'timpText') timp.text = e.target.value;
@@ -1875,7 +1882,7 @@ function renderImport(fileName){
 }
 function updateImportBtn(){
   const n = importRows.filter(x => x.on).length;
-  const b = $('#impGo'); b.disabled = !n; b.textContent = n ? `استورد ${n} معلم` : 'اختار معلم واحد على الأقل';
+  const b = $('#impGo'); b.disabled = !n; b.textContent = n ? `استورد ${teachersN(n)}` : 'اختار معلم واحد على الأقل';
 }
 function doImport(){
   const inst = DK.num($('#impInst').value), first = $('#impFirst').value;
@@ -1886,7 +1893,7 @@ function doImport(){
   importRows = [];
   setDirty(true);
   openDash();
-  toast(`انضافوا ${picked.length} معلم. اضغط «احفظ وانشر».`);
+  toast(`ضفنا ${teachersN(picked.length)}. اضغط «احفظ وانشر».`);
 }
 $('#importBtn').onclick = () => { $('#importFile').value = ''; $('#importFile').click(); };
 $('#importFile').addEventListener('change', e => { const f = e.target.files[0]; if (f) readImport(f); });
