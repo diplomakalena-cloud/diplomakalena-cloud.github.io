@@ -8,9 +8,9 @@
 <!-- The page may only talk to this site: nothing on it can send data anywhere else. -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>كشف حسابك | دبلومك علينا</title>
-<meta name="description" content="كشف حساب المعلم في دبلومك علينا: المبلغ المتفق عليه، الدفعات، المتبقي، وموعد القسط القادم.">
+<meta name="description" content="كشف حساب المعلم في دبلومك علينا: حالة المهام، المبلغ المتفق عليه، الدفعات، المتبقي، وموعد القسط القادم.">
 <meta property="og:title" content="كشف حسابك — دبلومك علينا">
-<meta property="og:description" content="شوف دفعاتك والمبلغ المتبقي وموعد القسط القادم.">
+<meta property="og:description" content="شوف حالة مهامك ودفعاتك والمبلغ المتبقي وموعد القسط القادم.">
 <meta property="og:image" content="https://diplomakalena-cloud.github.io/og-image.jpg">
 <meta property="og:locale" content="ar_JO">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
@@ -202,6 +202,58 @@ input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(191,
 .pay li.neg .tick{background:rgba(255,180,162,.1);color:var(--error)}
 .empty{color:var(--muted);font-size:.92rem;padding:6px 0}
 
+/* Tasks */
+.tasks .head-row{margin-bottom:12px}
+.tasks .count b{color:var(--gold-hi);font-weight:600}
+.tbar{display:flex;height:10px;border-radius:10px;background:rgba(245,239,224,.1);overflow:hidden}
+.tbar i{display:block;height:100%;width:0;transition:width 1.1s var(--ease)}
+.tbar .s-done{background:var(--foil);background-size:220% 100%}
+.tbar .s-ready{background:rgba(243,223,162,.55)}
+.tbar .s-doing{background:rgba(191,149,63,.3)}
+.tlegend{list-style:none;display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:10px;font-size:.82rem;color:var(--muted)}
+.tlegend li{display:inline-flex;align-items:center;gap:6px}
+.tlegend li i{width:8px;height:8px;border-radius:50%;background:rgba(245,239,224,.25)}
+.tlegend .s-done i{background:var(--gold)}
+.tlegend .s-ready i{background:var(--gold-hi)}
+.tlegend .s-doing i{background:rgba(191,149,63,.5)}
+.tlegend .s-fix i{background:var(--late)}
+.tlegend b{color:var(--ink);font-weight:600}
+.tnext{display:flex;gap:12px;align-items:center;margin-top:16px;padding:12px 14px;border-radius:var(--r-sm);background:var(--field);border:1px solid var(--field-line)}
+.tnext > svg{color:var(--gold);font-size:1.35rem}
+.tnext div{min-width:0}
+.tnext span{display:block;font-size:.8rem;color:var(--gold-hi);font-weight:600}
+.tnext b{display:block;font-weight:600;line-height:1.6;overflow-wrap:anywhere}
+.tnext small{display:block;color:var(--muted);font-size:.84rem}
+.tnext.all > svg{color:#1d1406;background:var(--foil);background-size:200% 100%;border-radius:50%;padding:5px;width:1.5em;height:1.5em;stroke-width:2.6}
+.tgroup{border-top:1px solid var(--field-line);margin-top:16px}
+.tgroup summary{list-style:none;display:flex;align-items:center;gap:10px;padding:12px 0 4px;cursor:pointer;font-family:var(--f-display);font-weight:700;font-size:.98rem;line-height:1.5}
+.tgroup summary::-webkit-details-marker{display:none}
+.tgroup summary .gc{margin-inline-start:auto;font-family:var(--f-body);font-weight:500;font-size:.8rem;color:var(--faint);white-space:nowrap}
+.tgroup summary .gc.full{color:var(--gold-hi)}
+.tgroup summary .chev{color:var(--faint);transition:transform .3s var(--ease)}
+.tgroup[open] summary .chev{transform:rotate(180deg)}
+.tlist{list-style:none;margin-top:6px}
+.tlist li{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-top:1px solid var(--field-line)}
+.tlist li:first-child{border-top:0}
+.tic{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;border:1.5px solid rgba(245,239,224,.2);color:var(--faint)}
+.tic svg{font-size:1rem}
+.tlist .s-doing .tic{border-color:var(--gold);border-style:dashed;color:var(--gold-hi)}
+.tlist .s-ready .tic{border-color:var(--gold-hi);background:rgba(243,223,162,.12);color:var(--gold-hi)}
+.tlist .s-done .tic{border:0;background:var(--foil);background-size:200% 100%;color:#1d1406}
+.tlist .s-done .tic svg{stroke-width:2.4}
+.tlist .s-fix .tic{border-color:rgba(255,180,138,.6);background:rgba(255,140,90,.1);color:var(--late)}
+.tinfo{flex:1;min-width:0}
+.tinfo b{display:block;font-weight:600;font-size:.96rem;line-height:1.6;overflow-wrap:anywhere}
+.tinfo small{display:block;color:var(--muted);font-size:.83rem;line-height:1.65}
+.tinfo small.soon{color:var(--gold-hi)}
+.tinfo .grade{display:inline-block;margin-top:5px;padding:1px 10px;border-radius:99px;font-size:.8rem;font-weight:600;color:var(--gold-hi);background:rgba(191,149,63,.12);border:1px solid rgba(191,149,63,.3)}
+.tinfo .tnote{margin-top:6px;padding:6px 10px;border-radius:10px;background:rgba(0,20,17,.3);border-inline-start:2px solid var(--gold);color:var(--ink);white-space:pre-line;overflow-wrap:anywhere}
+.tstate{flex-shrink:0;margin-top:5px;padding:1px 10px;border-radius:99px;font-size:.76rem;font-weight:600;white-space:nowrap;color:var(--faint);border:1px solid var(--field-line)}
+.s-doing .tstate{color:var(--gold-hi);border-color:rgba(191,149,63,.35)}
+.s-ready .tstate{color:var(--gold-hi);background:rgba(243,223,162,.1);border-color:rgba(243,223,162,.4)}
+.s-done .tstate{color:var(--gold-hi);background:rgba(191,149,63,.12);border-color:rgba(191,149,63,.3)}
+.s-fix .tstate{color:var(--late);background:rgba(255,140,90,.1);border-color:rgba(255,180,138,.4)}
+
 /* Notes */
 .notes p{white-space:pre-line;color:var(--ink);margin-top:8px;padding:12px 14px;border-radius:var(--r-sm);background:rgba(0,20,17,.3);border-inline-start:3px solid var(--gold)}
 
@@ -224,6 +276,11 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
   <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
   <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
   <symbol id="i-note" viewBox="0 0 24 24"><path d="M5 4h10l4 4v12H5z"/><path d="M14 4v5h5M8.5 13h7M8.5 16.5h5"/></symbol>
+  <symbol id="i-tasks" viewBox="0 0 24 24"><rect x="5" y="4.5" width="14" height="16.5" rx="2.5"/><path d="M9 4.5V3h6v1.5M8.5 10.5l1.5 1.5 3-3M8.5 16.5l1.5 1.5 3-3M15 11h1.5M15 17h1.5"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13 7 4 4"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h4"/></symbol>
+  <symbol id="i-redo" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v4.5h-4.5"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
   <symbol id="i-out" viewBox="0 0 24 24"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l-5-5 5-5M5 12h11"/></symbol>
   <symbol id="i-wa" viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.42.25-.69.25-1.29.18-1.41-.08-.13-.28-.2-.57-.35M12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88a9.82 9.82 0 0 1 9.88 9.89c0 5.45-4.44 9.88-9.88 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.9a11.82 11.82 0 0 0-3.48-8.41z"/></symbol>
 </svg>
@@ -241,7 +298,7 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
     <form class="card enter" id="loginForm" novalidate>
       <span class="kicker">كشف حساب المعلم</span>
       <h1>دفعاتك <span class="foil">قدّام عينك</span></h1>
-      <p class="lead">ادخل بياناتك وبتشوف المبلغ المتفق عليه، الدفعات اللي دفعتها، المتبقي، وموعد قسطك القادم.</p>
+      <p class="lead">ادخل بياناتك وبتشوف حالة مهامك، والمبلغ المتفق عليه، والدفعات اللي دفعتها، والمتبقي، وموعد قسطك القادم.</p>
 
       <div class="field" id="f-phone">
         <label for="phone">رقم الهاتف</label>
@@ -285,7 +342,7 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
 <script>
 // GitHub Pages lets browsers keep a page for ~10 minutes. If a newer version is live, reload once to pick it up,
 // so a teacher never sees new data through old code. Bump APP_VERSION here and in payments/version.json together.
-const APP_VERSION = 3;
+const APP_VERSION = 4;
 fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(({ v }) => {
   let seen = null; try { seen = sessionStorage.getItem('dk-reloaded'); } catch (e) {}
   if (v > APP_VERSION && seen !== String(v)) {
@@ -294,7 +351,7 @@ fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json())
   }
 }).catch(() => {});
 </script>
-<script src="core.js?v=3"></script>
+<script src="core.js?v=4"></script>
 <script>
 const DEMO = new URLSearchParams(location.search).has('demo');
 const WHATSAPP = 'https://wa.me/962779283635';
@@ -386,6 +443,61 @@ async function fetchAccount({ phone, ministry, pass }){
   catch (e) { return { ok: false, error: 'invalid' }; }
 }
 
+/* ---------- Tasks ---------- */
+const TASK_ICON = { todo: '', doing: 'i-pen', ready: 'i-doc', done: 'i-check', fix: 'i-redo' };
+const dayMonth = (d, today) => d.getFullYear() === today.getFullYear() ? `${d.getDate()} ${MONTHS[d.getMonth()]}` : shortDate(d);
+function untilWords(d, today){
+  const diff = Math.round((d - today) / 864e5);
+  return diff === 0 ? 'اليوم' : diff === 1 ? 'بكرة' : diff > 1 ? `بعد ${daysWord(diff)}` : '';
+}
+function taskRow(x, today){
+  const at = parseISO(x.at), due = parseISO(x.due);
+  const parts = [];
+  let soon = false;
+  if (x.status === 'done') parts.push(at ? `انسلّمت على المنصة ${dayMonth(at, today)}` : 'انسلّمت على المنصة');
+  else {
+    if (x.status === 'ready' && at) parts.push(`جهّزناها ${dayMonth(at, today)}`);
+    if (due) {
+      const w = untilWords(due, today);
+      soon = !!w && due - today <= 7 * 864e5;
+      parts.push(`موعد التسليم ${DAYS[due.getDay()]} ${dayMonth(due, today)}${w ? ` (${w})` : ''}`);
+    }
+  }
+  const icon = TASK_ICON[x.status];
+  return `<li class="s-${x.status}"><span class="tic" aria-hidden="true">${icon ? `<svg class="i"><use href="#${icon}"/></svg>` : ''}</span>
+    <span class="tinfo"><b>${esc(x.title)}</b>${parts.length ? `<small${soon ? ' class="soon"' : ''}>${parts.join(' · ')}</small>` : ''}${x.grade ? `<span class="grade">الدرجة: <bdi>${esc(x.grade)}</bdi></span>` : ''}${x.note ? `<small class="tnote">${esc(x.note)}</small>` : ''}</span>
+    <span class="tstate">${DK.TASK_SHOWN[x.status]}</span></li>`;
+}
+function tasksCard(list, today){
+  if (!list.length) return '';
+  const c = DK.taskCounts(list);
+  const w = n => (n / c.total * 100).toFixed(2);
+  const groups = [];
+  list.forEach(x => { let g = groups.find(y => y.name === x.group); if (!g) groups.push(g = { name: x.group, items: [] }); g.items.push(x); });
+  const next = list.filter(x => x.status !== 'done' && x.due && parseISO(x.due) >= today).sort((x, y) => (x.due < y.due ? -1 : x.due > y.due ? 1 : 0))[0];
+  let head = '';
+  if (c.done === c.total) head = `<div class="tnext all"><svg class="i"><use href="#i-check"/></svg><div><b>انسلّمت كل مهامك على المنصة</b><small>إنت ركّز على صفك، والباقي علينا.</small></div></div>`;
+  else if (next) {
+    const d = parseISO(next.due), u = untilWords(d, today);
+    head = `<div class="tnext"><svg class="i"><use href="#i-cal"/></svg><div><span>أقرب موعد تسليم</span><b>${esc(next.title)}</b><small>${longDate(d)}${u ? ` · ${u}` : ''}</small></div></div>`;
+  }
+  const legend = [['done', 'تم التسليم'], ['ready', 'جاهزة'], ['doing', 'قيد التجهيز'], ['fix', 'قيد التعديل'], ['todo', 'بالانتظار']].filter(([s]) => c[s]);
+  const rows = g => `<ul class="tlist">${g.items.map(x => taskRow(x, today)).join('')}</ul>`;
+  const body = groups.length > 1
+    ? groups.map(g => {
+        const done = g.items.filter(x => x.status === 'done').length, full = done === g.items.length;
+        return `<details class="tgroup"${full ? '' : ' open'}><summary><span>${esc(g.name || 'مهام')}</span><span class="gc num${full ? ' full' : ''}">${full ? '✓ كلها انسلّمت' : `${done} من ${g.items.length}`}</span><svg class="i chev"><use href="#i-chev"/></svg></summary>${rows(g)}</details>`;
+      }).join('')
+    : `<div style="margin-top:12px">${rows(groups[0])}</div>`;
+  return `<div class="card tasks enter">
+      <div class="head-row"><h2><svg class="i"><use href="#i-tasks"/></svg>مهامي</h2><span class="count">سلّمنا <b class="num">${c.done}</b> من <span class="num">${c.total}</span></span></div>
+      <div class="tbar" role="progressbar" aria-valuenow="${c.done}" aria-valuemin="0" aria-valuemax="${c.total}" aria-label="المهام المسلّمة"><i class="s-done" data-w="${w(c.done)}"></i><i class="s-ready" data-w="${w(c.ready)}"></i><i class="s-doing" data-w="${w(c.doing + c.fix)}"></i></div>
+      <ul class="tlegend">${legend.map(([s, label]) => `<li class="s-${s}"><i></i>${label} <b class="num">${c[s]}</b></li>`).join('')}</ul>
+      ${head}
+      ${body}
+    </div>`;
+}
+
 /* ---------- Account ---------- */
 function renderAccount(a){
   const today = DK.today();
@@ -430,6 +542,7 @@ function renderAccount(a){
       <p>أهلاً${a.title && first ? ' ' + esc(a.title) + ' ' + esc(first) : first ? '، ' + esc(first) : ''}<small>هاد كشف حسابك معنا</small></p>
       <button class="out" id="logoutBtn" type="button"><svg class="i"><use href="#i-out"/></svg>خروج</button>
     </div>
+    ${tasksCard(a.tasks, today)}
     <div class="card balance enter">
       <div class="label">المبلغ المتبقي</div>
       <div class="big num"><span class="foil">${money(a.remaining)}</span><span class="unit">${CURRENCY}</span></div>
@@ -446,12 +559,15 @@ function renderAccount(a){
       ${list}
     </div>
     ${a.notes ? `<div class="card notes enter"><h2><svg class="i"><use href="#i-note"/></svg>ملاحظات</h2><p>${esc(a.notes)}</p></div>` : ''}
-    <p class="help"><a class="wa" href="${WHATSAPP}" target="_blank" rel="noopener"><svg class="i"><use href="#i-wa"/></svg>عندك سؤال عن دفعاتك؟ احكي معنا</a></p>`;
+    <p class="help"><a class="wa" href="${WHATSAPP}" target="_blank" rel="noopener"><svg class="i"><use href="#i-wa"/></svg>عندك سؤال عن ${a.tasks.length ? 'مهامك أو دفعاتك' : 'دفعاتك'}؟ احكي معنا</a></p>`;
 
   showScreen('account');
   $('#logoutBtn').onclick = logout;
   window.scrollTo(0, 0);
-  requestAnimationFrame(() => requestAnimationFrame(() => { $('#meterFill').style.width = pct + '%'; }));
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    $('#meterFill').style.width = pct + '%';
+    document.querySelectorAll('.tbar [data-w]').forEach(i => { i.style.width = i.dataset.w + '%'; });
+  }));
 }
 
 function logout(){
@@ -465,7 +581,19 @@ function logout(){
 /* ---------- Demo data (test mode only) ---------- */
 function demoAccount(){
   const t = DK.today(), first = DK.addMonths(new Date(t.getFullYear(), t.getMonth(), 24), t.getDate() > 24 ? 0 : -1);
+  const day = n => DK.iso(new Date(t.getFullYear(), t.getMonth(), t.getDate() + n));
+  const task = (group, title, due, status, at, extra) => ({ group, title, due: day(due), status, at: at === undefined ? '' : day(at), ...extra });
   return DK.account({
+    tasks: [
+      task('الشهر الأول', 'المهمة الأسبوعية 1: تحليل المحتوى', -20, 'done', -21, { grade: '10/10' }),
+      task('الشهر الأول', 'المهمة الأسبوعية 2: خطة درس', -13, 'done', -14, { grade: '9/10' }),
+      task('الشهر الأول', 'المهمة الأسبوعية 3: استراتيجيات التقويم', -6, 'done', -7),
+      task('الشهر الأول', 'المهمة الأسبوعية 4: بيئة الصف', 1, 'ready', -1),
+      task('الشهر الثاني', 'المهمة الأسبوعية 5: التعلم النشط', 8, 'doing'),
+      task('الشهر الثاني', 'المهمة الأسبوعية 6: الفروق الفردية', 15, 'fix', -2, { note: 'المدرّب طلب إضافة أمثلة من صفك، وعم نضيفها.' }),
+      task('الشهر الثاني', 'المهمة الأسبوعية 7: التعلم الرقمي', 22, 'todo'),
+      task('المقال', 'المقال التأملي', 40, 'todo')
+    ],
     name: 'محمد أحمد علي', title: 'أستاذ', total: 450, down: 100, installment: 50, firstDue: DK.iso(first),
     notes: 'الدفعة الأولى كانت مقدّم عند التسجيل.\nإذا تأخر الراتب، احكيلنا وبنأجّل القسط.',
     payments: [

@@ -204,7 +204,142 @@ pre.share{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;font
 @keyframes spin{to{transform:rotate(360deg)}}
 
 .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:80;background:#0A3A32;border:1px solid var(--line);color:var(--ink);
-  padding:8px 18px;border-radius:99px;font-size:.88rem;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+  padding:8px 18px;border-radius:99px;font-size:.88rem;box-shadow:0 10px 30px rgba(0,0,0,.4);
+  display:flex;align-items:center;gap:14px;width:max-content;max-width:calc(100% - 32px);line-height:1.6}
+.toast button{color:var(--gold-hi);font-weight:700;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+
+/* Sections */
+.seg{display:flex;gap:4px;padding:4px;border-radius:99px;background:var(--field);border:1px solid var(--field-line);margin:4px 0 14px}
+.seg button{flex:1;min-height:42px;border-radius:99px;font-family:var(--f-display);font-weight:700;font-size:.9rem;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.seg button.on{color:#1d1406;background:var(--foil);background-size:200% 100%}
+.seg.sm{margin:0 0 12px}
+.seg.sm button{min-height:38px;font-size:.86rem}
+.badge{min-width:20px;height:20px;padding:0 6px;border-radius:99px;background:var(--late);color:#2a1206;font-family:var(--f-body);font-size:.74rem;font-weight:700;display:inline-grid;place-items:center;line-height:1}
+.head-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.head-row .count{font-size:.82rem;color:var(--faint);white-space:nowrap}
+.linkish{color:var(--gold-hi);text-decoration:underline;text-underline-offset:3px;font-size:inherit}
+
+/* Task status marks */
+.st{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;border:1.5px solid transparent;color:var(--faint)}
+.st svg{font-size:.92rem}
+.st-todo{border-color:rgba(245,239,224,.26)}
+.st-doing{border-color:var(--gold);border-style:dashed;color:var(--gold-hi)}
+.st-ready{border-color:var(--gold-hi);background:rgba(243,223,162,.16);color:var(--gold-hi)}
+.st-done{background:var(--ok);color:#06261d}
+.st-done svg{stroke-width:2.6}
+.st-fix{border-color:var(--late);background:rgba(255,140,90,.14);color:var(--late)}
+.st-na{color:var(--faint)}
+.st.late{box-shadow:0 0 0 2px rgba(255,140,90,.6)}
+
+/* Tasks: worklist */
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:5px 12px;border-radius:99px;font-size:.84rem;font-weight:600;color:var(--muted);border:1px solid var(--field-line);background:var(--field);display:inline-flex;align-items:center;gap:6px;line-height:1.5}
+.chip b{font-family:var(--f-display);font-weight:700;color:var(--ink)}
+.chip.zero{opacity:.55}
+.chip.hot b{color:var(--late)}
+.chip.on{color:#1d1406;background:var(--foil);background-size:200% 100%;border-color:transparent;opacity:1}
+.chip.on b{color:#1d1406}
+.work{list-style:none;margin-top:12px}
+.wrow{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--field-line)}
+.wrow:first-child{border-top:0}
+.wmain{flex:1;min-width:0;display:flex;align-items:center;gap:12px;text-align:start;padding:2px 0}
+.wrow .who{flex:1;min-width:0}
+.wrow .who b{display:block;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wrow .who small{display:block;color:var(--muted);font-size:.8rem;line-height:1.6;overflow-wrap:anywhere}
+.wrow .who small.lt,.lt{color:var(--late)}
+.wrow .who small.sn{color:var(--gold-hi)}
+.wrow > .btn{flex-shrink:0}
+.tell-acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+
+/* Tasks: grid */
+.brush{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 8px;margin:0 -2px;scrollbar-width:thin}
+.bchip{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:4px 12px 4px 8px;border-radius:99px;font-size:.84rem;font-weight:600;color:var(--muted);border:1px solid var(--field-line);background:var(--field);white-space:nowrap}
+.bchip .st{width:24px;height:24px}
+.bchip .st svg{font-size:.78rem}
+.bchip.on{border-color:var(--gold);color:var(--ink);background:rgba(191,149,63,.16);box-shadow:0 0 0 2px rgba(191,149,63,.25)}
+.bchip[disabled]{opacity:.4;pointer-events:none}
+.hint{font-size:.8rem;color:var(--faint);margin:2px 0 10px;line-height:1.7}
+.mx-wrap{overflow:auto;max-height:70vh;border-radius:var(--r-sm);border:1px solid var(--field-line);background:rgba(0,20,17,.35);overscroll-behavior:contain}
+.mx{border-collapse:separate;border-spacing:0}
+.mx th,.mx td{padding:3px;text-align:center;vertical-align:middle}
+.mx thead th{position:sticky;top:0;z-index:2;background:#032c26}
+.mx thead tr + tr th{top:31px}
+.mx .band{height:31px;padding:0 8px;font-size:.74rem;font-weight:600;color:var(--gold-hi);white-space:nowrap;border-bottom:1px solid var(--field-line)}
+.mx .corner{inset-inline-start:0;z-index:4;padding:0 10px;font-size:.78rem;font-weight:500;color:var(--muted);text-align:start}
+.mx .rowh{position:sticky;inset-inline-start:0;z-index:1;background:#032c26;padding:0;text-align:start}
+.mx .rowh button{display:block;width:128px;padding:5px 10px;text-align:start}
+.mx .rowh b{display:block;font-weight:600;font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mx .rowh small{display:block;font-size:.72rem;color:var(--faint)}
+.mx .rowh button:hover b{color:var(--gold-hi)}
+.mx tbody tr + tr > *{border-top:1px solid rgba(245,239,224,.06)}
+.mx .gs{border-inline-start:1px solid var(--line)}
+.colh{width:32px;height:28px;border-radius:8px;font-size:.8rem;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.colh:hover{color:var(--gold-hi);background:rgba(191,149,63,.12)}
+.colh.soon{color:var(--gold-hi);box-shadow:inset 0 -2px 0 var(--gold)}
+.mx .c{width:30px;height:30px;margin:auto;position:relative}
+.mx .c.has::after{content:'';position:absolute;top:-2px;inset-inline-end:-2px;width:8px;height:8px;border-radius:50%;background:var(--gold-hi);border:1.5px solid #032c26}
+.mx td.off{background:repeating-linear-gradient(135deg,transparent 0 5px,rgba(245,239,224,.05) 5px 10px)}
+.legend{margin-top:12px;font-size:.86rem;color:var(--muted)}
+.legend summary{cursor:pointer;color:var(--gold-hi);font-weight:600}
+.legend p{margin-top:10px;color:var(--ink);font-weight:600}
+.legend ol{padding-inline-start:24px;line-height:1.8}
+.legend small{color:var(--faint)}
+
+/* Sheets */
+dialog.sheet{margin:auto auto 0;padding:0;width:100%;max-width:min(560px,100%);max-height:90vh;border:1px solid var(--line);border-bottom:0;border-radius:var(--r-md) var(--r-md) 0 0;
+  background:#06352e;color:var(--ink);overflow:auto;overscroll-behavior:contain}
+dialog.sheet::backdrop{background:rgba(0,10,8,.62)}
+@media (min-width:600px){ dialog.sheet{margin:auto;border-bottom:1px solid var(--line);border-radius:var(--r-md)} }
+.sheet-in{padding:18px 16px calc(16px + env(safe-area-inset-bottom))}
+.sheet-in h3{font-family:var(--f-display);font-weight:700;font-size:1.05rem;line-height:1.5;overflow-wrap:anywhere}
+.sheet-in .sub{color:var(--muted);font-size:.86rem;margin:2px 0 14px}
+.sheet-in .field{margin-bottom:12px}
+.sheet-in .grid{gap:0 12px}
+.sheet-in textarea{min-height:64px}
+.sheet-in .hist{font-size:.8rem;color:var(--faint);margin:-2px 0 12px}
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.sbtn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border-radius:var(--r-sm);border:1px solid var(--field-line);background:var(--field);font-size:.8rem;font-weight:600;color:var(--muted);line-height:1.4}
+.sbtn:hover{border-color:var(--line);color:var(--ink)}
+.sbtn.on{border-color:var(--gold);color:var(--ink);background:rgba(191,149,63,.16);box-shadow:0 0 0 2px rgba(191,149,63,.25)}
+.sheet-foot{display:flex;gap:8px;justify-content:space-between;align-items:center;margin-top:8px}
+.checklist{max-height:36vh;overflow:auto;border:1px solid var(--field-line);border-radius:var(--r-sm);padding:0 12px;margin:10px 0 8px}
+.checklist .check{margin:0;padding:9px 0;border-top:1px solid var(--field-line);color:var(--ink)}
+.checklist .check:first-child{border-top:0}
+.checklist .check > span:first-of-type{flex:1;min-width:0}
+.checklist .st{width:24px;height:24px}
+.checklist .st svg{font-size:.78rem}
+.checklist .empty{padding:14px 0}
+.mini-acts{display:flex;gap:16px;font-size:.84rem}
+
+/* Tasks: list editor */
+.grp-head{display:flex;gap:6px;align-items:center}
+.grp-head .gname{flex:1;min-width:0;font-family:var(--f-display);font-weight:700}
+.klist .icon-btn,.grp-head .icon-btn{color:var(--muted)}
+.icon-btn.mv:hover{color:var(--gold-hi);background:rgba(191,149,63,.1)}
+.icon-btn[disabled]{opacity:.3;pointer-events:none}
+.flip{transform:rotate(180deg)}
+.who-btn{margin:10px 0 2px;font-size:.84rem;color:var(--gold-hi);display:inline-flex;align-items:center;gap:6px}
+.klist{list-style:none;margin:6px 0 10px}
+.klist li{display:grid;grid-template-columns:26px 1fr;gap:6px 8px;align-items:center;padding:10px 0;border-top:1px solid var(--field-line)}
+.klist .kn{font-family:var(--f-display);font-weight:700;color:var(--faint);text-align:center}
+.klist .krow2{grid-column:2;display:flex;gap:4px;align-items:center}
+.klist .krow2 input{flex:1;min-width:0;min-height:42px}
+.klist .icon-btn{width:38px;height:38px}
+.klist input.invalid{border-color:rgba(255,180,162,.6)}
+
+/* Tasks: teacher page */
+.gtoggles{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:12px 0 4px;font-size:.84rem;color:var(--muted)}
+.gt{display:inline-flex;align-items:center;gap:6px;padding:4px 12px 4px 10px;border-radius:99px;border:1px solid var(--field-line);background:var(--field);cursor:pointer;color:var(--ink)}
+.gt input[type=checkbox]{width:16px;height:16px}
+h3.gname{font-family:var(--f-display);font-weight:700;font-size:.9rem;color:var(--gold-hi);margin:16px 0 2px}
+.tl{list-style:none}
+.trow{display:flex;align-items:center;gap:12px;width:100%;text-align:start;padding:9px 0;border-top:1px solid var(--field-line)}
+.tl li:first-child .trow{border-top:0}
+.trow .info{flex:1;min-width:0}
+.trow .info b{display:block;font-weight:600;font-size:.92rem;overflow-wrap:anywhere}
+.trow .info small{display:block;color:var(--muted);font-size:.8rem;line-height:1.6;overflow-wrap:anywhere}
+.trow .info small.pn{color:var(--faint)}
+.trow:hover .info b{color:var(--gold-hi)}
 footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gutter) 24px}
 </style>
 </head>
@@ -225,6 +360,15 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
   <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></symbol>
   <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13 7 4 4"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h4"/></symbol>
+  <symbol id="i-redo" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v4.5h-4.5"/></symbol>
+  <symbol id="i-dash" viewBox="0 0 24 24"><path d="M7 12h10"/></symbol>
+  <symbol id="i-tasks" viewBox="0 0 24 24"><rect x="5" y="4.5" width="14" height="16.5" rx="2.5"/><path d="M9 4.5V3h6v1.5M8.5 10.5l1.5 1.5 3-3M8.5 16.5l1.5 1.5 3-3M15 11h1.5M15 17h1.5"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13 7 4 4"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
 </svg>
 
 <header class="top wrap">
@@ -293,6 +437,11 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
       </ol>
   </div>
 
+  <nav class="seg" id="nav" aria-label="الأقسام" hidden>
+    <button type="button" data-nav="dash">المعلمين والدفعات</button>
+    <button type="button" data-nav="tasks">المهام <span class="badge num" id="navBadge" title="مهام متأخرة" hidden></span></button>
+  </nav>
+
   <!-- ============ Dashboard ============ -->
   <section class="screen" id="dash" hidden>
     <div class="stats" id="stats"></div>
@@ -310,6 +459,12 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
     <ul class="list" id="list"></ul>
   </section>
 
+  <!-- ============ Tasks ============ -->
+  <section class="screen" id="tasks" hidden></section>
+  <section class="screen" id="catalog" hidden></section>
+  <section class="screen" id="taskImport" hidden></section>
+  <input type="file" id="taskFile" accept=".xlsx,.xls,.csv" hidden>
+
   <!-- ============ Import ============ -->
   <section class="screen" id="import" hidden></section>
 
@@ -324,14 +479,15 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
     <button class="btn btn-gold" id="saveBtn" type="button" disabled><span class="spin" aria-hidden="true"></span>احفظ وانشر</button>
   </div>
 </div>
-<div class="toast" id="toast" hidden></div>
+<div class="toast" id="toast" role="status" hidden></div>
+<dialog class="sheet" id="sheet"><div class="sheet-in" id="sheetIn"></div></dialog>
 
 <footer>دبلومك علينا · لوحة الدفعات</footer>
 
 <script>
 // GitHub Pages lets browsers keep a page for ~10 minutes. If a newer version is live, reload once to pick it up,
 // so a teacher never sees new data through old code. Bump APP_VERSION here and in payments/version.json together.
-const APP_VERSION = 3;
+const APP_VERSION = 4;
 fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(({ v }) => {
   let seen = null; try { seen = sessionStorage.getItem('dk-reloaded'); } catch (e) {}
   if (v > APP_VERSION && seen !== String(v) && !(typeof db !== 'undefined' && db)) {
@@ -340,7 +496,7 @@ fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json
   }
 }).catch(() => {});
 </script>
-<script src="../core.js?v=3"></script>
+<script src="../core.js?v=4"></script>
 <script>
 const OWNER = 'diplomakalena-cloud';
 const REPO = 'diplomakalena-cloud.github.io';
@@ -348,7 +504,9 @@ const BRANCH = 'main';
 const DATA = 'payments/data';
 const PAGE_URL = 'https://diplomakalena-cloud.github.io/payments/';
 const KEY_TOKEN = 'dk-admin-token-v1';
-const PUBLISH_VERSION = 2; // bump when the published record gains fields, so existing statements get re-published
+// Bump when the published record gains fields, so existing statements get re-published.
+// 3 = tasks; it also catches an old cached copy of this page publishing statements without them.
+const PUBLISH_VERSION = 3;
 // Opens GitHub's new-token form pre-filled for this site: write access to files only, valid for a year.
 const TOKEN_URL = 'https://github.com/settings/personal-access-tokens/new?' + new URLSearchParams({
   name: 'لوحة الدفعات - دبلومك علينا', description: 'تحفظ كشوف دفعات المعلمين على الموقع', target_name: OWNER, expires_in: '366', contents: 'write'
@@ -367,10 +525,16 @@ const money = n => Number(n || 0).toLocaleString('en-US', { maximumFractionDigit
 const shortDate = s => { const d = DK.parseISO(s); return d ? `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}` : 'بدون تاريخ'; };
 const uid = () => DK.b64(crypto.getRandomValues(new Uint8Array(9))).replace(/[+/=]/g, '');
 function msgHTML(kind, text){ return `<div class="msg ${kind}"><svg class="i"><use href="#i-${kind === 'err' ? 'alert' : 'lock'}"/></svg><span>${text}</span></div>`; }
-function toast(text){ const t = $('#toast'); t.textContent = text; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 2200); }
+// With `undoable`, the toast offers «تراجع» for the last change to task statuses.
+function toast(text, undoable){
+  const t = $('#toast');
+  t.innerHTML = `<span>${esc(text)}</span>${undoable ? '<button type="button" id="toastUndo">تراجع</button>' : ''}`;
+  t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, undoable ? 4500 : 2200);
+}
 
 /* ---------- State ---------- */
 let token = '', masterKey = null, salt = '', db = null, dirty = false, current = null;
+const sheet = $('#sheet');
 
 /* ---------- GitHub API ---------- */
 async function gh(path, opts = {}){
@@ -406,7 +570,14 @@ async function connect(e){
     if (file.status === 404) { show('create'); $('#newMaster').value = master; return; }
     if (!file.ok) return out.innerHTML = msgHTML('err', 'ما قدرنا نقرأ قاعدة البيانات. جرّب كمان شوي.');
     if (!master) return out.innerHTML = msgHTML('err', 'اكتب كلمة السر الرئيسية.');
-    const box = JSON.parse(fromB64Text(file.data.content));
+    // The contents API leaves the file out once it passes 1MB; the blob API returns it whole.
+    let content = file.data.content;
+    if (!content && file.data.sha) {
+      const blob = await gh(`/git/blobs/${file.data.sha}`);
+      if (!blob.ok) return out.innerHTML = msgHTML('err', 'ما قدرنا نقرأ قاعدة البيانات. جرّب كمان شوي.');
+      content = blob.data.content;
+    }
+    const box = JSON.parse(fromB64Text(content));
     try {
       masterKey = await DK.adminKey(master, box.salt);
       db = await DK.decryptJSON(masterKey, box);
@@ -434,8 +605,11 @@ async function createDb(e){
 
 /* ---------- Screens ---------- */
 function show(id){
-  ['connect','create','dash','import','editor'].forEach(s => $('#' + s).hidden = s !== id);
-  $('#savebar').hidden = !(id === 'dash' || id === 'editor');
+  ['connect','create','dash','tasks','catalog','taskImport','import','editor'].forEach(s => $('#' + s).hidden = s !== id);
+  $('#savebar').hidden = !['dash','tasks','catalog','editor'].includes(id);
+  $('#nav').hidden = !(id === 'dash' || id === 'tasks');
+  document.querySelectorAll('[data-nav]').forEach(b => b.classList.toggle('on', b.dataset.nav === id));
+  if (sheet.open) sheet.close();
   window.scrollTo(0, 0);
 }
 function setDirty(v){
@@ -482,6 +656,7 @@ function openDash(){
   $('#carryOpt').checked = carryOn(); renderDash();
 }
 function renderDash(){
+  updateBadge();
   const all = db.teachers.map(t => ({ t, s: status(t) }));
   const remaining = all.reduce((s, x) => s + (x.s.a ? x.s.a.remaining : 0), 0);
   const late = all.filter(x => x.s.cls === 'late').length;
@@ -493,11 +668,11 @@ function renderDash(){
   const rows = all
     .filter(x => !q || [x.t.name, x.t.phone, x.t.ministry].some(v => DK.latin(v).toLowerCase().includes(q)))
     .sort((a, b) => a.s.order - b.s.order || String(a.s.due ? DK.iso(a.s.due) : '').localeCompare(b.s.due ? DK.iso(b.s.due) : '') || String(a.t.name).localeCompare(b.t.name, 'ar'));
-  $('#list').innerHTML = rows.length ? rows.map(({ t, s }) => `
+  $('#list').innerHTML = rows.length ? rows.map(({ t, s }) => { const tp = taskProgress(t); return `
     <li><button class="row" type="button" data-id="${esc(t.id)}">
-      <span class="who"><b>${esc(t.name || 'بدون اسم')}</b><small class="num">${esc(t.phone || '—')}${s.a ? ` · متبقي ${money(s.a.remaining)} ${CURRENCY}` : ''}</small>${!t.sentAt && s.cls !== 'warn' ? '<small class="nosend">لسا ما انبعتله الرابط</small>' : ''}</span>
+      <span class="who"><b>${esc(t.name || 'بدون اسم')}</b><small class="num">${esc(t.phone || '—')}${s.a ? ` · متبقي ${money(s.a.remaining)} ${CURRENCY}` : ''}${tp.total ? ` · مهام ${tp.done}/${tp.total}` : ''}</small>${!t.sentAt && s.cls !== 'warn' ? '<small class="nosend">لسا ما انبعتله الرابط</small>' : ''}</span>
       <span class="pill ${s.cls}">${esc(s.text)}</span>
-    </button></li>`).join('')
+    </button></li>`; }).join('')
     : db.teachers.length ? `<li class="empty">ما في نتائج.</li>`
     : `<li class="empty">لسا ما في معلمين.<br>عندك ملف المشتركين؟ ضيفهم كلهم مرة وحدة:
         <button class="btn btn-gold btn-block" type="button" data-import style="margin-top:14px"><svg class="i"><use href="#i-up"/></svg>استيراد من Excel</button>
@@ -532,12 +707,16 @@ const HINTS = {
   ministry: 'هو والهاتف والرقم السري بيفتحوا كشف المعلم.'
 };
 
-function openEditor(id){
+let returnTo = 'dash';
+function openEditor(id, from){
   current = db.teachers.find(t => t.id === id);
   if (!current) return openDash();
-  // Start on what this teacher most likely needs: the link first, then a reminder once a due date is near or past.
+  returnTo = from === 'tasks' ? 'tasks' : 'dash';
+  // Start on what this teacher most likely needs: the link first, then a reminder once a due date is near or past,
+  // then news about their tasks.
   const st = status(current);
-  msgKind = !current.sentAt ? 'link' : st.due && Math.round((st.due - DK.today()) / 864e5) <= 3 ? 'reminder' : 'link';
+  msgKind = !current.sentAt ? 'link' : st.due && Math.round((st.due - DK.today()) / 864e5) <= 3 ? 'reminder'
+    : pending(current, 'done').length ? 'tasksDone' : pending(current, 'ready').length ? 'tasksReady' : 'link';
   show('editor');
   renderEditor();
 }
@@ -549,7 +728,7 @@ function renderEditor(){
       ${HINTS[k] ? `<small>${HINTS[k]}</small>` : ''}</div>`;
   $('#editor').innerHTML = `
     <div class="ed-head">
-      <button class="btn btn-ghost btn-sm" id="backBtn" type="button"><svg class="i"><use href="#i-back"/></svg>القائمة</button>
+      <button class="btn btn-ghost btn-sm" id="backBtn" type="button"><svg class="i"><use href="#i-back"/></svg>${returnTo === 'tasks' ? 'المهام' : 'القائمة'}</button>
       <button class="btn btn-danger btn-sm" id="delBtn" type="button">حذف المعلم</button>
     </div>
     <div class="card"><div class="live" id="live"></div></div>
@@ -584,11 +763,12 @@ function renderEditor(){
         <button class="btn btn-gold btn-block" id="addPayBtn" type="button" style="margin-top:12px"><svg class="i"><use href="#i-plus"/></svg>سجّل الدفعة</button>
       </div>
     </div>
+    <div class="card" id="edTasks"></div>
     <div class="card">
       <h2><svg class="i"><use href="#i-send"/></svg>رسائل للمعلم</h2>
       <div id="shareBody"></div>
     </div>`;
-  renderLive(); renderPays(); renderShare();
+  renderLive(); renderPays(); renderEdTasks(); renderShare();
 }
 
 function renderLive(){
@@ -643,7 +823,7 @@ const MESSAGES = {
     ok: () => true,
     text: t => `${greeting(t)}\n\n` +
       `يسعدنا أن نشاركك رابط كشف حسابك في «دبلومك علينا»، ويمكنك من خلاله الاطلاع في أي وقت على:\n` +
-      `• المبلغ المتفق عليه\n• الدفعات المسجّلة\n• المبلغ المتبقي\n• موعد القسط القادم\n\n` +
+      `${myTasks(t).length ? '• حالة مهامك\n' : ''}• المبلغ المتفق عليه\n• الدفعات المسجّلة\n• المبلغ المتبقي\n• موعد القسط القادم\n\n` +
       `${magicLink(t)}\n\n` +
       `🔒 هذا الرابط خاص بك ويفتح الكشف مباشرة، لذا يُرجى عدم مشاركته مع أحد.\n` +
       `وفي حال فتح الصفحة من دون الرابط، فالرقم السري هو: ${t.pass}\n\n` +
@@ -681,6 +861,50 @@ const MESSAGES = {
       }
       return `${greeting(t)}\n\n${body}\n\nتفاصيل حسابك على الرابط:\n${magicLink(t)}${SIGN}`;
     }
+  },
+  // The two task messages cover everything the teacher hasn't heard about yet, so a busy day is one message.
+  tasksReady: {
+    label: 'مهام جاهزة',
+    hide: t => !myTasks(t).length,
+    ok: t => myTasks(t).some(k => stateOf(t, k) === 'ready'),
+    text: t => {
+      const ks = announce(t, 'ready'), today = DK.iso(DK.today());
+      const when = k => { const d = dueOf(t, k); return d >= today ? longDate(d) : ''; };
+      const body = ks.length === 1
+        ? `يسعدنا إعلامك بأننا انتهينا من تجهيز مهمة «${taskName(t, ks[0])}»، وسنسلّمها على المنصة ${when(ks[0]) ? `قبل موعدها (${when(ks[0])})` : dueOf(t, ks[0]) ? 'قريبًا' : 'في موعدها'}.`
+        : `يسعدنا إعلامك بأننا انتهينا من تجهيز المهام التالية، وسنسلّمها على المنصة في مواعيدها:\n${ks.map(k => `• ${taskName(t, k)}${when(k) ? `، موعد تسليمها ${when(k)}` : ''}`).join('\n')}`;
+      return `${greeting(t)}\n\n${body}\n\nيمكنك متابعة حالة مهامك على الرابط:\n${magicLink(t)}${SIGN}`;
+    }
+  },
+  tasksDone: {
+    label: 'تم تسليم مهام',
+    hide: t => !myTasks(t).length,
+    ok: t => myTasks(t).some(k => stateOf(t, k) === 'done'),
+    text: t => {
+      const ks = announce(t, 'done'), on = k => (cellOf(t, k).d || {}).done || '';
+      const sameDay = ks.every(k => on(k) === on(ks[0]));
+      let body = ks.length === 1
+        ? `يسعدنا إعلامك بأنه تم تسليم مهمة «${taskName(t, ks[0])}» على المنصة${on(ks[0]) ? ` بتاريخ ${longDate(on(ks[0]))}` : ''}.`
+        : `يسعدنا إعلامك بأنه تم تسليم المهام التالية على المنصة${sameDay && on(ks[0]) ? ` بتاريخ ${longDate(on(ks[0]))}` : ''}:\n${ks.map(k => `• ${taskName(t, k)}${!sameDay && on(k) ? ` (${longDate(on(k))})` : ''}`).join('\n')}`;
+      const p = taskProgress(t);
+      body += p.done === p.total ? '\n\nوبذلك تكون جميع مهامك حتى الآن قد سُلِّمت، ونتمنى لك التوفيق في الدبلوم.'
+        : `\n\nوبذلك أصبح عدد مهامك المسلَّمة ${p.done} من أصل ${p.total}.`;
+      return `${greeting(t)}\n\n${body}\n\nيمكنك متابعة حالة جميع مهامك على الرابط:\n${magicLink(t)}${SIGN}`;
+    }
+  },
+  tasksSummary: {
+    label: 'ملخص المهام',
+    hide: t => !myTasks(t).length,
+    ok: t => myTasks(t).length > 0,
+    text: t => {
+      const ks = myTasks(t), n = s => ks.filter(k => stateOf(t, k) === s).length, today = DK.iso(DK.today());
+      const lines = [`• تم تسليمها: ${n('done')} من ${ks.length}`,
+        ...[['ready', 'جاهزة للتسليم'], ['doing', 'قيد التجهيز'], ['fix', 'قيد التعديل'], ['todo', 'بالانتظار']].filter(([s]) => n(s)).map(([s, label]) => `• ${label}: ${n(s)}`)];
+      const next = ks.filter(k => stateOf(t, k) !== 'done' && dueOf(t, k) >= today).sort((a, b) => dueOf(t, a).localeCompare(dueOf(t, b)))[0];
+      return `${greeting(t)}\n\nإليك ملخص مهامك في «دبلومك علينا»:\n\n${lines.join('\n')}` +
+        (next ? `\n\nأقرب موعد تسليم: «${taskName(t, next)}»، ${longDate(dueOf(t, next))}.` : '') +
+        `\n\nتفاصيل كل مهمة على الرابط:\n${magicLink(t)}${SIGN}`;
+    }
   }
 };
 let msgKind = 'link';
@@ -688,10 +912,10 @@ const waHref = (t, text) => { const ph = DK.normPhone(t.phone); return `https://
 function renderShare(){
   const t = current, p = problems(t);
   if (p.length) { $('#shareBody').innerHTML = `<p class="sent">بتطلع الرسائل لما تكمّل: ${p.join('، ')}.</p>`; return; }
-  if (!MESSAGES[msgKind].ok(t)) msgKind = 'link';
+  if (!MESSAGES[msgKind].ok(t) || (MESSAGES[msgKind].hide && MESSAGES[msgKind].hide(t))) msgKind = 'link';
   const text = MESSAGES[msgKind].text(t);
   $('#shareBody').innerHTML = `
-    <div class="tabs" role="tablist">${Object.entries(MESSAGES).map(([k, m]) =>
+    <div class="tabs" role="tablist">${Object.entries(MESSAGES).filter(([, m]) => !m.hide || !m.hide(t)).map(([k, m]) =>
       `<button class="tab${k === msgKind ? ' on' : ''}" type="button" role="tab" aria-selected="${k === msgKind}" data-kind="${k}" ${m.ok(t) ? '' : 'disabled'}>${m.label}</button>`).join('')}</div>
     <pre class="share">${esc(text)}</pre>
     <div class="actions">
@@ -703,11 +927,737 @@ function renderShare(){
     <p class="sent">${t.sentAt ? `<b>✓ انبعت الرابط</b> بتاريخ ${shortDate(t.sentAt)}.` : 'لسا ما انبعتله الرابط.'} التعديلات بتوصل لكشفه بعد «احفظ وانشر» بدقيقة أو دقيقتين، وإذا غيّرت الرقم السري لازم تبعتله الرابط من جديد.</p>`;
 }
 
+/* ---------- Tasks ----------
+   db.taskGroups   [{ id, name, all }]          all: false = only for the teachers ticked for it
+   db.tasks        [{ id, gid, title, due }]    each group's tasks, in the order teachers see them
+   teacher.groups  { gid: true/false }          this teacher's exception to a group's «all»
+   teacher.tasks   { taskId: { s, d, due, g, n, p, told } }
+     s status · d the date it reached each status · due this teacher's own due date · g grade
+     n note the teacher sees · p private note · told the status last announced on WhatsApp */
+const STATES = ['todo', 'doing', 'ready', 'done', 'fix', 'na'];
+const STATE_LABEL = { todo: 'لم تبدأ', doing: 'قيد التجهيز', ready: 'جاهزة', done: 'تم التسليم', fix: 'بحاجة تعديل', na: 'مش مطلوبة' };
+const STATE_ICON = { doing: 'i-pen', ready: 'i-doc', done: 'i-check', fix: 'i-redo', na: 'i-dash' };
+// The usual next step from each status, offered as one button in «شو عليّ هسا».
+const NEXT_STEP = { todo: ['doing', 'بلّشت فيها'], doing: ['ready', 'جاهزة'], ready: ['done', 'سلّمتها'], fix: ['ready', 'عدّلتها'] };
+const TOLD = { tasksReady: 'ready', tasksDone: 'done' };
+const stIcon = s => STATE_ICON[s] ? `<svg class="i"><use href="#${STATE_ICON[s]}"/></svg>` : '';
+const groupsList = () => db.taskGroups || (db.taskGroups = []);
+const taskDefs = () => db.tasks || (db.tasks = []);
+const groupById = id => groupsList().find(g => g.id === id);
+const taskById = id => taskDefs().find(k => k.id === id);
+const teacherById = id => db.teachers.find(t => t.id === id);
+const orderedTasks = () => groupsList().flatMap(g => taskDefs().filter(k => k.gid === g.id));
+const groupOn = (t, g) => t.groups && g.id in t.groups ? !!t.groups[g.id] : g.all !== false;
+function setGroupFor(t, g, on){
+  t.groups = t.groups || {};
+  if (on === (g.all !== false)) delete t.groups[g.id]; else t.groups[g.id] = on;
+}
+const cellOf = (t, k) => (t.tasks && t.tasks[k.id]) || null;
+const ensureCell = (t, k) => { t.tasks = t.tasks || {}; return t.tasks[k.id] = t.tasks[k.id] || { s: 'todo' }; };
+const stateOf = (t, k) => { const c = cellOf(t, k); return c && STATES.includes(c.s) ? c.s : 'todo'; };
+const dueOf = (t, k) => { const c = cellOf(t, k); return (c && c.due) || k.due || ''; };
+// The tasks of a teacher's groups; myTasks leaves out the ones marked «مش مطلوبة».
+function assigned(t){ const on = new Set(groupsList().filter(g => groupOn(t, g)).map(g => g.id)); return orderedTasks().filter(k => on.has(k.gid)); }
+const myTasks = t => assigned(t).filter(k => stateOf(t, k) !== 'na');
+function taskProgress(t){ const ks = myTasks(t); return { total: ks.length, done: ks.filter(k => stateOf(t, k) === 'done').length }; }
+const dayOffset = n => { const d = DK.today(); return DK.iso(new Date(d.getFullYear(), d.getMonth(), d.getDate() + n)); };
+const firstName = t => String(t.name || '').trim().split(/\s+/)[0] || 'المعلم';
+function newId(list){ let id; do id = uid().slice(0, 8); while (list.some(x => x.id === id)); return id; }
+// A task's name in a message, with its group when the teacher has two tasks by the same name.
+function taskName(t, k){
+  const g = groupById(k.gid), twin = myTasks(t).filter(x => x.title.trim() === k.title.trim()).length > 1;
+  return k.title.trim() + (twin && g ? ` (${g.name.trim()})` : '');
+}
+
+function setState(t, k, s, date){
+  const c = ensureCell(t, k), d = { ...(c.d || {}) };
+  c.s = s;
+  // Stepping back forgets the later steps' dates; «بحاجة تعديل» keeps the first round's.
+  if (s === 'todo') ['doing', 'ready', 'done', 'fix'].forEach(x => delete d[x]);
+  else if (s === 'doing') ['ready', 'done'].forEach(x => delete d[x]);
+  else if (s === 'ready') delete d.done;
+  if (s !== 'todo' && s !== 'na') d[s] = date || DK.iso(DK.today());
+  c.d = d;
+}
+let undoStack = [];
+function applyStates(pairs, s, date){
+  const batch = [];
+  pairs.forEach(({ t, k }) => {
+    if (stateOf(t, k) === s) return;
+    const c = cellOf(t, k);
+    batch.push({ t, k, prev: c ? JSON.parse(JSON.stringify(c)) : null });
+    setState(t, k, s, date);
+  });
+  if (batch.length) { undoStack.push(batch); if (undoStack.length > 30) undoStack.shift(); setDirty(true); }
+  return batch.length;
+}
+function undo(){
+  const batch = undoStack.pop();
+  if (!batch) return;
+  batch.forEach(({ t, k, prev }) => { if (prev) t.tasks[k.id] = prev; else delete t.tasks[k.id]; });
+  setDirty(true); refreshView();
+  toast(batch.length === 1 ? 'رجّعنا آخر تغيير.' : `رجّعنا ${batch.length} تغييرات.`);
+}
+function refreshView(){
+  if (!$('#tasks').hidden) renderTaskBody();
+  else if (!$('#catalog').hidden) renderCatalog();
+  else if (!$('#editor').hidden && current) { renderEdTasks(); renderShare(); }
+  else if (!$('#dash').hidden) renderDash();
+  updateBadge();
+}
+function lateCount(){
+  const today = DK.iso(DK.today());
+  let n = 0;
+  db.teachers.forEach(t => myTasks(t).forEach(k => { const d = dueOf(t, k); if (d && d < today && stateOf(t, k) !== 'done') n++; }));
+  return n;
+}
+function updateBadge(){ const n = lateCount(), b = $('#navBadge'); b.hidden = !n; b.textContent = n; }
+
+// Tasks in status s the teacher hasn't heard about on WhatsApp yet.
+const pending = (t, s) => myTasks(t).filter(k => stateOf(t, k) === s && cellOf(t, k).told !== s);
+// What a «جاهزة» / «تم التسليم» message is about: the news since the last one, or else the latest day's.
+function announce(t, s){
+  const fresh = pending(t, s);
+  if (fresh.length) return fresh;
+  const ks = myTasks(t).filter(k => stateOf(t, k) === s), on = k => (cellOf(t, k).d || {})[s] || '';
+  const last = ks.reduce((m, k) => (on(k) > m ? on(k) : m), '');
+  return ks.filter(k => on(k) === last);
+}
+function markTold(t, s){ announce(t, s).forEach(k => { ensureCell(t, k).told = s; }); }
+
+/* ---------- Tasks screen ---------- */
+let taskTab = 'todo', taskFilter = '', taskGroup = '', taskQuery = '', brush = '', showAllRows = false;
+function openTasks(){ current = null; taskFilter = ''; show('tasks'); renderTasks(); }
+function visibleTeachers(){
+  const q = DK.latin(taskQuery).trim().toLowerCase();
+  return db.teachers.filter(t => !q || [t.name, t.phone, t.ministry].some(v => DK.latin(v).toLowerCase().includes(q)))
+    .sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'ar'));
+}
+function renderTasks(){
+  updateBadge();
+  const el = $('#tasks');
+  if (!orderedTasks().length) {
+    el.innerHTML = `
+      <div class="card">
+        <h2><svg class="i"><use href="#i-tasks"/></svg>متابعة المهام</h2>
+        <p class="lead" style="margin:8px 0 6px">من هون بتتابع لكل معلم شو جهّزت، وشو سلّمت عالمنصة، وشو موعده قريب. والمعلم بيشوف حالة مهامه بكشفه، بنفس رابطه.</p>
+        <p class="sent" style="margin:0 0 14px">أول خطوة: ضيف قائمة مهام الدبلوم مرة وحدة. بتلصقها لصق، أو بتجيبها من ملف Excel.</p>
+        <button class="btn btn-gold btn-block" id="firstTasks" type="button"><svg class="i"><use href="#i-plus"/></svg>ضيف قائمة المهام</button>
+        <button class="btn btn-ghost btn-block" id="firstXls" type="button" style="margin-top:10px"><svg class="i"><use href="#i-up"/></svg>استيراد من Excel</button>
+      </div>`;
+    return;
+  }
+  if (taskGroup && !groupById(taskGroup)) taskGroup = '';
+  const gs = groupsList().filter(g => taskDefs().some(k => k.gid === g.id));
+  const tab = (k, label) => `<button type="button" role="tab" data-ttab="${k}" class="${taskTab === k ? 'on' : ''}" aria-selected="${taskTab === k}">${label}</button>`;
+  el.innerHTML = `
+    <div class="card">
+      <div class="ed-head" style="margin:0 0 12px"><h2><svg class="i"><use href="#i-tasks"/></svg>متابعة المهام</h2>
+        <button class="btn btn-ghost btn-sm" id="catBtn" type="button"><svg class="i"><use href="#i-edit"/></svg>قائمة المهام</button></div>
+      <div class="seg sm" role="tablist">${tab('todo', 'شو عليّ هسا')}${tab('grid', 'الجدول')}</div>
+      ${gs.length > 1 ? `<div class="chips" style="margin-bottom:10px">
+        <button class="chip${taskGroup ? '' : ' on'}" type="button" data-tgroup="">كل المجموعات</button>
+        ${gs.map(g => `<button class="chip${taskGroup === g.id ? ' on' : ''}" type="button" data-tgroup="${g.id}">${esc(g.name || 'بدون اسم')}</button>`).join('')}</div>` : ''}
+      <input type="search" id="tq" value="${esc(taskQuery)}" placeholder="دوّر على معلم بالاسم أو الرقم" aria-label="دوّر على معلم">
+    </div>
+    <div class="card" id="tbody"></div>`;
+  renderTaskBody();
+}
+function renderTaskBody(){
+  const b = $('#tbody');
+  if (!b) return;
+  // Keep the grid where it was scrolled to, so tapping cells doesn't jump around.
+  const w = b.querySelector('.mx-wrap'), pos = w && [w.scrollLeft, w.scrollTop];
+  b.innerHTML = taskTab === 'grid' ? gridHTML() : workHTML();
+  const w2 = b.querySelector('.mx-wrap');
+  if (w2 && pos) { w2.scrollLeft = pos[0]; w2.scrollTop = pos[1]; }
+}
+
+// «شو عليّ هسا»: every task of every teacher, filtered down to what needs doing.
+const FILTERS = [
+  ['late', 'متأخرة', x => x.late],
+  ['week', 'موعدها هالأسبوع', x => x.week],
+  ['ready', 'جاهزة للتسليم', x => x.s === 'ready'],
+  ['fix', 'بحاجة تعديل', x => x.s === 'fix'],
+  ['tell', 'لازم أبلّغهم', null],
+  ['doing', 'قيد التجهيز', x => x.s === 'doing'],
+  ['todo', 'لم تبدأ', x => x.s === 'todo'],
+  ['open', 'كل اللي ما انسلّم', x => x.s !== 'done'],
+  ['done', 'تم التسليم', x => x.s === 'done']
+];
+const BULK = { ready: 'سلّمتها كلها', doing: 'كلها صارت جاهزة', fix: 'عدّلتها كلها', todo: 'بلّشت فيها كلها' };
+function workItems(){
+  const today = DK.iso(DK.today()), week = dayOffset(7), items = [];
+  visibleTeachers().forEach(t => myTasks(t).forEach(k => {
+    if (taskGroup && k.gid !== taskGroup) return;
+    const s = stateOf(t, k), due = dueOf(t, k), open = s !== 'done';
+    items.push({ t, k, s, due, late: open && !!due && due < today, week: open && !!due && due >= today && due <= week });
+  }));
+  return items;
+}
+function toTell(){
+  return visibleTeachers().map(t => ({ t, ready: pending(t, 'ready'), done: pending(t, 'done') })).filter(x => x.ready.length || x.done.length);
+}
+function filteredRows(items){
+  const f = FILTERS.find(x => x[0] === taskFilter)[2];
+  const order = new Map(orderedTasks().map((k, i) => [k.id, i]));
+  return items.filter(f).sort((a, b) => (a.due || '9').localeCompare(b.due || '9')
+    || String(a.t.name || '').localeCompare(String(b.t.name || ''), 'ar') || order.get(a.k.id) - order.get(b.k.id));
+}
+function dueText(iso, s){
+  const d = DK.parseISO(iso);
+  if (!d) return '';
+  const diff = Math.round((d - DK.today()) / 864e5);
+  const rel = s === 'done' ? '' : diff < 0 ? ` · متأخرة ${-diff} يوم` : diff === 0 ? ' · اليوم' : diff === 1 ? ' · بكرة' : ` · بعد ${diff} يوم`;
+  return `موعدها ${d.getDate()}/${d.getMonth() + 1}${rel}`;
+}
+function workHTML(){
+  if (!db.teachers.length) return '<p class="empty">لسا ما في معلمين. ضيفهم من «المعلمين والدفعات».</p>';
+  const items = workItems(), tell = toTell();
+  const counts = Object.fromEntries(FILTERS.map(([k, , f]) => [k, f ? items.filter(f).length : tell.length]));
+  if (!(taskFilter in counts)) taskFilter = ['late', 'week', 'ready', 'fix', 'tell'].find(k => counts[k]) || 'open';
+  // Empty filters stay out of the way, except the one you're on.
+  const chips = `<div class="chips" role="tablist">${FILTERS.filter(([k]) => counts[k] || k === taskFilter).map(([k, label]) =>
+    `<button class="chip${k === taskFilter ? ' on' : ''}${counts[k] ? '' : ' zero'}${k === 'late' && counts[k] ? ' hot' : ''}" type="button" role="tab" aria-selected="${k === taskFilter}" data-filter="${k}">${label} <b class="num">${counts[k]}</b></button>`).join('')}</div>`;
+  if (taskFilter === 'tell') {
+    return chips + (tell.length
+      ? `<ul class="work">${tell.map(tellRow).join('')}</ul><p class="sent">الرسالة بتجمع كل المهام اللي لسا ما بلّغته فيها. إذا ما بدك تبلّغه، اضغط ✕ وبينشال من هون.</p>`
+      : '<p class="empty">بلّغت الكل ✓</p>');
+  }
+  const rows = filteredRows(items), shown = showAllRows ? rows : rows.slice(0, 60);
+  if (!rows.length) return chips + `<p class="empty">${taskFilter === 'late' ? 'ما في ولا مهمة متأخرة ✓' : 'ما في إشي هون.'}</p>`;
+  return chips + `<ul class="work">${shown.map(workRow).join('')}</ul>` +
+    (rows.length > shown.length ? `<button class="btn btn-ghost btn-sm btn-block" id="showAll" type="button">اعرض الكل (${rows.length})</button>` : '') +
+    (BULK[taskFilter] && rows.length > 1 ? `<button class="btn btn-gold btn-block" id="bulkNext" type="button" style="margin-top:12px">${BULK[taskFilter]} (${rows.length})</button>` : '');
+}
+function workRow(x){
+  const nx = NEXT_STEP[x.s], g = groupsList().length > 1 && !taskGroup ? groupById(x.k.gid) : null;
+  const meta = [STATE_LABEL[x.s], dueText(x.due, x.s)].filter(Boolean).join(' · ');
+  return `<li class="wrow"><button class="wmain" type="button" data-cell="${x.t.id}|${x.k.id}">
+      <span class="st st-${x.s}${x.late ? ' late' : ''}" aria-hidden="true">${stIcon(x.s)}</span>
+      <span class="who"><b>${esc(x.t.name || 'بدون اسم')}</b><small>${esc(x.k.title || 'بدون اسم')}${g ? ` · ${esc(g.name)}` : ''}</small><small class="${x.late ? 'lt' : x.week ? 'sn' : ''}">${meta}</small></span></button>
+    ${nx ? `<button class="btn btn-ghost btn-sm" type="button" data-next="${x.t.id}|${x.k.id}">${nx[1]}</button>` : ''}</li>`;
+}
+function tellRow({ t, ready, done }){
+  const ok = !problems(t).length;
+  const what = [done.length ? `انسلّم ${done.length}` : '', ready.length ? `جاهز ${ready.length}` : ''].filter(Boolean).join(' · ');
+  const wa = (kind, label) => `<a class="btn btn-gold btn-sm" href="${esc(waHref(t, MESSAGES[kind].text(t)))}" target="_blank" rel="noopener" data-tell="${t.id}|${kind}"><svg class="i"><use href="#i-send"/></svg>${label}</a>`;
+  return `<li class="wrow"><span class="who"><b>${esc(t.name || 'بدون اسم')}</b><small>${what}</small></span>
+    <span class="tell-acts">${ok ? (done.length ? wa('tasksDone', 'بلّغه بالتسليم') : '') + (ready.length ? wa('tasksReady', 'إنها جاهزة') : '') : '<small class="lt">كمّل بياناته</small>'}
+      <button class="icon-btn" type="button" data-untell="${t.id}" aria-label="ما بدي أبلّغه" title="ما بدي أبلّغه"><svg class="i"><use href="#i-x"/></svg></button></span></li>`;
+}
+
+// «الجدول»: teachers × tasks. Pick a status from the bar, then each tap on a cell sets it.
+function cellBtn(t, k, today = DK.iso(DK.today())){
+  const s = stateOf(t, k), c = cellOf(t, k) || {}, due = dueOf(t, k);
+  const late = s !== 'done' && s !== 'na' && due && due < today;
+  return `<button class="c st st-${s}${late ? ' late' : ''}${c.p || c.n || c.g ? ' has' : ''}" type="button" data-c="${t.id}|${k.id}" aria-label="${esc(t.name || '')}، ${esc(k.title)}: ${STATE_LABEL[s]}${late ? '، متأخرة' : ''}">${stIcon(s)}</button>`;
+}
+function gridHTML(){
+  const ts = visibleTeachers(), today = DK.iso(DK.today()), week = dayOffset(7);
+  const cols = groupsList().filter(g => !taskGroup || g.id === taskGroup).map(g => ({ g, ks: taskDefs().filter(k => k.gid === g.id) })).filter(x => x.ks.length);
+  const bar = `<div class="brush" role="toolbar" aria-label="شو بتعمل الضغطة على المربع">
+      <button class="bchip${brush ? '' : ' on'}" type="button" data-brush="" aria-pressed="${!brush}"><svg class="i"><use href="#i-edit"/></svg>تفاصيل</button>
+      ${STATES.map(s => `<button class="bchip${brush === s ? ' on' : ''}" type="button" data-brush="${s}" aria-pressed="${brush === s}"><span class="st st-${s}">${stIcon(s)}</span>${STATE_LABEL[s]}</button>`).join('')}
+      <button class="bchip" type="button" id="undoBtn" ${undoStack.length ? '' : 'disabled'}><svg class="i"><use href="#i-undo"/></svg>تراجع</button></div>
+    <p class="hint">${brush ? `كل ضغطة على مربع بتخلّي المهمة «${STATE_LABEL[brush]}» بتاريخ اليوم.` : 'اختار حالة من فوق وبعدين اضغط عالمربعات، أو اضغط أي مربع لتشوف تفاصيله.'} رقم المهمة فوق بيغيّرها لأكثر من معلم مرة وحدة.</p>`;
+  if (!ts.length) return bar + `<p class="empty">${db.teachers.length ? 'ما في نتائج.' : 'لسا ما في معلمين.'}</p>`;
+  const gs = (i, j) => i && !j ? ' gs' : '';
+  const head1 = cols.map(({ g, ks }, i) => `<th class="band${gs(i, 0)}" colspan="${ks.length}">${esc(g.name || 'بدون اسم')}</th>`).join('');
+  const head2 = cols.map(({ ks }, i) => ks.map((k, j) =>
+    `<th class="${gs(i, j)}"><button class="colh${k.due && k.due >= today && k.due <= week ? ' soon' : ''}" type="button" data-col="${k.id}" title="${esc(k.title)}${k.due ? ' · ' + esc(shortDate(k.due)) : ''}" aria-label="${esc(k.title || 'بدون اسم')}">${j + 1}</button></th>`).join('')).join('');
+  const body = ts.map(t => {
+    const p = taskProgress(t);
+    return `<tr><th class="rowh" scope="row"><button type="button" data-open="${t.id}"><b>${esc(t.name || 'بدون اسم')}</b><small class="num">${p.done}/${p.total}</small></button></th>${
+      cols.map(({ g, ks }, i) => ks.map((k, j) => groupOn(t, g) ? `<td class="${gs(i, j)}">${cellBtn(t, k, today)}</td>` : `<td class="off${gs(i, j)}"></td>`).join('')).join('')}</tr>`;
+  }).join('');
+  const legend = `<details class="legend"><summary>أسماء المهام</summary>${cols.map(({ g, ks }) =>
+    `<p>${esc(g.name || 'بدون اسم')}</p><ol>${ks.map(k => `<li>${esc(k.title || '—')}${k.due ? ` <small>· ${shortDate(k.due)}</small>` : ''}</li>`).join('')}</ol>`).join('')}</details>`;
+  return bar + `<div class="mx-wrap"><table class="mx"><thead><tr><th class="corner" rowspan="2">المعلم</th>${head1}</tr><tr>${head2}</tr></thead><tbody>${body}</tbody></table></div>` + legend;
+}
+function brushCell(b, t, k){
+  if (!applyStates([{ t, k }], brush)) return toast(`هي أصلاً «${STATE_LABEL[brush]}».`);
+  const row = b.closest('tr');
+  b.outerHTML = cellBtn(t, k);
+  const p = taskProgress(t), sm = row && row.querySelector('.rowh small');
+  if (sm) sm.textContent = `${p.done}/${p.total}`;
+  const u = $('#undoBtn'); if (u) u.disabled = false;
+  updateBadge();
+  toast(`${firstName(t)} · ${k.title}: ${STATE_LABEL[brush]}`, true);
+}
+
+$('#nav').addEventListener('click', e => { const b = e.target.closest('[data-nav]'); if (b) b.dataset.nav === 'tasks' ? openTasks() : openDash(); });
+$('#toast').addEventListener('click', e => { if (e.target.id === 'toastUndo') { $('#toast').hidden = true; undo(); } });
+$('#tasks').addEventListener('input', e => { if (e.target.id === 'tq') { taskQuery = e.target.value; showAllRows = false; renderTaskBody(); } });
+$('#tasks').addEventListener('click', e => {
+  const b = e.target.closest('button, a[data-tell]');
+  if (!b) return;
+  const d = b.dataset;
+  if (b.id === 'firstTasks') return openTaskImport('');
+  if (b.id === 'firstXls') return pickTaskFile();
+  if (b.id === 'catBtn') return openCatalog();
+  if (d.ttab) { taskTab = d.ttab; return renderTasks(); }
+  if (d.tgroup !== undefined) { taskGroup = d.tgroup; showAllRows = false; return renderTasks(); }
+  if (d.filter) { taskFilter = d.filter; showAllRows = false; return renderTaskBody(); }
+  if (b.id === 'showAll') { showAllRows = true; return renderTaskBody(); }
+  if (d.brush !== undefined) { brush = d.brush; return renderTaskBody(); }
+  if (b.id === 'undoBtn') return undo();
+  if (d.col) return openColSheet(d.col);
+  if (d.open) return openEditor(d.open, 'tasks');
+  const pair = d.c || d.cell || d.next;
+  if (pair) {
+    const [ti, ki] = pair.split('|'), t = teacherById(ti), k = taskById(ki);
+    if (d.c && brush) return brushCell(b, t, k);
+    if (d.next) {
+      const s = NEXT_STEP[stateOf(t, k)][0];
+      applyStates([{ t, k }], s); renderTaskBody(); updateBadge();
+      return toast(`${firstName(t)} · ${k.title}: ${STATE_LABEL[s]}`, true);
+    }
+    return openCellSheet(ti, ki);
+  }
+  if (b.id === 'bulkNext') {
+    const rows = filteredRows(workItems()), s = NEXT_STEP[taskFilter][0];
+    if (!confirm(`${rows.length} مهمة رح تصير «${STATE_LABEL[s]}» بتاريخ اليوم. أكمل؟`)) return;
+    const n = applyStates(rows, s); renderTaskBody(); updateBadge();
+    return toast(`صارت ${n} مهمة «${STATE_LABEL[s]}».`, true);
+  }
+  if (d.tell) {
+    const [ti, kind] = d.tell.split('|');
+    markTold(teacherById(ti), TOLD[kind]); setDirty(true);
+    setTimeout(renderTaskBody, 300);
+    return;
+  }
+  if (d.untell) {
+    const t = teacherById(d.untell);
+    ['ready', 'done'].forEach(s => pending(t, s).forEach(k => { ensureCell(t, k).told = s; }));
+    setDirty(true); renderTaskBody();
+    return toast(`تمام، ${firstName(t)} انشال من «لازم أبلّغهم».`);
+  }
+});
+
+/* ---------- Sheets (a task of one teacher, a task for many, a group's teachers) ---------- */
+let sheetCtx = null;
+function openSheet(ctx){ sheetCtx = ctx; renderSheet(); if (!sheet.open) sheet.showModal(); }
+function renderSheet(){ ({ cell: renderCellSheet, col: renderColSheet, group: renderGroupSheet })[sheetCtx.kind](); }
+const openCellSheet = (tid, kid) => openSheet({ kind: 'cell', tid, kid });
+const openColSheet = kid => openSheet({ kind: 'col', kid, from: '' });
+const openGroupSheet = gid => openSheet({ kind: 'group', gid });
+const statusGrid = (attr, on) => `<div class="sgrid">${STATES.map(s =>
+  `<button class="sbtn${s === on ? ' on' : ''}" type="button" data-${attr}="${s}"${on ? ` aria-pressed="${s === on}"` : ''}><span class="st st-${s}">${stIcon(s)}</span>${STATE_LABEL[s]}</button>`).join('')}</div>`;
+
+function renderCellSheet(){
+  const t = teacherById(sheetCtx.tid), k = taskById(sheetCtx.kid);
+  if (!t || !k) return sheet.close();
+  const g = groupById(k.gid), c = cellOf(t, k) || {}, s = stateOf(t, k), d = c.d || {};
+  const hist = ['doing', 'ready', 'done', 'fix'].filter(x => d[x] && x !== s).map(x => `${STATE_LABEL[x]} ${shortDate(d[x])}`).join(' · ');
+  $('#sheetIn').innerHTML = `
+    <h3>${esc(k.title || 'بدون اسم')}</h3>
+    <p class="sub">${esc(t.name || 'بدون اسم')}${g ? ` · ${esc(g.name)}` : ''}</p>
+    ${statusGrid('set', s)}
+    ${s !== 'todo' && s !== 'na' ? `<div class="field"><label for="cDate">تاريخ «${STATE_LABEL[s]}»</label><input type="date" id="cDate" value="${esc(d[s] || '')}"></div>` : ''}
+    ${hist ? `<p class="hist">قبلها: ${hist}</p>` : ''}
+    <div class="grid g2">
+      <div class="field"><label for="cDue">موعد خاص لهاد المعلم</label><input type="date" id="cDue" value="${esc(c.due || '')}">
+        <small>${k.due ? `موعدها للكل ${shortDate(k.due)}. ` : ''}اتركه فاضي إذا نفس موعد الكل.</small></div>
+      <div class="field"><label for="cGrade">الدرجة (بتطلع للمعلم)</label><input id="cGrade" value="${esc(c.g || '')}" placeholder="مثال: 9/10" autocomplete="off"></div>
+    </div>
+    <div class="field"><label for="cNote">ملاحظة للمعلم (اختياري)</label><textarea id="cNote" placeholder="بتطلع تحت المهمة بكشفه">${esc(c.n || '')}</textarea></div>
+    <div class="field"><label for="cPriv">ملاحظة خاصة (إلك إنت، ما بتطلع للمعلم)</label><textarea id="cPriv" placeholder="مثلاً: بعتلي ملف الصور على واتساب">${esc(c.p || '')}</textarea></div>
+    <div class="sheet-foot">${$('#editor').hidden ? `<button class="btn btn-ghost btn-sm" type="button" data-open="${t.id}"><svg class="i"><use href="#i-user"/></svg>صفحة المعلم</button>` : '<span></span>'}
+      <button class="btn btn-gold btn-sm" type="button" data-close>تم</button></div>`;
+}
+function renderColSheet(){
+  const k = taskById(sheetCtx.kid);
+  if (!k) return sheet.close();
+  const g = groupById(k.gid), from = sheetCtx.from;
+  const ts = visibleTeachers().filter(t => groupOn(t, g)), counts = {};
+  ts.forEach(t => { const s = stateOf(t, k); counts[s] = (counts[s] || 0) + 1; });
+  const picked = ts.filter(t => !from || stateOf(t, k) === from);
+  $('#sheetIn').innerHTML = `
+    <h3>${esc(k.title || 'بدون اسم')}</h3>
+    <p class="sub">${esc(g.name || '')}${k.due ? ` · موعد التسليم ${shortDate(k.due)}` : ''}${taskQuery ? ' · حسب البحث' : ''}</p>
+    <div class="chips">${[['', 'الكل', ts.length], ...STATES.filter(s => counts[s]).map(s => [s, STATE_LABEL[s], counts[s]])].map(([s, label, n]) =>
+      `<button class="chip${from === s ? ' on' : ''}" type="button" data-from="${s}">${label} <b class="num">${n}</b></button>`).join('')}</div>
+    <div class="checklist">${picked.map(t => { const s = stateOf(t, k); return `<label class="check"><input type="checkbox" data-pick="${t.id}" checked><span>${esc(t.name || 'بدون اسم')}</span><span class="st st-${s}" title="${STATE_LABEL[s]}" aria-label="${STATE_LABEL[s]}">${stIcon(s)}</span></label>`; }).join('') || '<p class="empty">ما في حدا.</p>'}</div>
+    <div class="mini-acts"><button class="linkish" type="button" data-pickall>اختار الكل</button><button class="linkish" type="button" data-picknone>شيل الكل</button></div>
+    <div class="field" style="margin:14px 0 8px"><label for="colDate">بتاريخ</label><input type="date" id="colDate" value="${DK.iso(DK.today())}"></div>
+    <p class="sub" style="margin:0 0 8px">خلّيها للمختارين:</p>
+    ${statusGrid('apply')}
+    <p class="msg err" id="colErr" hidden><svg class="i"><use href="#i-alert"/></svg><span>اختار معلم واحد على الأقل.</span></p>
+    <div class="sheet-foot"><button class="btn btn-ghost btn-sm" type="button" data-editk><svg class="i"><use href="#i-edit"/></svg>عدّل المهمة</button>
+      <button class="btn btn-gold btn-sm" type="button" data-close>إغلاق</button></div>`;
+}
+function renderGroupSheet(){
+  const g = groupById(sheetCtx.gid);
+  if (!g) return sheet.close();
+  const n = taskDefs().filter(k => k.gid === g.id).length;
+  $('#sheetIn').innerHTML = `
+    <h3>لمين «${esc(g.name || 'بدون اسم')}»؟</h3>
+    <p class="sub">${n} مهمة</p>
+    <label class="check setting"><input type="checkbox" id="gAll" ${g.all !== false ? 'checked' : ''}>
+      <span>لكل المعلمين، وللي بتضيفهم بعدين<small>إذا شلتها، المجموعة بتطلع بس للي بتختارهم تحت.</small></span></label>
+    <div class="checklist">${db.teachers.map(t => `<label class="check"><input type="checkbox" data-gt="${t.id}" ${groupOn(t, g) ? 'checked' : ''}><span>${esc(t.name || 'بدون اسم')}</span></label>`).join('') || '<p class="empty">لسا ما في معلمين.</p>'}</div>
+    <div class="mini-acts"><button class="linkish" type="button" data-gtall>اختار الكل</button><button class="linkish" type="button" data-gtnone>شيل الكل</button></div>
+    <div class="sheet-foot"><span></span><button class="btn btn-gold btn-sm" type="button" data-close>تم</button></div>`;
+}
+sheet.addEventListener('click', e => {
+  if (e.target === sheet) return sheet.close();
+  const b = e.target.closest('button');
+  if (!b || !sheetCtx) return;
+  const d = b.dataset, ctx = sheetCtx;
+  if (d.close !== undefined) return sheet.close();
+  if (ctx.kind === 'cell') {
+    const t = teacherById(ctx.tid), k = taskById(ctx.kid);
+    if (d.set) {
+      applyStates([{ t, k }], d.set);
+      // In the teacher's page, the matching WhatsApp message is waiting once the sheet closes.
+      if (current === t && (d.set === 'ready' || d.set === 'done')) msgKind = d.set === 'done' ? 'tasksDone' : 'tasksReady';
+      return renderCellSheet();
+    }
+    if (d.open) { sheet.close(); return openEditor(t.id, 'tasks'); }
+  }
+  if (ctx.kind === 'col') {
+    if (d.from !== undefined) { ctx.from = d.from; return renderColSheet(); }
+    if (d.pickall !== undefined || d.picknone !== undefined) { sheet.querySelectorAll('[data-pick]').forEach(i => { i.checked = d.pickall !== undefined; }); return; }
+    if (d.apply) {
+      const k = taskById(ctx.kid), picked = [...sheet.querySelectorAll('[data-pick]:checked')].map(i => teacherById(i.dataset.pick));
+      if (!picked.length) { $('#colErr').hidden = false; return; }
+      const n = applyStates(picked.map(t => ({ t, k })), d.apply, $('#colDate').value);
+      sheet.close();
+      return toast(n ? `صارت «${STATE_LABEL[d.apply]}» عند ${n} معلم.` : 'ما تغيّر إشي، هي أصلاً هيك.', !!n);
+    }
+    if (d.editk !== undefined) { sheet.close(); return openCatalog(); }
+  }
+  if (ctx.kind === 'group' && (d.gtall !== undefined || d.gtnone !== undefined)) {
+    const g = groupById(ctx.gid);
+    db.teachers.forEach(t => setGroupFor(t, g, d.gtall !== undefined));
+    setDirty(true); return renderGroupSheet();
+  }
+});
+sheet.addEventListener('input', e => {
+  if (!sheetCtx || sheetCtx.kind !== 'cell') return;
+  const field = { cGrade: 'g', cNote: 'n', cPriv: 'p' }[e.target.id];
+  if (!field) return;
+  ensureCell(teacherById(sheetCtx.tid), taskById(sheetCtx.kid))[field] = e.target.value;
+  setDirty(true);
+});
+sheet.addEventListener('change', e => {
+  const ctx = sheetCtx, v = e.target.value;
+  if (!ctx) return;
+  if (ctx.kind === 'cell' && (e.target.id === 'cDue' || e.target.id === 'cDate')) {
+    const c = ensureCell(teacherById(ctx.tid), taskById(ctx.kid));
+    if (e.target.id === 'cDue') { if (v) c.due = v; else delete c.due; }
+    else { c.d = { ...(c.d || {}) }; if (v) c.d[c.s] = v; else delete c.d[c.s]; }
+    setDirty(true);
+  }
+  if (ctx.kind === 'group') {
+    const g = groupById(ctx.gid);
+    if (e.target.id === 'gAll') {
+      g.all = e.target.checked;
+      db.teachers.forEach(t => { if (t.groups && t.groups[g.id] === g.all) delete t.groups[g.id]; });
+      setDirty(true); return renderGroupSheet();
+    }
+    if (e.target.dataset.gt) { setGroupFor(teacherById(e.target.dataset.gt), g, e.target.checked); setDirty(true); }
+  }
+});
+sheet.addEventListener('close', () => { sheetCtx = null; refreshView(); });
+
+/* ---------- A teacher's tasks (in the editor) ---------- */
+function renderEdTasks(){
+  const el = $('#edTasks');
+  if (!el || !current) return;
+  const t = current, gs = groupsList().filter(g => taskDefs().some(k => k.gid === g.id));
+  if (!gs.length) {
+    el.innerHTML = `<h2><svg class="i"><use href="#i-tasks"/></svg>المهام</h2><p class="sent">لسا ما في قائمة مهام. <button class="linkish" type="button" data-gotasks>ضيفها من «المهام»</button></p>`;
+    return;
+  }
+  const p = taskProgress(t), today = DK.iso(DK.today());
+  const row = k => {
+    const s = stateOf(t, k), c = cellOf(t, k) || {}, due = dueOf(t, k), at = c.d && c.d[s];
+    const late = s !== 'done' && s !== 'na' && due && due < today;
+    const meta = [STATE_LABEL[s] + (at ? ` ${shortDate(at)}` : ''), due && s !== 'done' && s !== 'na' ? `موعدها ${shortDate(due)}${c.due ? ' (خاص فيه)' : ''}` : '', c.g ? `الدرجة ${c.g}` : ''].filter(Boolean).join(' · ');
+    return `<li><button class="trow" type="button" data-c="${t.id}|${k.id}"><span class="st st-${s}${late ? ' late' : ''}" aria-hidden="true">${stIcon(s)}</span>
+      <span class="info"><b>${esc(k.title || 'بدون اسم')}</b><small>${esc(meta)}</small>${c.n ? `<small>للمعلم: ${esc(c.n)}</small>` : ''}${c.p ? `<small class="pn">خاص: ${esc(c.p)}</small>` : ''}</span></button></li>`;
+  };
+  el.innerHTML = `
+    <div class="head-row"><h2><svg class="i"><use href="#i-tasks"/></svg>المهام</h2><span class="count num">${p.total ? `سلّمنا ${p.done} من ${p.total}` : ''}</span></div>
+    ${gs.length > 1 || gs.some(g => g.all === false) ? `<div class="gtoggles"><span>مجموعاته:</span>${gs.map(g => `<label class="gt"><input type="checkbox" data-tg="${g.id}" ${groupOn(t, g) ? 'checked' : ''}>${esc(g.name || 'بدون اسم')}</label>`).join('')}</div>` : ''}
+    ${gs.filter(g => groupOn(t, g)).map(g => `<h3 class="gname">${esc(g.name || 'بدون اسم')}</h3><ul class="tl">${orderedTasks().filter(k => k.gid === g.id).map(row).join('')}</ul>`).join('') || '<p class="sent">ما إله ولا مجموعة. اختار مجموعاته فوق.</p>'}
+    <p class="sent">اضغط على أي مهمة لتغيّر حالتها أو تكتب درجتها وملاحظاتها.</p>`;
+}
+
+/* ---------- Task list ---------- */
+function openCatalog(){ current = null; show('catalog'); renderCatalog(); }
+function whoText(g){
+  const n = db.teachers.filter(t => groupOn(t, g)).length;
+  return g.all !== false && n === db.teachers.length ? 'لكل المعلمين' : `لـ ${n} من ${db.teachers.length} معلم`;
+}
+function renderCatalog(){
+  const gs = groupsList(), up = '<svg class="i flip"><use href="#i-chev"/></svg>', down = '<svg class="i"><use href="#i-chev"/></svg>', x = '<svg class="i"><use href="#i-x"/></svg>';
+  $('#catalog').innerHTML = `
+    <div class="ed-head"><button class="btn btn-ghost btn-sm" id="catBack" type="button"><svg class="i"><use href="#i-back"/></svg>المهام</button></div>
+    <div class="card">
+      <h2><svg class="i"><use href="#i-tasks"/></svg>قائمة مهام الدبلوم</h2>
+      <p class="lead" style="margin:6px 0 14px">المهام مقسّمة لمجموعات (مثلاً حسب الشهر أو المساق)، وموعد التسليم اختياري. كل مجموعة بتطلع لكل المعلمين، إلا إذا حددت لمين. أي تعديل هون بيتغيّر عند الكل.</p>
+      <div class="toolbar sub" style="margin:0">
+        <button class="btn btn-gold btn-sm" id="pasteBtn" type="button"><svg class="i"><use href="#i-plus"/></svg>ضيف مهام</button>
+        <button class="btn btn-ghost btn-sm" id="taskXlsBtn" type="button"><svg class="i"><use href="#i-up"/></svg>استيراد من Excel</button>
+      </div>
+    </div>
+    ${gs.map((g, gi) => { const ks = taskDefs().filter(k => k.gid === g.id); return `
+    <div class="card">
+      <div class="grp-head">
+        <input class="gname" data-gname="${g.id}" value="${esc(g.name)}" placeholder="اسم المجموعة" aria-label="اسم المجموعة">
+        <button class="icon-btn mv" type="button" data-gmove="${g.id}|-1" aria-label="طلّع المجموعة لفوق" ${gi ? '' : 'disabled'}>${up}</button>
+        <button class="icon-btn mv" type="button" data-gmove="${g.id}|1" aria-label="نزّل المجموعة لتحت" ${gi < gs.length - 1 ? '' : 'disabled'}>${down}</button>
+        <button class="icon-btn" type="button" data-gdel="${g.id}" aria-label="احذف المجموعة">${x}</button>
+      </div>
+      <button class="who-btn" type="button" data-gwho="${g.id}"><svg class="i"><use href="#i-user"/></svg>${whoText(g)} · غيّر</button>
+      <ul class="klist">${ks.map((k, i) => `
+        <li><span class="kn num">${i + 1}</span>
+          <input data-ktitle="${k.id}" value="${esc(k.title)}" placeholder="اسم المهمة" aria-label="اسم المهمة ${i + 1}"${k.title.trim() ? '' : ' class="invalid"'}>
+          <span class="krow2"><input type="date" data-kdue="${k.id}" value="${esc(k.due)}" aria-label="موعد تسليم المهمة ${i + 1}">
+            <button class="icon-btn mv" type="button" data-kmove="${k.id}|-1" aria-label="طلّعها لفوق" ${i ? '' : 'disabled'}>${up}</button>
+            <button class="icon-btn mv" type="button" data-kmove="${k.id}|1" aria-label="نزّلها لتحت" ${i < ks.length - 1 ? '' : 'disabled'}>${down}</button>
+            <button class="icon-btn" type="button" data-kdel="${k.id}" aria-label="احذف المهمة">${x}</button></span></li>`).join('')
+        || '<li style="display:block;color:var(--muted);font-size:.9rem">ما في مهام بهالمجموعة.</li>'}</ul>
+      <button class="btn btn-ghost btn-sm" type="button" data-kadd="${g.id}"><svg class="i"><use href="#i-plus"/></svg>مهمة</button>
+    </div>`; }).join('')}
+    <button class="btn btn-ghost btn-block" id="gAdd" type="button"><svg class="i"><use href="#i-plus"/></svg>مجموعة جديدة</button>`;
+}
+function moveIn(list, item, dir, same){
+  const i = list.indexOf(item);
+  let j = i + dir;
+  while (j >= 0 && j < list.length && !same(list[j])) j += dir;
+  if (j >= 0 && j < list.length) [list[i], list[j]] = [list[j], list[i]];
+}
+const usedBy = k => db.teachers.filter(t => { const c = cellOf(t, k); return c && (c.s !== 'todo' || c.g || c.n || c.p || c.due); }).length;
+function dropTask(k){
+  db.tasks = taskDefs().filter(x => x !== k);
+  db.teachers.forEach(t => { if (t.tasks) delete t.tasks[k.id]; });
+  undoStack = undoStack.map(b => b.filter(x => x.k !== k)).filter(b => b.length); // so «تراجع» can't bring back a stray status
+}
+function leaveCatalog(){
+  // A task left without a name or any progress is dropped instead of reaching teachers as a blank line.
+  taskDefs().filter(k => !k.title.trim() && !usedBy(k)).forEach(dropTask);
+  groupsList().forEach((g, i) => { if (!g.name.trim()) g.name = `مجموعة ${i + 1}`; });
+  openTasks();
+}
+$('#catalog').addEventListener('input', e => {
+  const d = e.target.dataset;
+  if (d.gname) { groupById(d.gname).name = e.target.value; setDirty(true); }
+  if (d.ktitle) { taskById(d.ktitle).title = e.target.value; e.target.classList.toggle('invalid', !e.target.value.trim()); setDirty(true); }
+});
+$('#catalog').addEventListener('change', e => {
+  if (e.target.dataset.kdue) { taskById(e.target.dataset.kdue).due = e.target.value; setDirty(true); }
+});
+$('#catalog').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  const d = b.dataset;
+  if (b.id === 'catBack') return leaveCatalog();
+  if (b.id === 'pasteBtn') return openTaskImport('');
+  if (b.id === 'taskXlsBtn') return pickTaskFile();
+  if (b.id === 'gAdd') {
+    const g = { id: newId(groupsList()), name: `مجموعة ${groupsList().length + 1}`, all: true };
+    groupsList().push(g); setDirty(true); renderCatalog();
+    const inp = document.querySelector(`[data-gname="${g.id}"]`); inp.focus(); inp.select();
+    return;
+  }
+  if (d.gwho) return openGroupSheet(d.gwho);
+  if (d.gmove) { const [id, dir] = d.gmove.split('|'); moveIn(groupsList(), groupById(id), +dir, () => true); setDirty(true); return renderCatalog(); }
+  if (d.kmove) { const [id, dir] = d.kmove.split('|'), k = taskById(id); moveIn(taskDefs(), k, +dir, x => x.gid === k.gid); setDirty(true); return renderCatalog(); }
+  if (d.kadd) {
+    const k = { id: newId(taskDefs()), gid: d.kadd, title: '', due: '' };
+    taskDefs().push(k); setDirty(true); renderCatalog();
+    document.querySelector(`[data-ktitle="${k.id}"]`).focus();
+    return;
+  }
+  if (d.kdel) {
+    const k = taskById(d.kdel), n = usedBy(k);
+    if (!confirm(n ? `«${k.title || 'المهمة'}» إلها حالة أو ملاحظات عند ${n} معلم، ورح تنمسح كلها. أكيد بدك تحذفها؟` : `حذف «${k.title || 'المهمة'}»؟`)) return;
+    dropTask(k); setDirty(true); return renderCatalog();
+  }
+  if (d.gdel) {
+    const g = groupById(d.gdel), ks = taskDefs().filter(k => k.gid === g.id);
+    if (!confirm(`حذف مجموعة «${g.name || 'بدون اسم'}»${ks.length ? ` مع مهامها (${ks.length}) وحالاتها عند كل المعلمين` : ''}؟`)) return;
+    ks.forEach(dropTask);
+    db.taskGroups = groupsList().filter(x => x !== g);
+    db.teachers.forEach(t => { if (t.groups) delete t.groups[g.id]; });
+    setDirty(true); return renderCatalog();
+  }
+});
+
+/* ---------- Adding tasks: pasted lines, or an Excel file turned into lines ----------
+   One task per line, its due date optionally at the end («30/10», «30/10/2026», «2026-10-30»).
+   A line ending in «:» (or starting with #) starts a group. Lines copied from Excel cells arrive tab-separated. */
+const DATE_TAIL = /(?:^|[\s,،|(\-–—])(\d{4}[-/.]\d{1,2}[-/.]\d{1,2}|\d{1,2}[/.]\d{1,2}(?:[/.]\d{2,4})?|\d{1,2}-\d{1,2}-\d{2,4})\)?\s*$/;
+function parseDay(v){
+  if (typeof v === 'number') {
+    // An Excel date serial; rounded to the day, since files often carry a few hours of timezone drift.
+    if (v < 30000 || v > 80000) return '';
+    const d = new Date(Date.UTC(1899, 11, 30) + Math.round(v) * 864e5);
+    return DK.iso(new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+  }
+  const s = DK.latin(v).trim();
+  let y, m, d, x;
+  if ((x = /^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/.exec(s))) [y, m, d] = [+x[1], +x[2], +x[3]];
+  else if ((x = /^(\d{1,2})[-/.](\d{1,2})(?:[-/.](\d{2,4}))?$/.exec(s))) {
+    [d, m] = [+x[1], +x[2]];
+    y = x[3] ? (+x[3] < 100 ? 2000 + +x[3] : +x[3]) : 0;
+    // No year: the coming one, unless that date is already months behind us.
+    if (!y) { const t = DK.today(); y = t.getFullYear(); if (new Date(y, m - 1, d) < new Date(y, t.getMonth() - 4, t.getDate())) y++; }
+  } else return '';
+  const dt = new Date(y, m - 1, d);
+  return dt.getFullYear() === y && dt.getMonth() === m - 1 && dt.getDate() === d ? DK.iso(dt) : '';
+}
+function parseTasks(text){
+  const out = [];
+  let group = '';
+  String(text || '').split(/\r?\n/).forEach(raw => {
+    const line = raw.trim();
+    if (!line) return;
+    const head = /^#+\s*(.+)$/.exec(line) || /^(.+?)\s*[:：]$/.exec(line);
+    if (head) { group = head[1].trim(); return; }
+    let title = line, due = '', rowGroup = '';
+    if (line.includes('\t')) {
+      const cells = line.split('\t').map(c => c.trim()).filter(Boolean);
+      if (cells.length > 1 && parseDay(cells[cells.length - 1])) due = parseDay(cells.pop());
+      if (cells.length > 1) rowGroup = cells.shift();
+      title = cells.join(' ');
+    } else {
+      const m = DATE_TAIL.exec(DK.latin(line));
+      const cut = m ? line.slice(0, m.index).replace(/[\s,،|:\-–—(]+$/, '') : '';
+      if (m && cut && parseDay(m[1])) { title = cut; due = parseDay(m[1]); }
+    }
+    title = title.replace(/^[•●▪◦*\-–]\s*/, '').trim();
+    if (title) out.push({ group: rowGroup || group, title, due });
+  });
+  return out;
+}
+
+let timp = { text: '', gid: null };
+function openTaskImport(text){
+  timp.text = text || '';
+  if (timp.gid === null || (timp.gid && !groupById(timp.gid))) { const gs = groupsList(); timp.gid = gs.length ? gs[gs.length - 1].id : ''; }
+  show('taskImport'); renderTaskImport();
+}
+function renderTaskImport(){
+  const gs = groupsList();
+  $('#taskImport').innerHTML = `
+    <div class="ed-head"><button class="btn btn-ghost btn-sm" id="timpBack" type="button"><svg class="i"><use href="#i-back"/></svg>رجوع</button></div>
+    <div class="card">
+      <h2><svg class="i"><use href="#i-plus"/></svg>ضيف مهام</h2>
+      <p class="lead" style="margin:6px 0 14px">اكتب أو الصق كل مهمة بسطر، وموعد التسليم بآخر السطر إذا بدك (مثل 30/10). لتبلّش مجموعة جديدة، اكتب اسمها لحاله بسطر وبعده نقطتين، مثل «الشهر الثاني:».</p>
+      <div class="grid g2">
+        <div class="field"><label for="timpGroup">المهام بتنحط بمجموعة</label>
+          <select id="timpGroup">${gs.map(g => `<option value="${g.id}"${timp.gid === g.id ? ' selected' : ''}>${esc(g.name || 'بدون اسم')}</option>`).join('')}<option value=""${timp.gid ? '' : ' selected'}>مجموعة جديدة…</option></select></div>
+        <div class="field" id="timpNewWrap"${timp.gid ? ' hidden' : ''}><label for="timpNew">اسم المجموعة الجديدة</label><input id="timpNew" placeholder="مثال: الشهر الأول"></div>
+      </div>
+      <div class="field" style="margin-top:12px"><label for="timpText">المهام</label>
+        <textarea id="timpText" rows="9" placeholder="المهمة الأسبوعية 1: تحليل المحتوى  30/10&#10;المهمة الأسبوعية 2: خطة درس  6/11&#10;&#10;المقال:&#10;المقال التأملي  20/12">${esc(timp.text)}</textarea></div>
+      <button class="btn btn-ghost btn-sm" id="timpXls" type="button"><svg class="i"><use href="#i-up"/></svg>جيبها من ملف Excel</button>
+      <div id="timpPreview"></div>
+    </div>`;
+  renderTimpPreview();
+}
+function timpItems(){
+  const sel = timp.gid ? groupById(timp.gid) : null;
+  const fallback = (sel ? sel.name.trim() : (($('#timpNew') || {}).value || '').trim()) || 'المهام';
+  const seen = new Set();
+  return parseTasks(timp.text).map(x => {
+    const groupName = x.group || fallback;
+    const g = !x.group && sel ? sel : groupsList().find(y => y.name.trim() === groupName) || null;
+    const key = groupName + '\n' + x.title;
+    const dup = seen.has(key) || !!(g && taskDefs().some(k => k.gid === g.id && k.title.trim() === x.title));
+    seen.add(key);
+    return { ...x, groupName, g, dup };
+  });
+}
+function renderTimpPreview(){
+  const items = timpItems(), fresh = items.filter(x => !x.dup).length;
+  $('#timpPreview').innerHTML = items.length ? `
+    <div class="imp-wrap" style="margin-top:14px"><table class="imp-table">
+      <thead><tr><th>المجموعة</th><th>المهمة</th><th>الموعد</th></tr></thead>
+      <tbody>${items.map(x => `<tr><td>${esc(x.groupName)}${x.g ? '' : '<small>جديدة</small>'}</td><td>${esc(x.title)}${x.dup ? '<small>موجودة، ما رح تتكرر</small>' : ''}</td><td class="num">${x.due ? shortDate(x.due) : '—'}</td></tr>`).join('')}</tbody>
+    </table></div>
+    <button class="btn btn-gold btn-block" id="timpGo" type="button" style="margin-top:14px" ${fresh ? '' : 'disabled'}>${fresh ? `ضيف ${fresh} مهمة` : 'كل هالمهام موجودة'}</button>`
+    : '<p class="sent">بتطلع المهام هون أول ما تكتبها.</p>';
+}
+function doTaskImport(){
+  const items = timpItems().filter(x => !x.dup);
+  if (!items.length) return;
+  const made = new Map();
+  items.forEach(x => {
+    let g = x.g || made.get(x.groupName);
+    if (!g) { g = { id: newId(groupsList()), name: x.groupName, all: true }; groupsList().push(g); made.set(x.groupName, g); }
+    taskDefs().push({ id: newId(taskDefs()), gid: g.id, title: x.title, due: x.due });
+  });
+  timp = { text: '', gid: null };
+  setDirty(true); openCatalog();
+  toast(`انضافت ${items.length} مهمة. لما تخلص اضغط «احفظ وانشر».`);
+}
+$('#taskImport').addEventListener('input', e => {
+  if (e.target.id === 'timpText') timp.text = e.target.value;
+  if (e.target.id === 'timpText' || e.target.id === 'timpNew') renderTimpPreview();
+});
+$('#taskImport').addEventListener('change', e => {
+  if (e.target.id !== 'timpGroup') return;
+  timp.gid = e.target.value; $('#timpNewWrap').hidden = !!timp.gid; renderTimpPreview();
+});
+$('#taskImport').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  if (b.id === 'timpBack') return groupsList().length ? openCatalog() : openTasks();
+  if (b.id === 'timpXls') return pickTaskFile();
+  if (b.id === 'timpGo') doTaskImport();
+});
+
+function pickTaskFile(){ const f = $('#taskFile'); f.value = ''; f.click(); }
+$('#taskFile').addEventListener('change', e => { const f = e.target.files[0]; if (f) readTaskFile(f); });
+// Reads the first sheet on this device: a column for the task, and optionally its group and due date.
+async function readTaskFile(file){
+  let XLSX;
+  try { XLSX = await loadXLSX(); } catch (e) { return toast('ما قدرنا نحمّل قارئ Excel. تأكد من النت.'); }
+  const wb = XLSX.read(await file.arrayBuffer(), { type: 'array' });
+  const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, defval: '', raw: true, blankrows: false });
+  if (!rows.length) return toast('الملف فاضي.');
+  const TITLE = ['اسم المهمة', 'المهمة', 'المهام', 'عنوان المهمة', 'العنوان', 'النشاط'];
+  const GROUP = ['المجموعة', 'المساق', 'الفصل', 'الوحدة', 'الشهر', 'القسم'];
+  const DUE = ['موعد التسليم', 'تاريخ التسليم', 'آخر موعد', 'الموعد', 'التاريخ'];
+  const colOf = (row, names) => { const hs = row.map(normHead); for (const n of names.map(normHead)) { const i = hs.indexOf(n); if (i !== -1) return i; } return -1; };
+  const hi = rows.slice(0, 5).findIndex(r => colOf(r, TITLE) !== -1);
+  let col = { title: 0, group: -1, due: -1 }, body = rows;
+  if (hi !== -1) { const h = rows[hi]; col = { title: colOf(h, TITLE), group: colOf(h, GROUP), due: colOf(h, DUE) }; body = rows.slice(hi + 1); }
+  else col.due = rows[0].findIndex((v, i) => i > 0 && parseDay(v));
+  const lines = [];
+  let last = '';
+  body.forEach(r => {
+    const title = String(r[col.title] == null ? '' : r[col.title]).trim();
+    if (!title) return;
+    const g = col.group !== -1 ? String(r[col.group] || '').trim() : '';
+    if (g && g !== last) { lines.push(g + ':'); last = g; }
+    const due = col.due !== -1 ? parseDay(r[col.due]) : '';
+    lines.push(title + (due ? '  ' + due : ''));
+  });
+  if (!lines.length) return toast('ما لقينا مهام بالملف.');
+  openTaskImport(lines.join('\n'));
+}
+
 /* ---------- Save & publish ---------- */
 function publicRecord(t){
-  return { name: String(t.name || '').trim(), title: titleOf(t), total: DK.num(t.total), down: DK.num(t.down), installment: DK.num(t.installment),
+  const rec = { name: String(t.name || '').trim(), title: titleOf(t), total: DK.num(t.total), down: DK.num(t.down), installment: DK.num(t.installment),
     firstDue: t.firstDue || '', manualDue: t.manualDue || '', carry: carryOn(), notes: String(t.notes || '').trim(),
     payments: t.payments.map(p => ({ date: p.date, amount: DK.num(p.amount), note: String(p.note || '').trim() })) };
+  // Only this teacher's tasks, and only what they may see: no private notes, nothing marked «مش مطلوبة».
+  // Left out entirely when there are none, so statements without tasks stay exactly as they were.
+  const tasks = myTasks(t).filter(k => String(k.title || '').trim()).map(k => {
+    const c = cellOf(t, k) || {}, s = stateOf(t, k), g = groupById(k.gid);
+    return { group: g ? String(g.name || '').trim() : '', title: k.title.trim(), due: dueOf(t, k), status: s,
+      at: (c.d && c.d[s]) || '', grade: String(c.g || '').trim(), note: String(c.n || '').trim() };
+  });
+  if (tasks.length) rec.tasks = tasks;
+  return rec;
 }
 
 async function save(){
@@ -788,6 +1738,10 @@ $('#editor').addEventListener('input', e => {
   if (e.target.id === 'p-amount' || e.target.id === 'p-note') e.target.dataset.touched = '1';
 });
 $('#editor').addEventListener('change', e => {
+  if (e.target.dataset.tg) {
+    setGroupFor(current, groupById(e.target.dataset.tg), e.target.checked);
+    setDirty(true); renderEdTasks(); renderShare(); return;
+  }
   const f = e.target.dataset.f;
   if (f === 'phone' && DK.normPhone(current.phone)) e.target.value = current.phone = DK.normPhone(current.phone);
   if (f === 'ministry') e.target.value = current.ministry = DK.digits(current.ministry);
@@ -795,7 +1749,9 @@ $('#editor').addEventListener('change', e => {
 });
 $('#editor').addEventListener('click', e => {
   const t = e.target.closest('button'); if (!t) return;
-  if (t.id === 'backBtn') return openDash();
+  if (t.id === 'backBtn') return returnTo === 'tasks' ? openTasks() : openDash();
+  if (t.dataset.c) { const [tid, kid] = t.dataset.c.split('|'); return openCellSheet(tid, kid); }
+  if (t.dataset.gotasks !== undefined) return openTasks();
   if (t.id === 'delBtn') {
     if (!confirm(`أكيد بدك تحذف ${current.name || 'هاد المعلم'} وكل دفعاته؟`)) return;
     db.teachers = db.teachers.filter(x => x !== current); setDirty(true); return openDash();
@@ -824,9 +1780,12 @@ $('#editor').addEventListener('click', e => {
 $('#editor').addEventListener('click', e => {
   const tab = e.target.closest('[data-kind]');
   if (tab && !tab.disabled) { msgKind = tab.dataset.kind; return renderShare(); }
-  if (!e.target.closest('#waBtn') || msgKind !== 'link') return;
-  current.sentAt = DK.iso(DK.today()); setDirty(true);
-  setTimeout(renderShare, 300);
+  if (!e.target.closest('#waBtn')) return;
+  if (msgKind === 'link') current.sentAt = DK.iso(DK.today());
+  else if (TOLD[msgKind]) markTold(current, TOLD[msgKind]);
+  else return;
+  setDirty(true);
+  setTimeout(() => { renderShare(); renderEdTasks(); }, 300);
 });
 function copy(text){
   (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(() => toast('انسخ ✓'), () => toast('ما زبط النسخ، انسخه بإيدك.'));
@@ -951,6 +1910,19 @@ $('#exportBtn').onclick = async () => {
   const wb = XLSX.utils.book_new();
   wb.Workbook = { Views: [{ RTL: true }] };
   XLSX.utils.book_append_sheet(wb, ws, 'المعلمين');
+  const ks = orderedTasks();
+  if (ks.length) {
+    const heads = ks.map(k => { const g = groupById(k.gid); return `${g ? g.name.trim() + ': ' : ''}${k.title.trim()}`; });
+    const cols = heads.map((h, i) => heads.indexOf(h) === i ? h : `${h} (${i + 1})`); // same name twice keeps both columns
+    const trows = db.teachers.map(t => {
+      const on = new Set(assigned(t).map(k => k.id)), p = taskProgress(t), r = { 'الاسم': t.name, 'المسلّمة': `${p.done}/${p.total}` };
+      ks.forEach((k, i) => { const c = cellOf(t, k) || {}; r[cols[i]] = on.has(k.id) ? STATE_LABEL[stateOf(t, k)] + (c.g ? ` (${c.g})` : '') : ''; });
+      return r;
+    });
+    const ws2 = XLSX.utils.json_to_sheet(trows);
+    ws2['!cols'] = [{ wch: 24 }, { wch: 10 }, ...ks.map(() => ({ wch: 18 }))];
+    XLSX.utils.book_append_sheet(wb, ws2, 'المهام');
+  }
   const blob = new Blob([XLSX.write(wb, { type: 'array', bookType: 'xlsx' })], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob); a.download = `diplomakalena-payments-${DK.iso(DK.today())}.xlsx`;
