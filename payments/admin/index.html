@@ -125,13 +125,6 @@ ol.fix b{color:var(--ink);font-weight:600;direction:ltr;unicode-bidi:isolate}
 .msg.info{color:var(--gold-hi);background:rgba(191,149,63,.08);border:1px solid rgba(191,149,63,.3)}
 .msg svg{margin-top:4px}
 
-/* Summary */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
-.stat{padding:12px 8px;border-radius:var(--r-sm);background:var(--glass);border:1px solid var(--line);text-align:center}
-.stat span{display:block;font-size:.76rem;color:var(--muted)}
-.stat b{display:block;font-family:var(--f-display);font-weight:700;font-size:1.2rem;line-height:1.5}
-.stat.late b{color:var(--late)}
-
 .toolbar{display:flex;gap:10px;margin-bottom:12px}
 .toolbar.sub{gap:8px;margin-top:-2px}
 .toolbar.sub .btn{flex:1}
@@ -169,6 +162,44 @@ ol.fix b{color:var(--ink);font-weight:600;direction:ltr;unicode-bidi:isolate}
 .pill.ok{color:var(--ok);background:rgba(159,224,192,.08);border-color:rgba(159,224,192,.3)}
 .pill.warn{color:var(--error);background:rgba(255,180,162,.08);border-color:rgba(255,180,162,.35)}
 .empty{color:var(--muted);text-align:center;padding:26px 10px}
+.pill.mute{color:var(--muted);background:var(--field);border-color:var(--field-line)}
+
+/* This month's collection, and the teachers grouped by where this month's installment stands */
+.month{padding:16px;border-radius:var(--r-md);background:var(--glass);border:1px solid var(--line);margin-bottom:14px}
+.month-head{display:flex;align-items:baseline;justify-content:space-between;gap:6px 12px;flex-wrap:wrap}
+.month-head h2{font-family:var(--f-display);font-size:1rem;font-weight:700}
+.month-head span{color:var(--muted);font-size:.88rem}
+.month-head span b{font-family:var(--f-display);font-size:1.1rem;color:var(--ok)}
+.mbar{display:flex;height:8px;border-radius:99px;background:var(--field);overflow:hidden;margin:10px 0 12px}
+.mbar i{display:block;height:100%;background:var(--ok);border-radius:99px}
+.mnums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mnums div{padding:8px 4px;border-radius:var(--r-sm);background:var(--field);text-align:center}
+.mnums span{display:block;font-size:.74rem;color:var(--muted)}
+.mnums b{display:block;font-family:var(--f-display);font-weight:700;font-size:1.05rem;line-height:1.5}
+.mnums .owed b{color:var(--gold-hi)}
+.mnums .owed.hot b{color:var(--late)}
+#dashChips{margin:2px 0 12px}
+.b-warn{--c:var(--error)}
+.b-late{--c:var(--late)}
+.b-due{--c:var(--gold)}
+.b-paid{--c:var(--ok)}
+.b-later{--c:var(--faint)}
+.b-full{--c:rgba(159,224,192,.4)}
+.row[class*="b-"]{border-inline-start:4px solid var(--c)}
+.grp>summary{list-style:none;display:flex;align-items:center;gap:8px;padding:10px 2px 8px;cursor:pointer;font-weight:600;font-size:.94rem}
+.grp>summary::-webkit-details-marker{display:none}
+.grp>summary .dot{width:10px;height:10px;border-radius:50%;background:var(--c);flex-shrink:0}
+.grp>summary b{font-family:var(--f-display);font-weight:700;color:var(--c)}
+.grp>summary .chev{margin-inline-start:auto;color:var(--faint);transition:transform .25s}
+.grp[open]>summary .chev{transform:rotate(180deg)}
+.col-title{display:none}
+.dash-cols .col>.empty{display:none;padding:14px 10px}
+@media (min-width:1000px){
+  /* On a computer «ما دفعوا» and «دفعوا» sit side by side, a little wider than the rest of the page. */
+  .dash-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 20px;align-items:start;width:min(1000px,100vw - 48px);margin-inline:calc(50% - min(500px,50vw - 24px))}
+  .dash-cols .col>.empty{display:block}
+  .col-title{display:flex;align-items:center;gap:8px;font-family:var(--f-display);font-size:1.05rem;font-weight:700;padding:6px 2px 4px;border-bottom:1px solid var(--line);margin-bottom:4px}
+}
 
 /* Editor */
 .ed-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 12px}
@@ -444,7 +475,7 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
 
   <!-- ============ Dashboard ============ -->
   <section class="screen" id="dash" hidden>
-    <div class="stats" id="stats"></div>
+    <div id="stats"></div>
     <div class="toolbar">
       <input type="search" id="search" placeholder="دوّر بالاسم أو الرقم" aria-label="دوّر بالاسم أو الهاتف أو الرقم الوزاري">
       <button class="btn btn-gold" id="addBtn" type="button"><svg class="i"><use href="#i-plus"/></svg>معلم جديد</button>
@@ -454,9 +485,10 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
       <button class="btn btn-ghost btn-sm" id="exportBtn" type="button"><svg class="i"><use href="#i-down"/></svg>تنزيل Excel</button>
       <input type="file" id="importFile" accept=".xlsx,.xls,.csv" hidden>
     </div>
-    <label class="check setting"><input type="checkbox" id="carryOpt">
+    <div class="chips" id="dashChips" role="tablist" aria-label="فلترة المعلمين"></div>
+    <div id="list"></div>
+    <label class="check setting" style="margin-top:14px"><input type="checkbox" id="carryOpt">
       <span>إذا المعلم دفع جزء من القسط، باقيه بينضاف لقسط الشهر الجاي (وما بينحسب متأخر)<small>إذا طفّيتها، أي قسط ما اندفع كامل بموعده بيطلع متأخر.</small></span></label>
-    <ul class="list" id="list"></ul>
   </section>
 
   <!-- ============ Tasks ============ -->
@@ -487,7 +519,7 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
 <script>
 // GitHub Pages lets browsers keep a page for ~10 minutes. If a newer version is live, reload once to pick it up,
 // so a teacher never sees new data through old code. Bump APP_VERSION here and in payments/version.json together.
-const APP_VERSION = 5;
+const APP_VERSION = 6;
 fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(({ v }) => {
   let seen = null; try { seen = sessionStorage.getItem('dk-reloaded'); } catch (e) {}
   if (v > APP_VERSION && seen !== String(v) && !(typeof db !== 'undefined' && db)) {
@@ -496,7 +528,7 @@ fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json
   }
 }).catch(() => {});
 </script>
-<script src="../core.js?v=5"></script>
+<script src="../core.js?v=6"></script>
 <script>
 const OWNER = 'diplomakalena-cloud';
 const REPO = 'diplomakalena-cloud.github.io';
@@ -660,28 +692,115 @@ function openDash(){
   if (stale && !hadEdits) saveState('dirty', 'في تحديث جديد لكشوف المعلمين. اضغط «احفظ وانشر» مرة وحدة عشان يوصلهم.');
   $('#carryOpt').checked = carryOn(); renderDash();
 }
+/* The list is grouped by this month's installment (calendar month):
+   late → not paid yet this month → paid this month's (or paid it early) → nothing due this month → fully paid. */
+const BUCKETS = [
+  ['warn', 'بيانات ناقصة'],
+  ['late', 'متأخرين'],
+  ['due', 'لسا ما دفعوا قسط هالشهر'],
+  ['paid', 'دفعوا قسط هالشهر'],
+  ['later', 'ما عليهم قسط هالشهر'],
+  ['full', 'سدّدوا كامل']
+];
+const DASH_COLS = [['ما دفعوا', ['warn', 'late', 'due']], ['دفعوا', ['paid', 'later', 'full']]];
+const DASH_FILTERS = [
+  ['all', 'الكل', () => true],
+  ['unpaid', 'ما دفعوا', b => b === 'late' || b === 'due'],
+  ['paid', 'دفعوا', b => b === 'paid'],
+  ['later', 'ما عليهم هالشهر', b => b === 'later'],
+  ['full', 'سدّدوا كامل', b => b === 'full'],
+  ['warn', 'بيانات ناقصة', b => b === 'warn']
+];
+let dashFilter = 'all';
+const dashClosed = new Set(['full']);
+const dm = d => `${d.getDate()}/${d.getMonth() + 1}`;
+const monthEnd = () => { const d = DK.today(); return new Date(d.getFullYear(), d.getMonth() + 1, 0); };
+const inThisMonth = s => { const d = DK.parseISO(s), n = DK.today(); return !!d && d.getFullYear() === n.getFullYear() && d.getMonth() === n.getMonth(); };
+// Everything a teacher still owes for the installments due up to the end of this month.
+function owedThisMonth(t, a){
+  if (a.remaining <= 0) return 0;
+  const eom = monthEnd(), manual = DK.parseISO(t.manualDue);
+  if (manual) return manual <= eom ? a.nextAmount : 0;
+  const first = DK.parseISO(t.firstDue), inst = DK.num(t.installment);
+  if (!first || !(inst > 0)) return a.nextAmount;
+  let n = 0;
+  while (DK.addMonths(first, n) <= eom) n++;
+  return Math.round(Math.min(Math.max(DK.num(t.down) + inst * n - a.paid, 0), a.remaining) * 100) / 100;
+}
+function bucket(t){
+  const p = problems(t);
+  if (p.length) return { b: 'warn', pill: 'بيانات ناقصة', cls: 'warn', sub: `ناقص: ${p.join('، ')}` };
+  const a = acct(t), today = DK.today(), eom = monthEnd();
+  const now = t.payments.filter(x => inThisMonth(x.date) && DK.num(x.amount) > 0);
+  const paidNow = now.reduce((s, x) => s + DK.num(x.amount), 0);
+  const lastNow = now.map(x => x.date).sort().pop();
+  const left = `متبقي ${money(a.remaining)} ${CURRENCY}`;
+  if (a.total > 0 && a.remaining <= 0) return { b: 'full', a, pill: '✓ مسدّد كامل', cls: 'ok', sub: `${money(a.total)} ${CURRENCY}` };
+  const due = DK.parseISO(a.nextDue);
+  if (due && due <= eom) {
+    const diff = Math.round((due - today) / 864e5), owed = owedThisMonth(t, a);
+    const sub = `مطلوب ${money(owed)} ${CURRENCY}${paidNow ? ` · دفع ${money(paidNow)} هالشهر` : ''}`;
+    if (diff < 0) return { b: 'late', a, due, owed, pill: `متأخر ${daysN(-diff)} · ${dm(due)}`, cls: 'late', sub };
+    return { b: 'due', a, due, owed, pill: diff === 0 ? 'موعده اليوم' : `${dm(due)} · ${diff === 1 ? 'بكرة' : `بعد ${daysN(diff)}`}`, cls: diff === 0 ? 'late' : '', sub };
+  }
+  const manual = DK.parseISO(t.manualDue), first = DK.parseISO(t.firstDue);
+  const carried = a.carried ? ` · مرحّل ${money(a.carried)}` : '';
+  if (paidNow) return { b: 'paid', a, pill: `✓ دفع ${money(paidNow)} · ${dm(DK.parseISO(lastNow))}`, cls: 'ok', sub: left + carried };
+  // Paid this month's installment early (in an earlier month).
+  if (due && !manual && first && first <= eom) return { b: 'paid', a, pill: `✓ القسط الجاي ${dm(due)}`, cls: 'ok', sub: left + carried };
+  if (manual && due) return { b: 'later', a, pill: `مأجّل لـ ${dm(due)}`, cls: 'mute', sub: left };
+  if (due) return { b: 'later', a, pill: `أول قسط ${dm(due)}`, cls: 'mute', sub: left };
+  return { b: 'later', a, pill: a.total > 0 ? 'ما في موعد قسط' : 'ما في مبلغ متفق عليه', cls: 'mute', sub: a.total > 0 ? left : '' };
+}
 function renderDash(){
   updateBadge();
-  const all = db.teachers.map(t => ({ t, s: status(t) }));
-  const remaining = all.reduce((s, x) => s + (x.s.a ? x.s.a.remaining : 0), 0);
-  const late = all.filter(x => x.s.cls === 'late').length;
-  $('#stats').innerHTML = `
-    <div class="stat"><span>المعلمين</span><b class="num">${all.length}</b></div>
-    <div class="stat"><span>مجموع المتبقي</span><b class="num">${money(remaining)}</b></div>
-    <div class="stat${late ? ' late' : ''}"><span>متأخرين / اليوم</span><b class="num">${late}</b></div>`;
+  const all = db.teachers.map(t => ({ t, ...bucket(t) }));
+  const owing = all.filter(x => x.b === 'late' || x.b === 'due'), paid = all.filter(x => x.b === 'paid').length;
+  const whoOwes = owing.length + paid;
+  const collected = db.teachers.reduce((s, t) => s + t.payments.filter(x => inThisMonth(x.date)).reduce((v, x) => v + DK.num(x.amount), 0), 0);
+  const owed = owing.reduce((s, x) => s + x.owed, 0);
+  const remaining = all.reduce((s, x) => s + (x.a ? x.a.remaining : 0), 0);
+  const pct = whoOwes ? Math.round(paid / whoOwes * 100) : 0;
+  $('#stats').innerHTML = db.teachers.length ? `
+    <div class="month">
+      <div class="month-head"><h2>تحصيل ${MONTHS[DK.today().getMonth()]}</h2><span>${whoOwes ? `دفع <b class="num">${paid}</b> من ${teachersN(whoOwes)}` : 'ما على حدا قسط هالشهر'}</span></div>
+      <div class="mbar" role="progressbar" aria-label="اللي دفعوا قسط هالشهر" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pct}%"></i></div>
+      <div class="mnums">
+        <div><span>انجمع هالشهر</span><b class="num">${money(collected)}</b></div>
+        <div class="owed${owing.some(x => x.b === 'late') ? ' hot' : ''}"><span>لسا مطلوب هالشهر</span><b class="num">${money(owed)}</b></div>
+        <div><span>مجموع المتبقي</span><b class="num">${money(remaining)}</b></div>
+      </div>
+    </div>` : '';
   const q = DK.latin($('#search').value).trim().toLowerCase();
-  const rows = all
-    .filter(x => !q || [x.t.name, x.t.phone, x.t.ministry].some(v => DK.latin(v).toLowerCase().includes(q)))
-    .sort((a, b) => a.s.order - b.s.order || String(a.s.due ? DK.iso(a.s.due) : '').localeCompare(b.s.due ? DK.iso(b.s.due) : '') || String(a.t.name).localeCompare(b.t.name, 'ar'));
-  $('#list').innerHTML = rows.length ? rows.map(({ t, s }) => { const tp = taskProgress(t); return `
-    <li><button class="row" type="button" data-id="${esc(t.id)}">
-      <span class="who"><b>${esc(t.name || 'بدون اسم')}</b><small class="num">${esc(t.phone || '—')}${s.a ? ` · متبقي ${money(s.a.remaining)} ${CURRENCY}` : ''}${tp.total ? ` · مهام ${tp.done}/${tp.total}` : ''}</small>${!t.sentAt && s.cls !== 'warn' ? '<small class="nosend">لسا ما انبعتله الرابط</small>' : ''}</span>
-      <span class="pill ${s.cls}">${esc(s.text)}</span>
-    </button></li>`; }).join('')
-    : db.teachers.length ? `<li class="empty">ما في نتائج.</li>`
-    : `<li class="empty">لسا ما في معلمين.<br>عندك ملف المشتركين؟ ضيفهم كلهم مرة وحدة:
+  const counts = Object.fromEntries(DASH_FILTERS.map(([k, , f]) => [k, all.filter(x => f(x.b)).length]));
+  if (!counts[dashFilter]) dashFilter = 'all';
+  $('#dashChips').innerHTML = db.teachers.length ? DASH_FILTERS.filter(([k]) => k === 'all' || counts[k]).map(([k, label]) =>
+    `<button class="chip${k === dashFilter ? ' on' : ''}${k === 'unpaid' && all.some(x => x.b === 'late') ? ' hot' : ''}" type="button" role="tab" aria-selected="${k === dashFilter}" data-dfilter="${k}">${label} <b class="num">${counts[k]}</b></button>`).join('') : '';
+  const pass = DASH_FILTERS.find(([k]) => k === dashFilter)[2];
+  const shown = all.filter(x => pass(x.b) && (!q || [x.t.name, x.t.phone, x.t.ministry].some(v => DK.latin(v).toLowerCase().includes(q))));
+  const byName = (x, y) => String(x.t.name).localeCompare(String(y.t.name), 'ar');
+  const row = x => { const tp = taskProgress(x.t); return `
+    <li><button class="row b-${x.b}" type="button" data-id="${esc(x.t.id)}">
+      <span class="who"><b>${esc(x.t.name || 'بدون اسم')}</b><small class="num">${esc(x.t.phone || '—')}${x.sub ? ` · ${esc(x.sub)}` : ''}${tp.total ? ` · مهام ${tp.done}/${tp.total}` : ''}</small>${!x.t.sentAt && x.b !== 'warn' ? '<small class="nosend">لسا ما انبعتله الرابط</small>' : ''}</span>
+      <span class="pill ${x.cls}">${esc(x.pill)}</span>
+    </button></li>`; };
+  const section = ([b, title]) => {
+    const xs = shown.filter(x => x.b === b).sort((x, y) => (x.due && y.due ? x.due - y.due : 0) || byName(x, y));
+    return xs.length ? `<details class="grp b-${b}" data-grp="${b}"${q || !dashClosed.has(b) ? ' open' : ''}>
+      <summary><i class="dot"></i>${BUCKETS.find(([k]) => k === b)[1]} <b class="num">${xs.length}</b><svg class="i chev"><use href="#i-chev"/></svg></summary>
+      <ul class="list">${xs.map(row).join('')}</ul></details>` : '';
+  };
+  let html;
+  if (!db.teachers.length) html = `<p class="empty">لسا ما في معلمين.<br>عندك ملف المشتركين؟ ضيفهم كلهم مرة وحدة:
         <button class="btn btn-gold btn-block" type="button" data-import style="margin-top:14px"><svg class="i"><use href="#i-up"/></svg>استيراد من Excel</button>
-        <small style="display:block;margin-top:10px;color:var(--faint)">أو اضغط «معلم جديد» لتضيف واحد واحد.</small></li>`;
+        <small style="display:block;margin-top:10px;color:var(--faint)">أو اضغط «معلم جديد» لتضيف واحد واحد.</small></p>`;
+  else if (!shown.length) html = `<p class="empty">ما في نتائج.</p>`;
+  else if (dashFilter === 'all') html = `<div class="dash-cols">${DASH_COLS.map(([title, bs]) => {
+      const body = BUCKETS.filter(([b]) => bs.includes(b)).map(section).join('');
+      return `<div class="col"><h2 class="col-title">${title}</h2>${body || `<p class="empty">${q ? 'ما في نتائج هون.' : 'ولا حدا ✓'}</p>`}</div>`;
+    }).join('')}</div>`;
+  else html = BUCKETS.map(section).join('');
+  $('#list').innerHTML = html;
 }
 
 function nextTwentyFourth(){
@@ -1731,6 +1850,9 @@ function saveState(cls, text){ const s = $('#saveStatus'); s.className = 'status
 $('#connectForm').addEventListener('submit', connect);
 $('#createForm').addEventListener('submit', createDb);
 $('#search').addEventListener('input', renderDash);
+$('#dashChips').addEventListener('click', e => { const b = e.target.closest('[data-dfilter]'); if (b) { dashFilter = b.dataset.dfilter; renderDash(); } });
+// Remember which sections were folded (but not while searching, when everything opens).
+$('#list').addEventListener('toggle', e => { const g = e.target.dataset && e.target.dataset.grp; if (g && !$('#search').value.trim()) e.target.open ? dashClosed.delete(g) : dashClosed.add(g); }, true);
 $('#carryOpt').addEventListener('change', e => { db.settings = { ...(db.settings || {}), carry: e.target.checked }; setDirty(true); renderDash(); });
 $('#addBtn').onclick = addTeacher;
 $('#list').addEventListener('click', e => {
