@@ -307,6 +307,14 @@ pre.share{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;font
 .colh{width:32px;height:28px;border-radius:8px;font-size:.8rem;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
 .colh:hover{color:var(--gold-hi);background:rgba(191,149,63,.12)}
 .colh.soon{color:var(--gold-hi);box-shadow:inset 0 -2px 0 var(--gold)}
+.colh.done{color:var(--ok)}
+.wnav{display:flex;align-items:center;gap:4px;margin:0 0 12px}
+.wnav-t{flex:1;min-width:0;text-align:center;line-height:1.5}
+.wnav-t b{display:flex;justify-content:center;align-items:center;gap:8px;font-family:var(--f-display);font-weight:700;font-size:.98rem}
+.wnav-t small{display:block;color:var(--muted);font-size:.78rem}
+.wnav .chip{flex-shrink:0;margin-inline-start:4px}
+.to-r{transform:rotate(-90deg)}
+.to-l{transform:rotate(90deg)}
 .mx .c{width:30px;height:30px;margin:auto;position:relative}
 .mx .c.has::after{content:'';position:absolute;top:-2px;inset-inline-end:-2px;width:8px;height:8px;border-radius:50%;background:var(--gold-hi);border:1.5px solid #032c26}
 .mx td.off{background:repeating-linear-gradient(135deg,transparent 0 5px,rgba(245,239,224,.05) 5px 10px)}
@@ -353,8 +361,22 @@ dialog.sheet::backdrop{background:rgba(0,10,8,.62)}
 .klist{list-style:none;margin:6px 0 10px}
 .klist li{display:grid;grid-template-columns:26px 1fr;gap:6px 8px;align-items:center;padding:10px 0;border-top:1px solid var(--field-line)}
 .klist .kn{font-family:var(--f-display);font-weight:700;color:var(--faint);text-align:center}
-.klist .krow2{grid-column:2;display:flex;gap:4px;align-items:center}
-.klist .krow2 input{flex:1;min-width:0;min-height:42px}
+.klist .krow2{grid-column:2;display:flex;flex-wrap:wrap;gap:6px 4px;align-items:center}
+.klist .krow2 input,.klist .krow2 select{flex:1 1 130px;min-width:0;min-height:42px;padding-block:8px;font-size:.92rem}
+.klist .kacts{display:flex;gap:2px;margin-inline-start:auto}
+.crs{padding:10px 0;border-top:1px solid var(--field-line)}
+.crs:first-of-type{border-top:0}
+.crs .who-btn{margin-top:6px}
+details.wcard > summary,details.wk > summary{list-style:none;display:flex;align-items:center;gap:10px;cursor:pointer}
+details.wcard > summary::-webkit-details-marker,details.wk > summary::-webkit-details-marker{display:none}
+details.wcard > summary .count,details.wk > summary .count{margin-inline-start:auto;font-size:.82rem;color:var(--faint);white-space:nowrap}
+details.wcard > summary .chev,details.wk > summary .chev{color:var(--faint);transition:transform .25s var(--ease)}
+details.wcard[open] > summary .chev,details.wk[open] > summary .chev{transform:rotate(180deg)}
+details.wcard[open] > summary{margin-bottom:6px}
+.wk-t{display:flex;flex-direction:column;min-width:0;line-height:1.5}
+.wk-t b{font-family:var(--f-display);font-weight:700;font-size:.98rem;display:flex;align-items:center;gap:8px}
+.wk-t small{color:var(--muted);font-size:.78rem}
+.wk-tag{padding:0 9px;border-radius:99px;font-family:var(--f-body);font-size:.72rem;font-weight:700;color:#1d1406;background:var(--foil);background-size:200% 100%}
 .klist .icon-btn{width:38px;height:38px}
 .klist input.invalid{border-color:rgba(255,180,162,.6)}
 
@@ -363,6 +385,8 @@ dialog.sheet::backdrop{background:rgba(0,10,8,.62)}
 .gt{display:inline-flex;align-items:center;gap:6px;padding:4px 12px 4px 10px;border-radius:99px;border:1px solid var(--field-line);background:var(--field);cursor:pointer;color:var(--ink)}
 .gt input[type=checkbox]{width:16px;height:16px}
 h3.gname{font-family:var(--f-display);font-weight:700;font-size:.9rem;color:var(--gold-hi);margin:16px 0 2px}
+details.wk{border-top:1px solid var(--field-line);margin-top:12px;padding-top:10px}
+details.wk .tl{margin-top:4px}
 .tl{list-style:none}
 .trow{display:flex;align-items:center;gap:12px;width:100%;text-align:start;padding:9px 0;border-top:1px solid var(--field-line)}
 .tl li:first-child .trow{border-top:0}
@@ -519,7 +543,7 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
 <script>
 // GitHub Pages lets browsers keep a page for ~10 minutes. If a newer version is live, reload once to pick it up,
 // so a teacher never sees new data through old code. Bump APP_VERSION here and in payments/version.json together.
-const APP_VERSION = 6;
+const APP_VERSION = 7;
 fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(({ v }) => {
   let seen = null; try { seen = sessionStorage.getItem('dk-reloaded'); } catch (e) {}
   if (v > APP_VERSION && seen !== String(v) && !(typeof db !== 'undefined' && db)) {
@@ -528,7 +552,7 @@ fetch('../version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json
   }
 }).catch(() => {});
 </script>
-<script src="../core.js?v=6"></script>
+<script src="../core.js?v=7"></script>
 <script>
 const OWNER = 'diplomakalena-cloud';
 const REPO = 'diplomakalena-cloud.github.io';
@@ -537,8 +561,8 @@ const DATA = 'payments/data';
 const PAGE_URL = 'https://diplomakalena-cloud.github.io/payments/';
 const KEY_TOKEN = 'dk-admin-token-v1';
 // Bump when the published record gains fields, so existing statements get re-published.
-// 3 = tasks; it also catches an old cached copy of this page publishing statements without them.
-const PUBLISH_VERSION = 3;
+// 3 = tasks; it also catches an old cached copy of this page publishing statements without them. 4 = task weeks.
+const PUBLISH_VERSION = 4;
 // Opens GitHub's new-token form pre-filled for this site: write access to files only, valid for a year.
 const TOKEN_URL = 'https://github.com/settings/personal-access-tokens/new?' + new URLSearchParams({
   name: 'لوحة الدفعات - دبلومك علينا', description: 'تحفظ كشوف دفعات المعلمين على الموقع', target_name: OWNER, expires_in: '366', contents: 'write'
@@ -561,6 +585,7 @@ const counted = (n, [one, two, few, many]) => n === 1 ? one : n === 2 ? two : `$
 const tasksN = n => counted(n, ['مهمة وحدة', 'مهمتين', 'مهام', 'مهمة']);
 const teachersN = n => counted(n, ['معلم واحد', 'معلمَين', 'معلمين', 'معلم']);
 const daysN = n => counted(n, ['يوم', 'يومين', 'أيام', 'يوم']);
+const weeksN = n => counted(n, ['أسبوع واحد', 'أسبوعين', 'أسابيع', 'أسبوع']);
 function msgHTML(kind, text){ return `<div class="msg ${kind}"><svg class="i"><use href="#i-${kind === 'err' ? 'alert' : 'lock'}"/></svg><span>${text}</span></div>`; }
 // With `undoable`, the toast offers «تراجع» for the last change to task statuses.
 function toast(text, undoable){
@@ -1021,12 +1046,15 @@ const MESSAGES = {
     hide: t => !myTasks(t).length,
     ok: t => myTasks(t).length > 0,
     text: t => {
-      const ks = myTasks(t), n = s => ks.filter(k => stateOf(t, k) === s).length, today = DK.iso(DK.today());
+      const ks = countedTasks(t), n = s => ks.filter(k => stateOf(t, k) === s).length, today = DK.iso(DK.today());
       const lines = [`• تم التسليم: ${n('done')} من ${ks.length}`,
         ...[['ready', 'جاهزة للتسليم'], ['doing', 'قيد التجهيز'], ['fix', 'قيد التعديل'], ['todo', 'قيد الانتظار']].filter(([s]) => n(s)).map(([s, label]) => `• ${label}: ${n(s)}`)];
+      // This week's tasks by name, since that's what the teacher is asking about most weeks.
+      const week = myTasks(t).filter(k => taskWeek(t, k) === thisWeek()), SHOWN = { ...DK.TASK_SHOWN, done: 'تم تسليمها' };
       const next = ks.filter(k => stateOf(t, k) !== 'done' && dueOf(t, k) >= today).sort((a, b) => dueOf(t, a).localeCompare(dueOf(t, b)))[0];
       return `${greeting(t)}\n\nإليك ملخص مهامك في «دبلومك علينا»:\n\n${lines.join('\n')}` +
-        (next ? `\n\nأقرب موعد تسليم: «${taskName(t, next)}»، ${longDate(dueOf(t, next))}.` : '') +
+        (week.length ? `\n\nمهام هذا الأسبوع (${weekName(thisWeek())}، وآخر موعد لتسليمها ${longDate(DK.weekEnd(thisWeek()))}):\n${week.map(k => `• ${taskName(t, k)}: ${SHOWN[stateOf(t, k)]}`).join('\n')}`
+          : next ? `\n\nأقرب موعد تسليم: «${taskName(t, next)}»، ${longDate(dueOf(t, next))}.` : '') +
         `\n\nتفاصيل كل مهمة على الرابط:\n${magicLink(t)}${SIGN}`;
     }
   }
@@ -1052,8 +1080,8 @@ function renderShare(){
 }
 
 /* ---------- Tasks ----------
-   db.taskGroups   [{ id, name, all }]          all: false = only for the teachers ticked for it
-   db.tasks        [{ id, gid, title, due }]    each group's tasks, in the order teachers see them
+   db.taskGroups   [{ id, name, all }]          the courses (المساقات); all: false = only for the teachers ticked for it
+   db.tasks        [{ id, gid, title, due }]    the tasks, each in its course; teachers see them by week, in this order
    teacher.groups  { gid: true/false }          this teacher's exception to a group's «all»
    teacher.tasks   { taskId: { s, d, due, g, n, p, told } }
      s status · d the date it reached each status · due this teacher's own due date · g grade
@@ -1070,7 +1098,9 @@ const taskDefs = () => db.tasks || (db.tasks = []);
 const groupById = id => groupsList().find(g => g.id === id);
 const taskById = id => taskDefs().find(k => k.id === id);
 const teacherById = id => db.teachers.find(t => t.id === id);
-const orderedTasks = () => groupsList().flatMap(g => taskDefs().filter(k => k.gid === g.id));
+// Time order: by week, the tasks without a date last, and as listed within a week.
+const orderedTasks = () => taskDefs().map((k, i) => ({ k, i, w: weekOfTask(k) || '~' })).filter(x => groupById(x.k.gid))
+  .sort((a, b) => (a.w < b.w ? -1 : a.w > b.w ? 1 : a.i - b.i)).map(x => x.k);
 const groupOn = (t, g) => t.groups && g.id in t.groups ? !!t.groups[g.id] : g.all !== false;
 function setGroupFor(t, g, on){
   t.groups = t.groups || {};
@@ -1080,11 +1110,25 @@ const cellOf = (t, k) => (t.tasks && t.tasks[k.id]) || null;
 const ensureCell = (t, k) => { t.tasks = t.tasks || {}; return t.tasks[k.id] = t.tasks[k.id] || { s: 'todo' }; };
 const stateOf = (t, k) => { const c = cellOf(t, k); return c && STATES.includes(c.s) ? c.s : 'todo'; };
 const dueOf = (t, k) => { const c = cellOf(t, k); return (c && c.due) || k.due || ''; };
+/* Weeks run Sunday to Saturday and go by the due date in the list. A teacher's own date (an extension) keeps the
+   task in its week, unless the list gives it no date. Weeks are numbered by the ones that have tasks, so holidays
+   are skipped. */
+const weekOfTask = k => DK.weekOf(k.due);
+const taskWeek = (t, k) => weekOfTask(k) || DK.weekOf(dueOf(t, k));
+function weekNumbers(extra = []){
+  const ws = [...new Set([...taskDefs().map(weekOfTask), ...extra].filter(Boolean))].sort();
+  return new Map(ws.map((w, i) => [w, i + 1]));
+}
+const weekName = (w, nos = weekNumbers()) => w === 'none' || !w ? 'بدون موعد' : nos.get(w) ? `الأسبوع ${nos.get(w)}` : 'أسبوع';
+const thisWeek = () => DK.weekOf(DK.iso(DK.today()));
+// «25/10/2026 – 31/10/2026 · هالأسبوع»
+const weekWhen = w => w && w !== 'none' ? DK.weekRange(w) + (w === thisWeek() ? ' · هالأسبوع' : '') : '';
 // The tasks of a teacher's groups; myTasks leaves out the ones marked «مش مطلوبة».
 function assigned(t){ const on = new Set(groupsList().filter(g => groupOn(t, g)).map(g => g.id)); return orderedTasks().filter(k => on.has(k.gid)); }
 const myTasks = t => assigned(t).filter(k => stateOf(t, k) !== 'na');
-function taskProgress(t){ const ks = myTasks(t); return { total: ks.length, done: ks.filter(k => stateOf(t, k) === 'done').length }; }
-const dayOffset = n => { const d = DK.today(); return DK.iso(new Date(d.getFullYear(), d.getMonth(), d.getDate() + n)); };
+// Like the teacher's page, weeks still to come count once work on them starts.
+const countedTasks = t => myTasks(t).filter(k => DK.inPlay(taskWeek(t, k), stateOf(t, k)));
+function taskProgress(t){ const ks = countedTasks(t); return { total: ks.length, done: ks.filter(k => stateOf(t, k) === 'done').length }; }
 const firstName = t => String(t.name || '').trim().split(/\s+/)[0] || 'المعلم';
 function newId(list){ let id; do id = uid().slice(0, 8); while (list.some(x => x.id === id)); return id; }
 // A task's name in a message, with its group when the teacher has two tasks by the same name.
@@ -1152,7 +1196,7 @@ function announce(t, s){
 function markTold(t, s){ announce(t, s).forEach(k => { ensureCell(t, k).told = s; }); }
 
 /* ---------- Tasks screen ---------- */
-let taskTab = 'todo', taskFilter = '', taskGroup = '', taskQuery = '', brush = '', showAllRows = false;
+let taskTab = 'todo', taskFilter = '', taskGroup = '', taskQuery = '', brush = '', showAllRows = false, gridWeek = '';
 function openTasks(){ current = null; taskFilter = ''; show('tasks'); renderTasks(); }
 function visibleTeachers(){
   const q = DK.latin(taskQuery).trim().toLowerCase();
@@ -1176,15 +1220,18 @@ function renderTasks(){
   if (taskGroup && !groupById(taskGroup)) taskGroup = '';
   const gs = groupsList().filter(g => taskDefs().some(k => k.gid === g.id));
   const tab = (k, label) => `<button type="button" role="tab" data-ttab="${k}" class="${taskTab === k ? 'on' : ''}" aria-selected="${taskTab === k}">${label}</button>`;
+  const undated = taskDefs().filter(k => !k.due).length;
   el.innerHTML = `
     <div class="card">
       <div class="ed-head" style="margin:0 0 12px"><h2><svg class="i"><use href="#i-tasks"/></svg>متابعة المهام</h2>
         <button class="btn btn-ghost btn-sm" id="catBtn" type="button"><svg class="i"><use href="#i-edit"/></svg>قائمة المهام</button></div>
+      <button class="btn btn-ghost btn-sm btn-block" id="weekAdd" type="button" style="margin-bottom:12px"><svg class="i"><use href="#i-plus"/></svg>ضيف مهام هالأسبوع</button>
       <div class="seg sm" role="tablist">${tab('todo', 'شو عليّ هسا')}${tab('grid', 'الجدول')}</div>
       ${gs.length > 1 ? `<div class="chips" style="margin-bottom:10px">
-        <button class="chip${taskGroup ? '' : ' on'}" type="button" data-tgroup="">كل المجموعات</button>
+        <button class="chip${taskGroup ? '' : ' on'}" type="button" data-tgroup="">كل المساقات</button>
         ${gs.map(g => `<button class="chip${taskGroup === g.id ? ' on' : ''}" type="button" data-tgroup="${g.id}">${esc(g.name || 'بدون اسم')}</button>`).join('')}</div>` : ''}
       <input type="search" id="tq" value="${esc(taskQuery)}" placeholder="دوّر على معلم بالاسم أو الرقم" aria-label="دوّر على معلم">
+      ${undated ? `<p class="hint" style="margin:10px 0 0">${undated === 1 ? 'في مهمة وحدة' : `في ${tasksN(undated)}`} بدون موعد تسليم، فما إلها أسبوع. إذا صار إلها موعد، حطّه من «قائمة المهام».</p>` : ''}
     </div>
     <div class="card" id="tbody"></div>`;
   renderTaskBody();
@@ -1212,12 +1259,14 @@ const FILTERS = [
   ['done', 'تم التسليم', x => x.s === 'done']
 ];
 const BULK = { ready: 'سلّمتها كلها', doing: 'كلها صارت جاهزة', fix: 'عدّلتها كلها', todo: 'بلّشت فيها كلها' };
+// Tasks of weeks still to come stay out until work on them starts, so a list entered in advance doesn't crowd it.
 function workItems(){
-  const today = DK.iso(DK.today()), week = dayOffset(7), items = [];
+  const today = DK.iso(DK.today()), now = thisWeek(), sat = DK.weekEnd(now), items = [];
   visibleTeachers().forEach(t => myTasks(t).forEach(k => {
     if (taskGroup && k.gid !== taskGroup) return;
     const s = stateOf(t, k), due = dueOf(t, k), open = s !== 'done';
-    items.push({ t, k, s, due, late: open && !!due && due < today, week: open && !!due && due >= today && due <= week });
+    if (s === 'todo' && taskWeek(t, k) > now) return;
+    items.push({ t, k, s, due, late: open && !!due && due < today, week: open && !!due && due >= today && due <= sat });
   }));
   return items;
 }
@@ -1235,7 +1284,7 @@ function dueText(iso, s){
   if (!d) return '';
   const diff = Math.round((d - DK.today()) / 864e5);
   const rel = s === 'done' ? '' : diff < 0 ? ` · متأخرة ${daysN(-diff)}` : diff === 0 ? ' · اليوم' : diff === 1 ? ' · بكرة' : ` · بعد ${daysN(diff)}`;
-  return `موعدها ${d.getDate()}/${d.getMonth() + 1}${rel}`;
+  return `موعدها ${DK.numDate(d)}${rel}`;
 }
 function workHTML(){
   if (!db.teachers.length) return '<p class="empty">لسا ما في معلمين. ضيفهم من «المعلمين والدفعات».</p>';
@@ -1279,27 +1328,53 @@ function cellBtn(t, k, today = DK.iso(DK.today())){
   const late = s !== 'done' && s !== 'na' && due && due < today;
   return `<button class="c st st-${s}${late ? ' late' : ''}${c.p || c.n || c.g ? ' has' : ''}" type="button" data-c="${t.id}|${k.id}" aria-label="${esc(t.name || '')}، ${esc(k.title)}: ${STATE_LABEL[s]}${late ? '، متأخرة' : ''}">${stIcon(s)}</button>`;
 }
+// The weeks the grid steps through, oldest first, with «بدون موعد» last when some tasks have no date.
+function gridWeeks(){
+  return [...new Set(orderedTasks().filter(k => !taskGroup || k.gid === taskGroup).map(k => weekOfTask(k) || 'none'))];
+}
+// It opens on this week, or the latest week before it, so Sunday morning still shows last week's.
+function pickWeek(ws){
+  if (gridWeek === 'all' || ws.includes(gridWeek)) return gridWeek;
+  const now = thisWeek(), dated = ws.filter(w => w !== 'none');
+  return dated.includes(now) ? now : dated.filter(w => w < now).pop() || dated[0] || ws[0] || 'all';
+}
+const doneFor = (t, ks) => ks.every(k => !groupOn(t, groupById(k.gid)) || ['done', 'na'].includes(stateOf(t, k)));
 function gridHTML(){
-  const ts = visibleTeachers(), today = DK.iso(DK.today()), week = dayOffset(7);
-  const cols = groupsList().filter(g => !taskGroup || g.id === taskGroup).map(g => ({ g, ks: taskDefs().filter(k => k.gid === g.id) })).filter(x => x.ks.length);
+  const ts = visibleTeachers(), today = DK.iso(DK.today()), sat = DK.weekEnd(thisWeek()), nos = weekNumbers();
+  const ws = gridWeeks();
+  gridWeek = pickWeek(ws);
+  const cols = (gridWeek === 'all' ? ws : [gridWeek]).map(w => ({ w, ks: orderedTasks().filter(k => (weekOfTask(k) || 'none') === w && (!taskGroup || k.gid === taskGroup)) })).filter(x => x.ks.length);
+  // With every week showing, a week everybody's done with folds into one column.
+  if (gridWeek === 'all') cols.forEach(c => { c.folded = c.w !== 'none' && db.teachers.every(t => doneFor(t, c.ks)); });
+  const i = ws.indexOf(gridWeek), arrow = (w, cls, label) =>
+    `<button class="icon-btn mv" type="button" data-gweek="${w || ''}" aria-label="${label}" ${w ? '' : 'disabled'}><svg class="i ${cls}"><use href="#i-chev"/></svg></button>`;
+  const nav = `<div class="wnav">
+      ${gridWeek === 'all' ? '' : arrow(ws[i - 1], 'to-r', 'الأسبوع اللي قبله')}
+      <div class="wnav-t"><b>${gridWeek === thisWeek() ? '<span class="wk-tag">هالأسبوع</span>' : ''}${gridWeek === 'all' ? 'كل الأسابيع' : weekName(gridWeek, nos)}</b><small class="num">${gridWeek === 'all' ? weeksN(ws.filter(w => w !== 'none').length) : gridWeek === 'none' ? '' : DK.weekRange(gridWeek)}</small></div>
+      ${gridWeek === 'all' ? '' : arrow(ws[i + 1], 'to-l', 'الأسبوع اللي بعده')}
+      <button class="chip${gridWeek === 'all' ? ' on' : ''}" type="button" data-gweek="${gridWeek === 'all' ? 'back' : 'all'}">كل الأسابيع</button></div>`;
   const bar = `<div class="brush" role="toolbar" aria-label="شو بتعمل الضغطة على المربع">
       <button class="bchip${brush ? '' : ' on'}" type="button" data-brush="" aria-pressed="${!brush}"><svg class="i"><use href="#i-edit"/></svg>تفاصيل</button>
       ${STATES.map(s => `<button class="bchip${brush === s ? ' on' : ''}" type="button" data-brush="${s}" aria-pressed="${brush === s}"><span class="st st-${s}">${stIcon(s)}</span>${STATE_LABEL[s]}</button>`).join('')}
       <button class="bchip" type="button" id="undoBtn" ${undoStack.length ? '' : 'disabled'}><svg class="i"><use href="#i-undo"/></svg>تراجع</button></div>
     <p class="hint">${brush ? `كل ضغطة على مربع بتخلّي المهمة «${STATE_LABEL[brush]}» بتاريخ اليوم.` : 'اختار حالة من فوق وبعدين اضغط عالمربعات، أو اضغط أي مربع لتشوف تفاصيله.'} رقم المهمة فوق بيغيّرها لأكثر من معلم مرة وحدة.</p>`;
-  if (!ts.length) return bar + `<p class="empty">${db.teachers.length ? 'ما في نتائج.' : 'لسا ما في معلمين.'}</p>`;
+  if (!ts.length) return nav + bar + `<p class="empty">${db.teachers.length ? 'ما في نتائج.' : 'لسا ما في معلمين.'}</p>`;
   const gs = (i, j) => i && !j ? ' gs' : '';
-  const head1 = cols.map(({ g, ks }, i) => `<th class="band${gs(i, 0)}" colspan="${ks.length}">${esc(g.name || 'بدون اسم')}</th>`).join('');
-  const head2 = cols.map(({ ks }, i) => ks.map((k, j) =>
-    `<th class="${gs(i, j)}"><button class="colh${k.due && k.due >= today && k.due <= week ? ' soon' : ''}" type="button" data-col="${k.id}" title="${esc(k.title)}${k.due ? ' · ' + esc(shortDate(k.due)) : ''}" aria-label="${esc(k.title || 'بدون اسم')}">${j + 1}</button></th>`).join('')).join('');
+  const head1 = cols.map(({ w, ks, folded }, i) => `<th class="band${gs(i, 0)}" colspan="${folded ? 1 : ks.length}">${esc(weekName(w, nos))}</th>`).join('');
+  const head2 = cols.map(({ w, ks, folded }, i) => folded
+    ? `<th class="${gs(i, 0)}"><button class="colh done" type="button" data-gweek="${w}" title="${esc(weekName(w, nos))}: تم تسليمها كلها" aria-label="${esc(weekName(w, nos))}: تم تسليمها كلها، افتحه">✓</button></th>`
+    : ks.map((k, j) => { const g = groupById(k.gid);
+      return `<th class="${gs(i, j)}"><button class="colh${k.due && k.due >= today && k.due <= sat ? ' soon' : ''}" type="button" data-col="${k.id}" title="${esc(k.title)}${g ? ' · ' + esc(g.name) : ''}" aria-label="${esc(k.title || 'بدون اسم')}">${j + 1}</button></th>`; }).join('')).join('');
   const body = ts.map(t => {
     const p = taskProgress(t);
     return `<tr><th class="rowh" scope="row"><button type="button" data-open="${t.id}"><b>${esc(t.name || 'بدون اسم')}</b><small class="num">${p.done}/${p.total}</small></button></th>${
-      cols.map(({ g, ks }, i) => ks.map((k, j) => groupOn(t, g) ? `<td class="${gs(i, j)}">${cellBtn(t, k, today)}</td>` : `<td class="off${gs(i, j)}"></td>`).join('')).join('')}</tr>`;
+      cols.map(({ ks, folded }, i) => folded
+        ? (ks.some(k => groupOn(t, groupById(k.gid))) ? `<td class="${gs(i, 0)}"><span class="c st st-done" aria-label="تم تسليمها كلها">${stIcon('done')}</span></td>` : `<td class="off${gs(i, 0)}"></td>`)
+        : ks.map((k, j) => groupOn(t, groupById(k.gid)) ? `<td class="${gs(i, j)}">${cellBtn(t, k, today)}</td>` : `<td class="off${gs(i, j)}"></td>`).join('')).join('')}</tr>`;
   }).join('');
-  const legend = `<details class="legend"><summary>أسماء المهام</summary>${cols.map(({ g, ks }) =>
-    `<p>${esc(g.name || 'بدون اسم')}</p><ol>${ks.map(k => `<li>${esc(k.title || '—')}${k.due ? ` <small>· ${shortDate(k.due)}</small>` : ''}</li>`).join('')}</ol>`).join('')}</details>`;
-  return bar + `<div class="mx-wrap"><table class="mx"><thead><tr><th class="corner" rowspan="2">المعلم</th>${head1}</tr><tr>${head2}</tr></thead><tbody>${body}</tbody></table></div>` + legend;
+  const legend = `<details class="legend"${gridWeek === 'all' ? '' : ' open'}><summary>أسماء المهام</summary>${cols.filter(c => !c.folded).map(({ w, ks }) =>
+    `<p>${esc(weekName(w, nos))} <small class="num">${weekWhen(w)}</small></p><ol>${ks.map(k => { const g = groupById(k.gid); return `<li>${esc(k.title || '—')}${g ? ` <small>· ${esc(g.name)}</small>` : ''}</li>`; }).join('')}</ol>`).join('')}</details>`;
+  return nav + bar + `<div class="mx-wrap"><table class="mx"><thead><tr><th class="corner" rowspan="2">المعلم</th>${head1}</tr><tr>${head2}</tr></thead><tbody>${body}</tbody></table></div>` + legend;
 }
 function brushCell(b, t, k){
   if (!applyStates([{ t, k }], brush)) return toast(`هي أصلاً «${STATE_LABEL[brush]}».`);
@@ -1322,6 +1397,8 @@ $('#tasks').addEventListener('click', e => {
   if (b.id === 'firstTasks') return openTaskImport('');
   if (b.id === 'firstXls') return pickTaskFile();
   if (b.id === 'catBtn') return openCatalog();
+  if (b.id === 'weekAdd') return openTaskImport('', DK.weekEnd(thisWeek()));
+  if (d.gweek !== undefined) { gridWeek = d.gweek === 'back' ? '' : d.gweek; return renderTaskBody(); }
   if (d.ttab) { taskTab = d.ttab; return renderTasks(); }
   if (d.tgroup !== undefined) { taskGroup = d.tgroup; showAllRows = false; return renderTasks(); }
   if (d.filter) { taskFilter = d.filter; showAllRows = false; return renderTaskBody(); }
@@ -1378,13 +1455,13 @@ function renderCellSheet(){
   const hist = ['doing', 'ready', 'done', 'fix'].filter(x => d[x] && x !== s).map(x => `${STATE_LABEL[x]} ${shortDate(d[x])}`).join(' · ');
   $('#sheetIn').innerHTML = `
     <h3>${esc(k.title || 'بدون اسم')}</h3>
-    <p class="sub">${esc(t.name || 'بدون اسم')}${g ? ` · ${esc(g.name)}` : ''}</p>
+    <p class="sub">${esc(t.name || 'بدون اسم')}${g ? ` · ${esc(g.name)}` : ''} · ${esc(weekName(taskWeek(t, k)))}</p>
     ${statusGrid('set', s)}
     ${s !== 'todo' && s !== 'na' ? `<div class="field"><label for="cDate">تاريخ «${STATE_LABEL[s]}»</label><input type="date" id="cDate" value="${esc(d[s] || '')}"></div>` : ''}
     ${hist ? `<p class="hist">قبلها: ${hist}</p>` : ''}
     <div class="grid g2">
       <div class="field"><label for="cDue">موعد خاص لهاد المعلم</label><input type="date" id="cDue" value="${esc(c.due || '')}">
-        <small>${k.due ? `موعدها للكل ${shortDate(k.due)}. ` : ''}اتركه فاضي إذا نفس موعد الكل.</small></div>
+        <small>${k.due ? `موعدها للكل ${DK.numDate(k.due)}. ` : ''}اتركه فاضي إذا نفس موعد الكل. المهمة بتضل بأسبوعها.</small></div>
       <div class="field"><label for="cGrade">الدرجة (بتطلع للمعلم)</label><input id="cGrade" value="${esc(c.g || '')}" placeholder="مثال: 9/10" autocomplete="off"></div>
     </div>
     <div class="field"><label for="cNote">ملاحظة للمعلم (اختياري)</label><textarea id="cNote" placeholder="بتطلع تحت المهمة بكشفه">${esc(c.n || '')}</textarea></div>
@@ -1401,7 +1478,7 @@ function renderColSheet(){
   const picked = ts.filter(t => !from || stateOf(t, k) === from);
   $('#sheetIn').innerHTML = `
     <h3>${esc(k.title || 'بدون اسم')}</h3>
-    <p class="sub">${esc(g.name || '')}${k.due ? ` · موعد التسليم ${shortDate(k.due)}` : ''}${taskQuery ? ' · حسب البحث' : ''}</p>
+    <p class="sub">${esc(g.name || '')} · ${esc(weekName(weekOfTask(k)))}${k.due ? ` · موعد التسليم ${DK.numDate(k.due)}` : ''}${taskQuery ? ' · حسب البحث' : ''}</p>
     <div class="chips">${[['', 'الكل', ts.length], ...STATES.filter(s => counts[s]).map(s => [s, STATE_LABEL[s], counts[s]])].map(([s, label, n]) =>
       `<button class="chip${from === s ? ' on' : ''}" type="button" data-from="${s}">${label} <b class="num">${n}</b></button>`).join('')}</div>
     <div class="checklist">${picked.map(t => { const s = stateOf(t, k); return `<label class="check"><input type="checkbox" data-pick="${t.id}" checked><span>${esc(t.name || 'بدون اسم')}</span><span class="st st-${s}" title="${STATE_LABEL[s]}" aria-label="${STATE_LABEL[s]}">${stIcon(s)}</span></label>`; }).join('') || '<p class="empty">ما في حدا.</p>'}</div>
@@ -1421,7 +1498,7 @@ function renderGroupSheet(){
     <h3>لمين «${esc(g.name || 'بدون اسم')}»؟</h3>
     <p class="sub">${tasksN(n)}</p>
     <label class="check setting"><input type="checkbox" id="gAll" ${g.all !== false ? 'checked' : ''}>
-      <span>لكل المعلمين، وللي بتضيفهم بعدين<small>إذا شلتها، المجموعة بتطلع بس للي بتختارهم تحت.</small></span></label>
+      <span>لكل المعلمين، وللي بتضيفهم بعدين<small>إذا شلتها، مهام هالمساق بتطلع بس للي بتختارهم تحت.</small></span></label>
     <div class="checklist">${db.teachers.map(t => `<label class="check"><input type="checkbox" data-gt="${t.id}" ${groupOn(t, g) ? 'checked' : ''}><span>${esc(t.name || 'بدون اسم')}</span></label>`).join('') || '<p class="empty">لسا ما في معلمين.</p>'}</div>
     <div class="mini-acts"><button class="linkish" type="button" data-gtall>اختار الكل</button><button class="linkish" type="button" data-gtnone>شيل الكل</button></div>
     <div class="sheet-foot"><span></span><button class="btn btn-gold btn-sm" type="button" data-close>تم</button></div>`;
@@ -1488,7 +1565,8 @@ sheet.addEventListener('change', e => {
 });
 sheet.addEventListener('close', () => { sheetCtx = null; refreshView(); });
 
-/* ---------- A teacher's tasks (in the editor) ---------- */
+/* ---------- A teacher's tasks (in the editor) ----------
+   Laid out like the teacher's own page: this week, the next one, the earlier weeks, then later on. */
 function renderEdTasks(){
   const el = $('#edTasks');
   if (!el || !current) return;
@@ -1497,18 +1575,29 @@ function renderEdTasks(){
     el.innerHTML = `<h2><svg class="i"><use href="#i-tasks"/></svg>المهام</h2><p class="sent">لسا ما في قائمة مهام. <button class="linkish" type="button" data-gotasks>ضيفها من «المهام»</button></p>`;
     return;
   }
-  const p = taskProgress(t), today = DK.iso(DK.today());
+  const p = taskProgress(t), today = DK.iso(DK.today()), nos = weekNumbers(), many = gs.length > 1;
   const row = k => {
-    const s = stateOf(t, k), c = cellOf(t, k) || {}, due = dueOf(t, k), at = c.d && c.d[s];
+    const s = stateOf(t, k), c = cellOf(t, k) || {}, due = dueOf(t, k), at = c.d && c.d[s], g = groupById(k.gid);
     const late = s !== 'done' && s !== 'na' && due && due < today;
-    const meta = [STATE_LABEL[s] + (at ? ` ${shortDate(at)}` : ''), due && s !== 'done' && s !== 'na' ? `موعدها ${shortDate(due)}${c.due ? ' (خاص فيه)' : ''}` : '', c.g ? `الدرجة ${c.g}` : ''].filter(Boolean).join(' · ');
+    const meta = [many && g ? g.name : '', STATE_LABEL[s] + (at ? ` ${DK.numDate(at)}` : ''), due && s !== 'done' && s !== 'na' ? `موعدها ${DK.numDate(due)}${c.due ? ' (خاص فيه)' : ''}` : '', c.g ? `الدرجة ${c.g}` : ''].filter(Boolean).join(' · ');
     return `<li><button class="trow" type="button" data-c="${t.id}|${k.id}"><span class="st st-${s}${late ? ' late' : ''}" aria-hidden="true">${stIcon(s)}</span>
       <span class="info"><b>${esc(k.title || 'بدون اسم')}</b><small>${esc(meta)}</small>${c.n ? `<small>للمعلم: ${esc(c.n)}</small>` : ''}${c.p ? `<small class="pn">خاص: ${esc(c.p)}</small>` : ''}</span></button></li>`;
   };
+  const plan = DK.weekPlan(assigned(t), k => taskWeek(t, k));
+  const settled = k => ['done', 'na'].includes(stateOf(t, k));
+  const week = (w, open, tag) => `<details class="wk"${open ? ' open' : ''}><summary><span class="wk-t"><b>${tag ? `<span class="wk-tag">${tag}</span>` : ''}${esc(weekName(w.week, nos))}</b><small class="num">${DK.weekRange(w.week)}</small></span>
+      <span class="count num">${w.items.every(settled) ? '✓ كلها' : `${w.items.filter(k => stateOf(t, k) === 'done').length}/${w.items.length}`}</span><svg class="i chev"><use href="#i-chev"/></svg></summary><ul class="tl">${w.items.map(row).join('')}</ul></details>`;
+  const weeks = [
+    plan.now ? week(plan.now, true, 'هالأسبوع') : '',
+    plan.next ? week(plan.next, !plan.now, 'الجاي') : '',
+    ...plan.past.map(w => week(w, !w.items.every(settled))),
+    ...plan.later.map(w => week(w, false)),
+    plan.undated.length ? `<details class="wk"${plan.undated.every(settled) ? '' : ' open'}><summary><span class="wk-t"><b>بدون موعد</b></span><span class="count num">${plan.undated.length}</span><svg class="i chev"><use href="#i-chev"/></svg></summary><ul class="tl">${plan.undated.map(row).join('')}</ul></details>` : ''
+  ].join('');
   el.innerHTML = `
     <div class="head-row"><h2><svg class="i"><use href="#i-tasks"/></svg>المهام</h2><span class="count num">${p.total ? `سلّمنا ${p.done} من ${p.total}` : ''}</span></div>
-    ${gs.length > 1 || gs.some(g => g.all === false) ? `<div class="gtoggles"><span>مجموعاته:</span>${gs.map(g => `<label class="gt"><input type="checkbox" data-tg="${g.id}" ${groupOn(t, g) ? 'checked' : ''}>${esc(g.name || 'بدون اسم')}</label>`).join('')}</div>` : ''}
-    ${gs.filter(g => groupOn(t, g)).map(g => `<h3 class="gname">${esc(g.name || 'بدون اسم')}</h3><ul class="tl">${orderedTasks().filter(k => k.gid === g.id).map(row).join('')}</ul>`).join('') || '<p class="sent">ما إله ولا مجموعة. اختار مجموعاته فوق.</p>'}
+    ${gs.length > 1 || gs.some(g => g.all === false) ? `<div class="gtoggles"><span>مساقاته:</span>${gs.map(g => `<label class="gt"><input type="checkbox" data-tg="${g.id}" ${groupOn(t, g) ? 'checked' : ''}>${esc(g.name || 'بدون اسم')}</label>`).join('')}</div>` : ''}
+    ${weeks || '<p class="sent">ما إله ولا مساق. اختار مساقاته فوق.</p>'}
     <p class="sent">اضغط على أي مهمة لتغيّر حالتها أو تكتب درجتها وملاحظاتها.</p>`;
 }
 
@@ -1518,38 +1607,53 @@ function whoText(g){
   const n = db.teachers.filter(t => groupOn(t, g)).length;
   return g.all !== false && n === db.teachers.length ? 'لكل المعلمين' : `لـ ${n} من ${teachersN(db.teachers.length)}`;
 }
+// The courses on top (their names, and who takes each), then the tasks week by week; past weeks start folded.
+const weekKeyOf = k => weekOfTask(k) || 'none';
 function renderCatalog(){
-  const gs = groupsList(), up = '<svg class="i flip"><use href="#i-chev"/></svg>', down = '<svg class="i"><use href="#i-chev"/></svg>', x = '<svg class="i"><use href="#i-x"/></svg>';
+  const gs = groupsList(), nos = weekNumbers(), now = thisWeek();
+  const up = '<svg class="i flip"><use href="#i-chev"/></svg>', down = '<svg class="i"><use href="#i-chev"/></svg>', x = '<svg class="i"><use href="#i-x"/></svg>';
+  const ks = orderedTasks(), weeks = [...new Set(ks.map(weekKeyOf))];
+  const course = k => gs.length > 1 ? `<select data-kgid="${k.id}" aria-label="مساق المهمة">${gs.map(g => `<option value="${g.id}"${g.id === k.gid ? ' selected' : ''}>${esc(g.name || 'بدون اسم')}</option>`).join('')}</select>` : '';
+  const week = w => { const wk = ks.filter(k => weekKeyOf(k) === w); return `
+    <details class="card wcard"${w === 'none' || w >= now ? ' open' : ''}>
+      <summary><span class="wk-t"><b>${w === now ? '<span class="wk-tag">هالأسبوع</span>' : ''}${esc(weekName(w, nos))}</b>${w === 'none' ? '' : `<small class="num">${DK.weekRange(w)}</small>`}</span>
+        <span class="count">${tasksN(wk.length)}</span><svg class="i chev"><use href="#i-chev"/></svg></summary>
+      <ul class="klist">${wk.map((k, i) => `
+        <li><span class="kn num">${i + 1}</span>
+          <input data-ktitle="${k.id}" value="${esc(k.title)}" placeholder="اسم المهمة" aria-label="اسم المهمة ${i + 1}"${k.title.trim() ? '' : ' class="invalid"'}>
+          <span class="krow2">${course(k)}<input type="date" data-kdue="${k.id}" value="${esc(k.due)}" aria-label="موعد تسليم المهمة ${i + 1}">
+            <span class="kacts"><button class="icon-btn mv" type="button" data-kmove="${k.id}|-1" aria-label="طلّعها لفوق" ${i ? '' : 'disabled'}>${up}</button>
+            <button class="icon-btn mv" type="button" data-kmove="${k.id}|1" aria-label="نزّلها لتحت" ${i < wk.length - 1 ? '' : 'disabled'}>${down}</button>
+            <button class="icon-btn" type="button" data-kdel="${k.id}" aria-label="احذف المهمة">${x}</button></span></span></li>`).join('')}</ul>
+      <button class="btn btn-ghost btn-sm" type="button" data-kadd="${w}"><svg class="i"><use href="#i-plus"/></svg>مهمة</button>
+    </details>`; };
   $('#catalog').innerHTML = `
     <div class="ed-head"><button class="btn btn-ghost btn-sm" id="catBack" type="button"><svg class="i"><use href="#i-back"/></svg>المهام</button></div>
     <div class="card">
       <h2><svg class="i"><use href="#i-tasks"/></svg>قائمة مهام الدبلوم</h2>
-      <p class="lead" style="margin:6px 0 14px">المهام مقسّمة لمجموعات (مثلاً حسب الشهر أو المساق)، وموعد التسليم اختياري. كل مجموعة بتطلع لكل المعلمين، إلا إذا حددت لمين. أي تعديل هون بيتغيّر عند الكل.</p>
+      <p class="lead" style="margin:6px 0 14px">كل مهمة بأسبوع موعد تسليمها (من الأحد للسبت)، وجنبها مساقها. أي تعديل هون بيتغيّر عند الكل.</p>
+      <button class="btn btn-gold btn-sm btn-block" id="catWeekAdd" type="button" style="margin-bottom:8px"><svg class="i"><use href="#i-plus"/></svg>ضيف مهام هالأسبوع</button>
       <div class="toolbar sub" style="margin:0">
-        <button class="btn btn-gold btn-sm" id="pasteBtn" type="button"><svg class="i"><use href="#i-plus"/></svg>ضيف مهام</button>
+        <button class="btn btn-ghost btn-sm" id="pasteBtn" type="button"><svg class="i"><use href="#i-plus"/></svg>ضيف مهام</button>
         <button class="btn btn-ghost btn-sm" id="taskXlsBtn" type="button"><svg class="i"><use href="#i-up"/></svg>استيراد من Excel</button>
       </div>
     </div>
-    ${gs.map((g, gi) => { const ks = taskDefs().filter(k => k.gid === g.id); return `
     <div class="card">
-      <div class="grp-head">
-        <input class="gname" data-gname="${g.id}" value="${esc(g.name)}" placeholder="اسم المجموعة" aria-label="اسم المجموعة">
-        <button class="icon-btn mv" type="button" data-gmove="${g.id}|-1" aria-label="طلّع المجموعة لفوق" ${gi ? '' : 'disabled'}>${up}</button>
-        <button class="icon-btn mv" type="button" data-gmove="${g.id}|1" aria-label="نزّل المجموعة لتحت" ${gi < gs.length - 1 ? '' : 'disabled'}>${down}</button>
-        <button class="icon-btn" type="button" data-gdel="${g.id}" aria-label="احذف المجموعة">${x}</button>
-      </div>
-      <button class="who-btn" type="button" data-gwho="${g.id}"><svg class="i"><use href="#i-user"/></svg>${whoText(g)} · غيّر</button>
-      <ul class="klist">${ks.map((k, i) => `
-        <li><span class="kn num">${i + 1}</span>
-          <input data-ktitle="${k.id}" value="${esc(k.title)}" placeholder="اسم المهمة" aria-label="اسم المهمة ${i + 1}"${k.title.trim() ? '' : ' class="invalid"'}>
-          <span class="krow2"><input type="date" data-kdue="${k.id}" value="${esc(k.due)}" aria-label="موعد تسليم المهمة ${i + 1}">
-            <button class="icon-btn mv" type="button" data-kmove="${k.id}|-1" aria-label="طلّعها لفوق" ${i ? '' : 'disabled'}>${up}</button>
-            <button class="icon-btn mv" type="button" data-kmove="${k.id}|1" aria-label="نزّلها لتحت" ${i < ks.length - 1 ? '' : 'disabled'}>${down}</button>
-            <button class="icon-btn" type="button" data-kdel="${k.id}" aria-label="احذف المهمة">${x}</button></span></li>`).join('')
-        || '<li style="display:block;color:var(--muted);font-size:.9rem">ما في مهام بهالمجموعة.</li>'}</ul>
-      <button class="btn btn-ghost btn-sm" type="button" data-kadd="${g.id}"><svg class="i"><use href="#i-plus"/></svg>مهمة</button>
-    </div>`; }).join('')}
-    <button class="btn btn-ghost btn-block" id="gAdd" type="button"><svg class="i"><use href="#i-plus"/></svg>مجموعة جديدة</button>`;
+      <h2>المساقات</h2>
+      <p class="sent" style="margin:4px 0 6px">اسم المساق بيطلع جنب المهمة بكشف المعلم. كل مساق لكل المعلمين، إلا إذا حددت لمين.</p>
+      ${gs.map((g, gi) => `
+      <div class="crs">
+        <div class="grp-head">
+          <input class="gname" data-gname="${g.id}" value="${esc(g.name)}" placeholder="اسم المساق" aria-label="اسم المساق">
+          <button class="icon-btn mv" type="button" data-gmove="${g.id}|-1" aria-label="طلّع المساق لفوق" ${gi ? '' : 'disabled'}>${up}</button>
+          <button class="icon-btn mv" type="button" data-gmove="${g.id}|1" aria-label="نزّل المساق لتحت" ${gi < gs.length - 1 ? '' : 'disabled'}>${down}</button>
+          <button class="icon-btn" type="button" data-gdel="${g.id}" aria-label="احذف المساق">${x}</button>
+        </div>
+        <button class="who-btn" type="button" data-gwho="${g.id}"><svg class="i"><use href="#i-user"/></svg>${whoText(g)} · ${tasksN(taskDefs().filter(k => k.gid === g.id).length)} · غيّر</button>
+      </div>`).join('') || '<p class="sent">لسا ما في مساقات. بتنعمل لحالها لما تضيف مهام.</p>'}
+      <button class="btn btn-ghost btn-sm" id="gAdd" type="button" style="margin-top:12px"><svg class="i"><use href="#i-plus"/></svg>مساق جديد</button>
+    </div>
+    ${weeks.map(week).join('')}`;
 }
 function moveIn(list, item, dir, same){
   const i = list.indexOf(item);
@@ -1566,7 +1670,7 @@ function dropTask(k){
 function leaveCatalog(){
   // A task left without a name or any progress is dropped instead of reaching teachers as a blank line.
   taskDefs().filter(k => !k.title.trim() && !usedBy(k)).forEach(dropTask);
-  groupsList().forEach((g, i) => { if (!g.name.trim()) g.name = `مجموعة ${i + 1}`; });
+  groupsList().forEach((g, i) => { if (!g.name.trim()) g.name = `مساق ${i + 1}`; });
   openTasks();
 }
 $('#catalog').addEventListener('input', e => {
@@ -1575,7 +1679,10 @@ $('#catalog').addEventListener('input', e => {
   if (d.ktitle) { taskById(d.ktitle).title = e.target.value; e.target.classList.toggle('invalid', !e.target.value.trim()); setDirty(true); }
 });
 $('#catalog').addEventListener('change', e => {
-  if (e.target.dataset.kdue) { taskById(e.target.dataset.kdue).due = e.target.value; setDirty(true); }
+  const d = e.target.dataset;
+  // A new date can move the task to another week, so the list is laid out again.
+  if (d.kdue) { taskById(d.kdue).due = e.target.value; setDirty(true); renderCatalog(); }
+  if (d.kgid) { taskById(d.kgid).gid = e.target.value; setDirty(true); }
 });
 $('#catalog').addEventListener('click', e => {
   const b = e.target.closest('button');
@@ -1583,18 +1690,22 @@ $('#catalog').addEventListener('click', e => {
   const d = b.dataset;
   if (b.id === 'catBack') return leaveCatalog();
   if (b.id === 'pasteBtn') return openTaskImport('');
+  if (b.id === 'catWeekAdd') return openTaskImport('', DK.weekEnd(thisWeek()));
   if (b.id === 'taskXlsBtn') return pickTaskFile();
   if (b.id === 'gAdd') {
-    const g = { id: newId(groupsList()), name: `مجموعة ${groupsList().length + 1}`, all: true };
+    const g = { id: newId(groupsList()), name: `مساق ${groupsList().length + 1}`, all: true };
     groupsList().push(g); setDirty(true); renderCatalog();
     const inp = document.querySelector(`[data-gname="${g.id}"]`); inp.focus(); inp.select();
     return;
   }
   if (d.gwho) return openGroupSheet(d.gwho);
   if (d.gmove) { const [id, dir] = d.gmove.split('|'); moveIn(groupsList(), groupById(id), +dir, () => true); setDirty(true); return renderCatalog(); }
-  if (d.kmove) { const [id, dir] = d.kmove.split('|'), k = taskById(id); moveIn(taskDefs(), k, +dir, x => x.gid === k.gid); setDirty(true); return renderCatalog(); }
+  if (d.kmove) { const [id, dir] = d.kmove.split('|'), k = taskById(id); moveIn(taskDefs(), k, +dir, x => weekKeyOf(x) === weekKeyOf(k)); setDirty(true); return renderCatalog(); }
   if (d.kadd) {
-    const k = { id: newId(taskDefs()), gid: d.kadd, title: '', due: '' };
+    // A new task in a week: due on its Saturday, in the course of the week's last task.
+    const same = orderedTasks().filter(k => weekKeyOf(k) === d.kadd), last = same[same.length - 1];
+    if (!groupsList().length) groupsList().push({ id: newId(groupsList()), name: 'مساق 1', all: true });
+    const k = { id: newId(taskDefs()), gid: last ? last.gid : groupsList()[0].id, title: '', due: d.kadd === 'none' ? '' : DK.weekEnd(d.kadd) };
     taskDefs().push(k); setDirty(true); renderCatalog();
     document.querySelector(`[data-ktitle="${k.id}"]`).focus();
     return;
@@ -1606,7 +1717,7 @@ $('#catalog').addEventListener('click', e => {
   }
   if (d.gdel) {
     const g = groupById(d.gdel), ks = taskDefs().filter(k => k.gid === g.id);
-    if (!confirm(`حذف مجموعة «${g.name || 'بدون اسم'}»${ks.length ? ` مع مهامها (${ks.length}) وحالاتها عند كل المعلمين` : ''}؟`)) return;
+    if (!confirm(`حذف مساق «${g.name || 'بدون اسم'}»${ks.length ? ` مع مهامه (${ks.length}) وحالاتها عند كل المعلمين` : ''}؟`)) return;
     ks.forEach(dropTask);
     db.taskGroups = groupsList().filter(x => x !== g);
     db.teachers.forEach(t => { if (t.groups) delete t.groups[g.id]; });
@@ -1662,11 +1773,20 @@ function parseTasks(text){
   return out;
 }
 
-let timp = { text: '', gid: null };
-function openTaskImport(text){
+// due: the date for lines that don't end in one; «ضيف مهام هالأسبوع» sets it to this Saturday.
+let timp = { text: '', gid: null, due: '' }, timpFrom = '';
+function openTaskImport(text, due){
+  // Opened afresh it starts without a date, unless it's this week's tasks; from its own Excel button it keeps it.
+  const fresh = $('#taskImport').hidden;
+  if (fresh) timpFrom = $('#tasks').hidden ? 'catalog' : 'tasks';
   timp.text = text || '';
+  if (due !== undefined || fresh) timp.due = due || '';
   if (timp.gid === null || (timp.gid && !groupById(timp.gid))) { const gs = groupsList(); timp.gid = gs.length ? gs[gs.length - 1].id : ''; }
   show('taskImport'); renderTaskImport();
+}
+function timpDueNote(){
+  const w = DK.weekOf(timp.due);
+  return w ? `${weekName(w, weekNumbers([w]))} · ${weekWhen(w)}. ` : '';
 }
 function renderTaskImport(){
   const gs = groupsList();
@@ -1674,38 +1794,42 @@ function renderTaskImport(){
     <div class="ed-head"><button class="btn btn-ghost btn-sm" id="timpBack" type="button"><svg class="i"><use href="#i-back"/></svg>رجوع</button></div>
     <div class="card">
       <h2><svg class="i"><use href="#i-plus"/></svg>ضيف مهام</h2>
-      <p class="lead" style="margin:6px 0 14px">اكتب أو الصق كل مهمة بسطر، وموعد التسليم بآخر السطر إذا بدك (مثل 30/10). لتبلّش مجموعة جديدة، اكتب اسمها لحاله بسطر وبعده نقطتين، مثل «الشهر الثاني:».</p>
+      <p class="lead" style="margin:6px 0 14px">الصق كل مهمة بسطر. قبل مهام كل مساق اكتب اسمه لحاله بسطر وبعده نقطتين، مثل «الخبرة المدرسية:». ولو مهمة إلها موعد غير، اكتبه بآخر سطرها (مثل 30/10).</p>
       <div class="grid g2">
-        <div class="field"><label for="timpGroup">المهام بتنحط بمجموعة</label>
-          <select id="timpGroup">${gs.map(g => `<option value="${g.id}"${timp.gid === g.id ? ' selected' : ''}>${esc(g.name || 'بدون اسم')}</option>`).join('')}<option value=""${timp.gid ? '' : ' selected'}>مجموعة جديدة…</option></select></div>
-        <div class="field" id="timpNewWrap"${timp.gid ? ' hidden' : ''}><label for="timpNew">اسم المجموعة الجديدة</label><input id="timpNew" placeholder="مثال: الشهر الأول"></div>
+        <div class="field"><label for="timpDue">موعد التسليم</label><input type="date" id="timpDue" value="${esc(timp.due)}">
+          <small id="timpDueNote">${timpDueNote()}للمهام اللي ما إلها موعد بآخر سطرها.</small></div>
+        <div class="field"><label for="timpGroup">المساق</label>
+          <select id="timpGroup">${gs.map(g => `<option value="${g.id}"${timp.gid === g.id ? ' selected' : ''}>${esc(g.name || 'بدون اسم')}</option>`).join('')}<option value=""${timp.gid ? '' : ' selected'}>مساق جديد…</option></select>
+          <small>للمهام اللي ما فوقها اسم مساق.</small></div>
+        <div class="field" id="timpNewWrap"${timp.gid ? ' hidden' : ''}><label for="timpNew">اسم المساق الجديد</label><input id="timpNew" placeholder="مثال: الخبرة المدرسية"></div>
       </div>
       <div class="field" style="margin-top:12px"><label for="timpText">المهام</label>
-        <textarea id="timpText" rows="9" placeholder="المهمة الأسبوعية 1: تحليل المحتوى  30/10&#10;المهمة الأسبوعية 2: خطة درس  6/11&#10;&#10;المقال:&#10;المقال التأملي  20/12">${esc(timp.text)}</textarea></div>
+        <textarea id="timpText" rows="9" placeholder="أساسيات التعلم والتعليم:&#10;أثر بناء العلاقات الإيجابية في بيئة التّعلم (مهمة منتدى نقاشي)&#10;أثر بناء العلاقات الإيجابية في بيئة التّعلم&#10;&#10;الخبرة المدرسية:&#10;التّخطيط لدمج أصحاب العلاقة في بيئة التّعلم">${esc(timp.text)}</textarea></div>
       <button class="btn btn-ghost btn-sm" id="timpXls" type="button"><svg class="i"><use href="#i-up"/></svg>جيبها من ملف Excel</button>
       <div id="timpPreview"></div>
     </div>`;
   renderTimpPreview();
 }
+// A task is already there when its course has one by the same name in the same week.
 function timpItems(){
   const sel = timp.gid ? groupById(timp.gid) : null;
   const fallback = (sel ? sel.name.trim() : (($('#timpNew') || {}).value || '').trim()) || 'المهام';
   const seen = new Set();
   return parseTasks(timp.text).map(x => {
-    const groupName = x.group || fallback;
+    const groupName = x.group || fallback, due = x.due || timp.due, week = DK.weekOf(due);
     const g = !x.group && sel ? sel : groupsList().find(y => y.name.trim() === groupName) || null;
-    const key = groupName + '\n' + x.title;
-    const dup = seen.has(key) || !!(g && taskDefs().some(k => k.gid === g.id && k.title.trim() === x.title));
+    const key = groupName + '\n' + x.title + '\n' + week;
+    const dup = seen.has(key) || !!(g && taskDefs().some(k => k.gid === g.id && k.title.trim() === x.title && weekOfTask(k) === week));
     seen.add(key);
-    return { ...x, groupName, g, dup };
+    return { ...x, due, week, groupName, g, dup };
   });
 }
 function renderTimpPreview(){
-  const items = timpItems(), fresh = items.filter(x => !x.dup).length;
+  const items = timpItems(), fresh = items.filter(x => !x.dup).length, nos = weekNumbers(items.filter(x => !x.dup).map(x => x.week));
   $('#timpPreview').innerHTML = items.length ? `
     <div class="imp-wrap" style="margin-top:14px"><table class="imp-table">
-      <thead><tr><th>المجموعة</th><th>المهمة</th><th>الموعد</th></tr></thead>
-      <tbody>${items.map(x => `<tr><td>${esc(x.groupName)}${x.g ? '' : '<small>جديدة</small>'}</td><td>${esc(x.title)}${x.dup ? '<small>موجودة، ما رح تتكرر</small>' : ''}</td><td class="num">${x.due ? shortDate(x.due) : '—'}</td></tr>`).join('')}</tbody>
+      <thead><tr><th>المساق</th><th>المهمة</th><th>الأسبوع</th></tr></thead>
+      <tbody>${items.map(x => `<tr><td>${esc(x.groupName)}${x.g ? '' : '<small>جديد</small>'}</td><td>${esc(x.title)}${x.dup ? '<small>موجودة، ما رح تتكرر</small>' : ''}</td><td class="num">${x.week ? `${weekName(x.week, nos)}<small>${DK.numDate(x.due)}</small>` : '—'}</td></tr>`).join('')}</tbody>
     </table></div>
     <button class="btn btn-gold btn-block" id="timpGo" type="button" style="margin-top:14px" ${fresh ? '' : 'disabled'}>${fresh ? `ضيف ${tasksN(fresh)}` : 'كل هالمهام موجودة'}</button>`
     : '<p class="sent">بتطلع المهام هون أول ما تكتبها.</p>';
@@ -1719,8 +1843,10 @@ function doTaskImport(){
     if (!g) { g = { id: newId(groupsList()), name: x.groupName, all: true }; groupsList().push(g); made.set(x.groupName, g); }
     taskDefs().push({ id: newId(taskDefs()), gid: g.id, title: x.title, due: x.due });
   });
-  timp = { text: '', gid: null };
-  setDirty(true); openCatalog();
+  timp = { text: '', gid: null, due: '' };
+  setDirty(true);
+  // Back where it started: the tasks screen opens on the week just added.
+  if (timpFrom === 'tasks') { gridWeek = items[0].week || 'none'; openTasks(); } else openCatalog();
   toast(`ضفنا ${tasksN(items.length)}. لما تخلص اضغط «احفظ وانشر».`);
 }
 $('#taskImport').addEventListener('input', e => {
@@ -1728,13 +1854,14 @@ $('#taskImport').addEventListener('input', e => {
   if (e.target.id === 'timpText' || e.target.id === 'timpNew') renderTimpPreview();
 });
 $('#taskImport').addEventListener('change', e => {
+  if (e.target.id === 'timpDue') { timp.due = e.target.value; $('#timpDueNote').textContent = timpDueNote() + 'للمهام اللي ما إلها موعد بآخر سطرها.'; return renderTimpPreview(); }
   if (e.target.id !== 'timpGroup') return;
   timp.gid = e.target.value; $('#timpNewWrap').hidden = !!timp.gid; renderTimpPreview();
 });
 $('#taskImport').addEventListener('click', e => {
   const b = e.target.closest('button');
   if (!b) return;
-  if (b.id === 'timpBack') return groupsList().length ? openCatalog() : openTasks();
+  if (b.id === 'timpBack') return timpFrom === 'catalog' && groupsList().length ? openCatalog() : openTasks();
   if (b.id === 'timpXls') return pickTaskFile();
   if (b.id === 'timpGo') doTaskImport();
 });
@@ -1777,9 +1904,10 @@ function publicRecord(t){
     payments: t.payments.map(p => ({ date: p.date, amount: DK.num(p.amount), note: String(p.note || '').trim() })) };
   // Only this teacher's tasks, and only what they may see: no private notes, nothing marked «مش مطلوبة».
   // Left out entirely when there are none, so statements without tasks stay exactly as they were.
+  const nos = weekNumbers();
   const tasks = myTasks(t).filter(k => String(k.title || '').trim()).map(k => {
-    const c = cellOf(t, k) || {}, s = stateOf(t, k), g = groupById(k.gid);
-    return { group: g ? String(g.name || '').trim() : '', title: k.title.trim(), due: dueOf(t, k), status: s,
+    const c = cellOf(t, k) || {}, s = stateOf(t, k), g = groupById(k.gid), week = taskWeek(t, k);
+    return { group: g ? String(g.name || '').trim() : '', title: k.title.trim(), due: dueOf(t, k), week, weekNo: nos.get(week) || 0, status: s,
       at: (c.d && c.d[s]) || '', grade: String(c.g || '').trim(), note: String(c.n || '').trim() };
   });
   if (tasks.length) rec.tasks = tasks;
@@ -2041,7 +2169,8 @@ $('#exportBtn').onclick = async () => {
   XLSX.utils.book_append_sheet(wb, ws, 'المعلمين');
   const ks = orderedTasks();
   if (ks.length) {
-    const heads = ks.map(k => { const g = groupById(k.gid); return `${g ? g.name.trim() + ': ' : ''}${k.title.trim()}`; });
+    const nos = weekNumbers();
+    const heads = ks.map(k => { const g = groupById(k.gid); return `${weekName(weekOfTask(k), nos)} · ${g ? g.name.trim() + ': ' : ''}${k.title.trim()}`; });
     const cols = heads.map((h, i) => heads.indexOf(h) === i ? h : `${h} (${i + 1})`); // same name twice keeps both columns
     const trows = db.teachers.map(t => {
       const on = new Set(assigned(t).map(k => k.id)), p = taskProgress(t), r = { 'الاسم': t.name, 'المسلّمة': `${p.done}/${p.total}` };

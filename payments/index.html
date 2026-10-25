@@ -253,6 +253,39 @@ input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(191,
 .s-ready .tstate{color:var(--gold-hi);background:rgba(243,223,162,.1);border-color:rgba(243,223,162,.4)}
 .s-done .tstate{color:var(--gold-hi);background:rgba(191,149,63,.12);border-color:rgba(191,149,63,.3)}
 .s-fix .tstate{color:var(--late);background:rgba(255,140,90,.1);border-color:rgba(255,180,138,.4)}
+.tcourse{display:inline-block;margin:3px 0 1px;padding:0 9px;border-radius:99px;font-size:.74rem;line-height:1.7;color:var(--muted);border:1px solid var(--field-line)}
+
+/* Tasks by week */
+.tweek{margin-top:16px;padding:14px 14px 2px;border-radius:var(--r-sm);background:var(--field);border:1px solid rgba(191,149,63,.4)}
+.wk-head{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px}
+.wk-tag{padding:1px 10px;border-radius:99px;font-size:.76rem;font-weight:700;color:#1d1406;background:var(--foil);background-size:200% 100%}
+.wk-head b{font-family:var(--f-display);font-weight:700;font-size:1.05rem}
+.wk-range{color:var(--muted);font-size:.82rem;font-weight:400;font-family:var(--f-body)}
+.wk-due{display:flex;gap:8px;align-items:flex-start;margin-top:8px;font-size:.86rem;line-height:1.65;color:var(--gold-hi)}
+.wk-due > svg{flex-shrink:0;margin-top:4px}
+.wk-due.ok,.wk-due.soft{color:var(--muted)}
+.wk-due.ok > svg{color:var(--gold-hi)}
+.tweek .tlist{margin-top:6px}
+.tsec{margin-top:20px;font-size:.8rem;font-weight:600;color:var(--faint)}
+.tsec + .tgroup{margin-top:6px}
+.tgroup .wk-sum{display:flex;flex-direction:column;min-width:0;line-height:1.45}
+.tgroup .wk-sum .wk-range{font-size:.78rem}
+.wk-lbl{font-family:var(--f-body);font-weight:600;font-size:.74rem;color:var(--gold-hi)}
+.wdots{display:inline-flex;gap:3px;margin-inline-start:auto}
+.wdots i{width:7px;height:7px;border-radius:50%;background:rgba(245,239,224,.2)}
+.wdots .s-done{background:var(--gold)}
+.wdots .s-ready{background:var(--gold-hi)}
+.wdots .s-doing{background:rgba(191,149,63,.55)}
+.wdots .s-fix{background:var(--late)}
+.tgroup summary .wdots + .gc{margin-inline-start:0}
+.wk-sub{margin-top:12px;font-weight:600;font-size:.88rem}
+.wk-sub small{color:var(--muted);font-weight:400;font-size:.8rem;margin-inline-start:6px}
+.wstrip{display:flex;flex-wrap:wrap;gap:5px;margin-top:14px}
+.wstrip button{min-width:28px;height:28px;padding:0 5px;border-radius:8px;border:1px solid var(--field-line);background:transparent;color:var(--faint);font:inherit;font-size:.76rem;font-variant-numeric:tabular-nums;cursor:pointer}
+.wstrip .w-done{background:rgba(191,149,63,.16);border-color:rgba(191,149,63,.35);color:var(--gold-hi)}
+.wstrip .w-open{border-color:rgba(255,180,138,.55);color:var(--late)}
+.wstrip .w-now{background:var(--foil);background-size:200% 100%;border:0;color:#1d1406;font-weight:700}
+.wstrip button:focus-visible{outline:2px solid var(--gold-hi);outline-offset:2px}
 
 /* Notes */
 .notes p{white-space:pre-line;color:var(--ink);margin-top:8px;padding:12px 14px;border-radius:var(--r-sm);background:rgba(0,20,17,.3);border-inline-start:3px solid var(--gold)}
@@ -342,7 +375,7 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
 <script>
 // GitHub Pages lets browsers keep a page for ~10 minutes. If a newer version is live, reload once to pick it up,
 // so a teacher never sees new data through old code. Bump APP_VERSION here and in payments/version.json together.
-const APP_VERSION = 6;
+const APP_VERSION = 7;
 fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(({ v }) => {
   let seen = null; try { seen = sessionStorage.getItem('dk-reloaded'); } catch (e) {}
   if (v > APP_VERSION && seen !== String(v)) {
@@ -351,7 +384,7 @@ fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json())
   }
 }).catch(() => {});
 </script>
-<script src="core.js?v=6"></script>
+<script src="core.js?v=7"></script>
 <script>
 const DEMO = new URLSearchParams(location.search).has('demo');
 const WHATSAPP = 'https://wa.me/962779283635';
@@ -443,59 +476,108 @@ async function fetchAccount({ phone, ministry, pass }){
   catch (e) { return { ok: false, error: 'invalid' }; }
 }
 
-/* ---------- Tasks ---------- */
+/* ---------- Tasks ----------
+   Laid out by the diploma's weeks: this week on top, then the next one, the earlier weeks (one line each once
+   they're all handed in), and whatever comes later. */
 const TASK_ICON = { todo: '', doing: 'i-pen', ready: 'i-doc', done: 'i-check', fix: 'i-redo' };
-const dayMonth = (d, today) => d.getFullYear() === today.getFullYear() ? `${d.getDate()} ${MONTHS[d.getMonth()]}` : shortDate(d);
+const numDate = DK.numDate;
 function untilWords(d, today){
   const diff = Math.round((d - today) / 864e5);
   return diff === 0 ? 'اليوم' : diff === 1 ? 'غدًا' : diff > 1 ? `بعد ${daysWord(diff)}` : '';
 }
-function taskRow(x, today){
+function tasksWord(n){
+  if (n === 1) return 'مهمة واحدة';
+  if (n === 2) return 'مهمتان';
+  return n <= 10 ? `${n} مهام` : `${n} مهمة`;
+}
+function taskRow(x, today, courses){
   const at = parseISO(x.at), due = parseISO(x.due);
   const parts = [];
   let soon = false;
-  if (x.status === 'done') parts.push(at ? `تم تسليمها على المنصة بتاريخ ${dayMonth(at, today)}` : 'تم تسليمها على المنصة');
+  if (x.status === 'done') parts.push(at ? `تم تسليمها على المنصة بتاريخ ${numDate(at)}` : 'تم تسليمها على المنصة');
   else {
-    if (x.status === 'ready' && at) parts.push(`تم تجهيزها بتاريخ ${dayMonth(at, today)}`);
-    if (due) {
+    if (x.status === 'ready' && at) parts.push(`تم تجهيزها بتاريخ ${numDate(at)}`);
+    // The week already says when it's due; only a date of its own (an extension) is spelled out.
+    if (!due) parts.push('موعد تسليمها لسا ما تحدد');
+    else if (!x.week || x.due !== DK.weekEnd(x.week)) {
       const w = untilWords(due, today);
       soon = !!w && due - today <= 7 * 864e5;
-      parts.push(`موعد التسليم ${DAYS[due.getDay()]} ${dayMonth(due, today)}${w ? ` (${w})` : ''}`);
+      parts.push(`موعد التسليم ${DAYS[due.getDay()]} ${numDate(due)}${w ? ` (${w})` : ''}`);
     }
   }
   const icon = TASK_ICON[x.status];
   return `<li class="s-${x.status}"><span class="tic" aria-hidden="true">${icon ? `<svg class="i"><use href="#${icon}"/></svg>` : ''}</span>
-    <span class="tinfo"><b>${esc(x.title)}</b>${parts.length ? `<small${soon ? ' class="soon"' : ''}>${parts.join(' · ')}</small>` : ''}${x.grade ? `<span class="grade">الدرجة: <bdi>${esc(x.grade)}</bdi></span>` : ''}${x.note ? `<small class="tnote">${esc(x.note)}</small>` : ''}</span>
+    <span class="tinfo"><b>${esc(x.title)}</b>${courses && x.group ? `<span class="tcourse">${esc(x.group)}</span>` : ''}${parts.length ? `<small${soon ? ' class="soon"' : ''}>${parts.join(' · ')}</small>` : ''}${x.grade ? `<span class="grade">الدرجة: <bdi>${esc(x.grade)}</bdi></span>` : ''}${x.note ? `<small class="tnote">${esc(x.note)}</small>` : ''}</span>
     <span class="tstate">${DK.TASK_SHOWN[x.status]}</span></li>`;
 }
+const weekNo = w => Math.max(...w.items.map(x => x.weekNo));
+const weekName = w => weekNo(w) ? `الأسبوع ${weekNo(w)}` : 'أسبوع';
+const weekDone = w => w.items.every(x => x.status === 'done');
+const dots = items => `<span class="wdots" aria-hidden="true">${items.map(x => `<i class="s-${x.status}"></i>`).join('')}</span>`;
 function tasksCard(list, today){
   if (!list.length) return '';
-  const c = DK.taskCounts(list);
+  const courses = new Set(list.map(x => x.group).filter(Boolean)).size > 1;
+  const rows = items => `<ul class="tlist">${items.map(x => taskRow(x, today, courses)).join('')}</ul>`;
+  const plan = DK.weekPlan(list, x => x.week, today);
+  // The count leaves out weeks still to come, so it reads «3 من 6» and not «3 من 60» when the list is in early.
+  const counted = list.filter(x => DK.inPlay(x.week, x.status, today));
+  const c = DK.taskCounts(counted);
   const w = n => (n / c.total * 100).toFixed(2);
-  const groups = [];
-  list.forEach(x => { let g = groups.find(y => y.name === x.group); if (!g) groups.push(g = { name: x.group, items: [] }); g.items.push(x); });
-  const next = list.filter(x => x.status !== 'done' && x.due && parseISO(x.due) >= today).sort((x, y) => (x.due < y.due ? -1 : x.due > y.due ? 1 : 0))[0];
-  let head = '';
-  if (c.done === c.total) head = `<div class="tnext all"><svg class="i"><use href="#i-check"/></svg><div><b>تم تسليم جميع مهامك على المنصة</b><small>إنت ركّز على صفك، والباقي علينا.</small></div></div>`;
-  else if (next) {
-    const d = parseISO(next.due), u = untilWords(d, today);
-    head = `<div class="tnext"><svg class="i"><use href="#i-cal"/></svg><div><span>أقرب موعد تسليم</span><b>${esc(next.title)}</b><small>${longDate(d)}${u ? ` · ${u}` : ''}</small></div></div>`;
-  }
   const legend = [['done', 'تم التسليم'], ['ready', 'جاهزة'], ['doing', 'قيد التجهيز'], ['fix', 'قيد التعديل'], ['todo', 'قيد الانتظار']].filter(([s]) => c[s]);
-  const rows = g => `<ul class="tlist">${g.items.map(x => taskRow(x, today)).join('')}</ul>`;
-  const body = groups.length > 1
-    ? groups.map(g => {
-        const done = g.items.filter(x => x.status === 'done').length, full = done === g.items.length;
-        return `<details class="tgroup"${full ? '' : ' open'}><summary><span>${esc(g.name || 'مهام')}</span><span class="gc num${full ? ' full' : ''}">${full ? '✓ تم تسليمها كلها' : `${done} من ${g.items.length}`}</span><svg class="i chev"><use href="#i-chev"/></svg></summary>${rows(g)}</details>`;
-      }).join('')
-    : `<div style="margin-top:12px">${rows(groups[0])}</div>`;
+  const nextWeek = DK.iso(new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 7));
+
+  // This week (or, in a week without tasks, the next one that has them), open.
+  const focus = (wk, tag) => {
+    const end = parseISO(DK.weekEnd(wk.week)), u = untilWords(end, today), done = weekDone(wk);
+    const due = wk.week === plan.thisWeek
+      ? done ? `<div class="wk-due ok"><svg class="i"><use href="#i-check"/></svg><span>تم تسليم مهام هالأسبوع كلها</span></div>`
+        : `<div class="wk-due"><svg class="i"><use href="#i-cal"/></svg><span>آخر موعد للتسليم: ${DAYS[end.getDay()]} <span class="num">${numDate(end)}</span>، الساعة 11:59 بالليل${u ? ` · ${u}` : ''}</span></div>`
+      : `<div class="wk-due soft"><svg class="i"><use href="#i-cal"/></svg><span>بتنزل يوم الأحد <span class="num">${numDate(wk.week)}</span>، وموعد تسليمها السبت <span class="num">${numDate(end)}</span></span></div>`;
+    return `<section class="tweek" id="wk-${wk.week}"><div class="wk-head"><span class="wk-tag">${tag}</span><b>${weekName(wk)}</b><span class="wk-range num">${DK.weekRange(wk.week)}</span></div>${due}${rows(wk.items)}</section>`;
+  };
+  // A week as one line that opens; earlier weeks stay open until all their tasks are handed in.
+  const fold = (wk, open, label) => `<details class="tgroup" id="wk-${wk.week}"${open ? ' open' : ''}><summary>
+      <span class="wk-sum">${label ? `<small class="wk-lbl">${label}</small>` : ''}<span>${weekName(wk)}</span><small class="wk-range num">${DK.weekRange(wk.week)}</small></span>
+      ${dots(wk.items)}<span class="gc num${weekDone(wk) ? ' full' : ''}">${weekDone(wk) ? '✓ تم تسليمها كلها' : wk.week > plan.thisWeek && wk.items.every(x => x.status === 'todo') ? tasksWord(wk.items.length) : `${wk.items.filter(x => x.status === 'done').length} من ${wk.items.length}`}</span>
+      <svg class="i chev"><use href="#i-chev"/></svg></summary>${rows(wk.items)}</details>`;
+
+  let body = '';
+  if (plan.now) body += focus(plan.now, 'هالأسبوع');
+  else {
+    const allDone = c.total && c.done === c.total;
+    body += `<div class="tnext${allDone ? ' all' : ''}"><svg class="i"><use href="#${allDone ? 'i-check' : 'i-cal'}"/></svg><div>${allDone ? '<b>تم تسليم جميع مهامك حتى الآن</b><small>ما في مهام هالأسبوع لحد الآن. إنت ركّز على صفك، والباقي علينا.</small>' : '<b>ما في مهام هالأسبوع لحد الآن</b>'}</div></div>`;
+    if (plan.next) body += focus(plan.next, plan.next.week === nextWeek ? 'الأسبوع الجاي' : 'المهام الجاية');
+  }
+  if (plan.now && plan.next) body += fold(plan.next, false, plan.next.week === nextWeek ? 'الأسبوع الجاي' : 'المهام الجاية');
+  if (plan.past.length) body += `<p class="tsec">الأسابيع السابقة</p>` + plan.past.map(wk => fold(wk, !weekDone(wk))).join('');
+  const later = [...plan.later.map(wk => `<p class="wk-sub" id="wk-${wk.week}">${weekName(wk)} <small class="num">${DK.weekRange(wk.week)}</small></p>${rows(wk.items)}`),
+    plan.undated.length ? `${plan.later.length ? '<p class="wk-sub">موعدها لسا ما تحدد</p>' : ''}${rows(plan.undated)}` : ''].join('');
+  if (later) {
+    const n = plan.later.reduce((s, wk) => s + wk.items.length, 0) + plan.undated.length;
+    body += `<details class="tgroup later"><summary><span class="wk-sum"><span>${plan.later.length ? 'لاحقًا' : 'موعدها لسا ما تحدد'}</span></span><span class="gc num">${tasksWord(n)}</span><svg class="i chev"><use href="#i-chev"/></svg></summary>${later}</details>`;
+  }
+
+  // Once the diploma is a few weeks in, a strip of its weeks to see it all at a glance and jump to any of them.
+  const strip = plan.weeks.length >= 4 ? `<div class="wstrip" aria-label="أسابيع الدبلوم">${plan.weeks.map(wk => {
+      const cls = wk.week === plan.thisWeek ? 'w-now' : wk.week > plan.thisWeek ? 'w-ahead' : weekDone(wk) ? 'w-done' : 'w-open';
+      return `<button type="button" class="${cls}" data-wk="${wk.week}" title="${weekName(wk)} · ${DK.weekRange(wk.week).replace(/\u200F/g, '')}">${weekNo(wk) || '•'}</button>`;
+    }).join('')}</div>` : '';
+
   return `<div class="card tasks enter">
-      <div class="head-row"><h2><svg class="i"><use href="#i-tasks"/></svg>مهامي</h2><span class="count">تم تسليم <b class="num">${c.done}</b> من <span class="num">${c.total}</span></span></div>
-      <div class="tbar" role="progressbar" aria-valuenow="${c.done}" aria-valuemin="0" aria-valuemax="${c.total}" aria-label="المهام المسلّمة"><i class="s-done" data-w="${w(c.done)}"></i><i class="s-ready" data-w="${w(c.ready)}"></i><i class="s-doing" data-w="${w(c.doing + c.fix)}"></i></div>
-      <ul class="tlegend">${legend.map(([s, label]) => `<li class="s-${s}"><i></i>${label} <b class="num">${c[s]}</b></li>`).join('')}</ul>
-      ${head}
+      <div class="head-row"><h2><svg class="i"><use href="#i-tasks"/></svg>مهامي</h2>${c.total ? `<span class="count">تم تسليم <b class="num">${c.done}</b> من <span class="num">${c.total}</span></span>` : ''}</div>
+      ${c.total ? `<div class="tbar" role="progressbar" aria-valuenow="${c.done}" aria-valuemin="0" aria-valuemax="${c.total}" aria-label="المهام المسلّمة"><i class="s-done" data-w="${w(c.done)}"></i><i class="s-ready" data-w="${w(c.ready)}"></i><i class="s-doing" data-w="${w(c.doing + c.fix)}"></i></div>
+      <ul class="tlegend">${legend.map(([s, label]) => `<li class="s-${s}"><i></i>${label} <b class="num">${c[s]}</b></li>`).join('')}</ul>` : ''}
+      ${strip}
       ${body}
     </div>`;
+}
+// A tap on the strip opens that week wherever it sits and brings it into view.
+function jumpToWeek(week){
+  const el = document.getElementById('wk-' + week);
+  if (!el) return;
+  const box = el.closest('details');
+  if (box) box.open = true;
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 /* ---------- Account ---------- */
@@ -563,6 +645,7 @@ function renderAccount(a){
 
   showScreen('account');
   $('#logoutBtn').onclick = logout;
+  document.querySelectorAll('.wstrip [data-wk]').forEach(b => { b.onclick = () => jumpToWeek(b.dataset.wk); });
   window.scrollTo(0, 0);
   requestAnimationFrame(() => requestAnimationFrame(() => {
     $('#meterFill').style.width = pct + '%';
@@ -582,17 +665,33 @@ function logout(){
 function demoAccount(){
   const t = DK.today(), first = DK.addMonths(new Date(t.getFullYear(), t.getMonth(), 24), t.getDate() > 24 ? 0 : -1);
   const day = n => DK.iso(new Date(t.getFullYear(), t.getMonth(), t.getDate() + n));
-  const task = (group, title, due, status, at, extra) => ({ group, title, due: day(due), status, at: at === undefined ? '' : day(at), ...extra });
+  // Weeks around this one (0), each due on its Saturday; week -3 is a holiday, and the essay has no date yet.
+  const sat = (w, back = 0) => DK.iso(new Date(t.getFullYear(), t.getMonth(), t.getDate() - t.getDay() + 6 + 7 * w - back));
+  const A = 'أساسيات التعلم والتعليم', S = 'الخبرة المدرسية';
+  const task = (group, title, w, status, at, extra) => ({ group, title, due: w === null ? '' : sat(w), status, at: at || '', ...extra });
   return DK.account({
     tasks: [
-      task('الشهر الأول', 'المهمة الأسبوعية 1: تحليل المحتوى', -20, 'done', -21, { grade: '10/10' }),
-      task('الشهر الأول', 'المهمة الأسبوعية 2: خطة درس', -13, 'done', -14, { grade: '9/10' }),
-      task('الشهر الأول', 'المهمة الأسبوعية 3: استراتيجيات التقويم', -6, 'done', -7),
-      task('الشهر الأول', 'المهمة الأسبوعية 4: بيئة الصف', 1, 'ready', -1),
-      task('الشهر الثاني', 'المهمة الأسبوعية 5: التعلم النشط', 8, 'doing'),
-      task('الشهر الثاني', 'المهمة الأسبوعية 6: الفروق الفردية', 15, 'fix', -2, { note: 'طلب المدرّب إضافة أمثلة من صفك، ونعمل على إضافتها.' }),
-      task('الشهر الثاني', 'المهمة الأسبوعية 7: التعلم الرقمي', 22, 'todo'),
-      task('المقال', 'المقال التأملي', 40, 'todo')
+      task(A, 'مفهوم التعلم ونظرياته (مهمة منتدى نقاشي)', -5, 'done', sat(-5, 2)),
+      task(A, 'تحليل موقف تعليمي في ضوء نظريات التعلم', -5, 'done', sat(-5, 1), { grade: '10/10' }),
+      task(S, 'التعرّف على البيئة المدرسية', -5, 'done', sat(-5, 1)),
+      task(A, 'خصائص المتعلمين (مهمة منتدى نقاشي)', -4, 'done', sat(-4, 3)),
+      task(A, 'ملف تعريفي بطلبة صفّي', -4, 'done', sat(-4, 2)),
+      task(S, 'ملاحظة حصة صفية', -4, 'done', sat(-4, 1)),
+      task(A, 'إدارة الصف (مهمة منتدى نقاشي)', -2, 'done', sat(-2, 3)),
+      task(A, 'خطة إدارة الصف', -2, 'fix', day(-1), { note: 'طلب المدرّب إضافة أمثلة من صفك، ونعمل على إضافتها.' }),
+      task(S, 'تأمل في ملاحظة حصة زميل', -2, 'done', sat(-2, 1)),
+      task(A, 'بيئة التعلم الآمنة (مهمة منتدى نقاشي)', -1, 'done', sat(-1, 3)),
+      task(A, 'تصميم بيئة تعلم داعمة', -1, 'done', sat(-1, 2)),
+      task(S, 'تقرير الزيارة الصفية', -1, 'done', sat(-1, 1)),
+      task(A, 'أثر بناء العلاقات الإيجابية في بيئة التّعلم (مهمة منتدى نقاشي)', 0, 'ready', day(0)),
+      task(A, 'أثر بناء العلاقات الإيجابية في بيئة التّعلم', 0, 'doing'),
+      task(S, 'التّخطيط لدمج أصحاب العلاقة في بيئة التّعلم', 0, 'todo'),
+      task(A, 'التعلم النشط (مهمة منتدى نقاشي)', 1, 'todo'),
+      task(A, 'تخطيط درس بالتعلم النشط', 1, 'todo'),
+      task(S, 'تطبيق استراتيجية تعلم نشط في صفّي', 1, 'todo'),
+      task(A, 'التقويم من أجل التعلم (مهمة منتدى نقاشي)', 2, 'todo'),
+      task(S, 'أدوات تقويم صفية', 2, 'todo'),
+      task(S, 'المقال التأملي', null, 'todo')
     ],
     name: 'محمد أحمد علي', title: 'أستاذ', total: 450, down: 100, installment: 50, firstDue: DK.iso(first),
     notes: 'الدفعة الأولى كانت مقدّم عند التسجيل.\nإذا تأخر الراتب، احكيلنا وبنأجّل القسط.',

@@ -86,6 +86,9 @@
     const y = d.getFullYear(), m = d.getMonth() + k;
     return new Date(y, m, Math.min(d.getDate(), new Date(y, m + 1, 0).getDate()));
   }
+  // «25/10/2026» as it's written in Arabic: the day on the right and the year on the left. The marks between the
+  // numbers keep the browser from reading the whole date as one left-to-right number.
+  const numDate = s => { const d = typeof s === 'string' ? parseISO(s) : s; return d ? [d.getDate(), d.getMonth() + 1, d.getFullYear()].join('\u200F/') : ''; };
   const num = v => { const n = parseFloat(latin(v).replace(/٫/g, '.').replace(/[^\d.\-]/g, '')); return isNaN(n) ? 0 : n; };
   const round = n => Math.round(n * 100) / 100;
 
@@ -124,18 +127,58 @@
     return { name: String(r.name || '').trim(), title: String(r.title || '').trim(), total, paid, remaining, installment, nextDue, nextAmount, carried, carriedFrom, notes: String(r.notes || '').trim(), payments, tasks: taskList(r.tasks) };
   }
 
+  /* ---------- Weeks ----------
+     The diploma runs in weeks: tasks come out on Sunday and are due by 11:59 at night on Saturday.
+     A week goes by its Sunday's date, and its number counts only the weeks that have tasks, so holidays are skipped. */
+  const weekOf = s => { const d = parseISO(s); return d ? iso(new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay())) : ''; };
+  const weekEnd = w => { const d = parseISO(w); return d ? iso(new Date(d.getFullYear(), d.getMonth(), d.getDate() + 6)) : ''; };
+  const weekRange = w => `${numDate(w)} – ${numDate(weekEnd(w))}`;
+  // A task of a week still to come, or without a due date, counts once work on it starts,
+  // so a list entered in advance doesn't read as «3 من 60».
+  const inPlay = (week, status, now) => status !== 'todo' || (!!week && week <= weekOf(iso(now || today())));
+  /* The way both pages lay a list out: this week, the next one with tasks, the earlier weeks (latest first),
+     the weeks after that, and the tasks without a date yet. weekOfItem gives an item's week. */
+  function weekPlan(items, weekOfItem, now) {
+    const thisWeek = weekOf(iso(now || today())), byWeek = new Map(), undated = [];
+    items.forEach(x => {
+      const w = weekOfItem(x);
+      if (!w) return undated.push(x);
+      if (!byWeek.has(w)) byWeek.set(w, []);
+      byWeek.get(w).push(x);
+    });
+    const weeks = [...byWeek.keys()].sort().map(week => ({ week, items: byWeek.get(week) }));
+    const ahead = weeks.filter(w => w.week > thisWeek);
+    return {
+      thisWeek, weeks, undated,
+      now: weeks.find(w => w.week === thisWeek) || null,
+      next: ahead[0] || null,
+      past: weeks.filter(w => w.week < thisWeek).reverse(),
+      later: ahead.slice(1)
+    };
+  }
+
   /* ---------- Tasks ----------
      The diploma's task list lives in the admin database. A teacher's file carries only their own tasks, in order,
-     each with its status; tasks marked «مش مطلوبة» aren't published at all. Statements from before tasks have none. */
+     each with its status, its week and the week's number; tasks marked «مش مطلوبة» aren't published at all.
+     Statements from before tasks have none, and statements from before weeks get them from the due date. */
   const TASK_STATES = ['todo', 'doing', 'ready', 'done', 'fix'];
   // What the teacher reads for each status (the admin panel has its own, plainer names).
   const TASK_SHOWN = { todo: 'قيد الانتظار', doing: 'قيد التجهيز', ready: 'جاهزة', done: 'تم التسليم', fix: 'قيد التعديل' };
   function taskList(list) {
-    return (Array.isArray(list) ? list : []).map(x => ({
-      group: String(x.group || '').trim(), title: String(x.title || '').trim(), due: parseISO(x.due) ? x.due : '',
-      status: TASK_STATES.includes(x.status) ? x.status : 'todo', at: parseISO(x.at) ? x.at : '',
-      grade: String(x.grade || '').trim(), note: String(x.note || '').trim()
-    })).filter(x => x.title);
+    const out = (Array.isArray(list) ? list : []).map(x => {
+      const due = parseISO(x.due) ? x.due : '';
+      return {
+        group: String(x.group || '').trim(), title: String(x.title || '').trim(), due,
+        week: parseISO(x.week) ? weekOf(x.week) : weekOf(due), weekNo: Math.max(Math.floor(+x.weekNo) || 0, 0),
+        status: TASK_STATES.includes(x.status) ? x.status : 'todo', at: parseISO(x.at) ? x.at : '',
+        grade: String(x.grade || '').trim(), note: String(x.note || '').trim()
+      };
+    }).filter(x => x.title);
+    if (!out.some(x => x.weekNo)) {
+      const weeks = [...new Set(out.map(x => x.week).filter(Boolean))].sort();
+      out.forEach(x => { if (x.week) x.weekNo = weeks.indexOf(x.week) + 1; });
+    }
+    return out;
   }
   function taskCounts(list) {
     const c = { total: list.length, todo: 0, doing: 0, ready: 0, done: 0, fix: 0 };
@@ -143,5 +186,5 @@
     return c;
   }
 
-  window.DK = { linkToken, readLinkToken, latin, digits, normPhone, normPass, material, sha256, encryptJSON, decryptJSON, teacherKey, adminKey, newSalt, genPassword, iso, parseISO, today, addMonths, num, account, b64, unb64, TASK_STATES, TASK_SHOWN, taskList, taskCounts };
+  window.DK = { linkToken, readLinkToken, latin, digits, normPhone, normPass, material, sha256, encryptJSON, decryptJSON, teacherKey, adminKey, newSalt, genPassword, iso, parseISO, today, addMonths, numDate, num, account, b64, unb64, TASK_STATES, TASK_SHOWN, taskList, taskCounts, weekOf, weekEnd, weekRange, inPlay, weekPlan };
 })();
