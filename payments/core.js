@@ -129,7 +129,8 @@
 
   /* ---------- Weeks ----------
      The diploma runs in weeks: tasks come out on Sunday and are due by 11:59 at night on Saturday.
-     A week goes by its Sunday's date, and its number counts only the weeks that have tasks, so holidays are skipped. */
+     A week goes by its Sunday's date. The admin panel numbers it (holidays skipped, and back to 1 with each main
+     course) and names the main course it counts in. */
   const weekOf = s => { const d = parseISO(s); return d ? iso(new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay())) : ''; };
   const weekEnd = w => { const d = parseISO(w); return d ? iso(new Date(d.getFullYear(), d.getMonth(), d.getDate() + 6)) : ''; };
   const weekRange = w => `${numDate(w)} – ${numDate(weekEnd(w))}`;
@@ -159,7 +160,7 @@
 
   /* ---------- Tasks ----------
      The diploma's task list lives in the admin database. A teacher's file carries only their own tasks, in order,
-     each with its status, its week and the week's number; tasks marked «مش مطلوبة» aren't published at all.
+     each with its status, its week, the week's number and main course; tasks marked «مش مطلوبة» aren't published at all.
      Statements from before tasks have none, and statements from before weeks get them from the due date. */
   const TASK_STATES = ['todo', 'doing', 'ready', 'done', 'fix'];
   // What the teacher reads for each status (the admin panel has its own, plainer names).
@@ -169,7 +170,7 @@
       const due = parseISO(x.due) ? x.due : '';
       return {
         group: String(x.group || '').trim(), title: String(x.title || '').trim(), due,
-        week: parseISO(x.week) ? weekOf(x.week) : weekOf(due), weekNo: Math.max(Math.floor(+x.weekNo) || 0, 0),
+        week: parseISO(x.week) ? weekOf(x.week) : weekOf(due), weekNo: Math.max(Math.floor(+x.weekNo) || 0, 0), phase: String(x.phase || '').trim(),
         status: TASK_STATES.includes(x.status) ? x.status : 'todo', at: parseISO(x.at) ? x.at : '',
         grade: String(x.grade || '').trim(), note: String(x.note || '').trim()
       };

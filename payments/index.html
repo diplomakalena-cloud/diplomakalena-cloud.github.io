@@ -286,6 +286,8 @@ input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(191,
 .wstrip .w-open{border-color:rgba(255,180,138,.55);color:var(--late)}
 .wstrip .w-now{background:var(--foil);background-size:200% 100%;border:0;color:#1d1406;font-weight:700}
 .wstrip button:focus-visible{outline:2px solid var(--gold-hi);outline-offset:2px}
+.nw{white-space:nowrap}
+.wstrip .wgap{width:1px;margin:3px 6px;background:var(--field-line)}
 
 /* Notes */
 .notes p{white-space:pre-line;color:var(--ink);margin-top:8px;padding:12px 14px;border-radius:var(--r-sm);background:rgba(0,20,17,.3);border-inline-start:3px solid var(--gold)}
@@ -513,6 +515,10 @@ function taskRow(x, today, courses){
 const weekNo = w => Math.max(...w.items.map(x => x.weekNo));
 const weekName = w => weekNo(w) ? `الأسبوع ${weekNo(w)}` : 'أسبوع';
 const weekDone = w => w.items.every(x => x.status === 'done');
+// The main course a week counts in (the numbers start again with each one), and its dates.
+const weekCourse = w => (w.items.find(x => x.phase) || {}).phase || '';
+// The dates stay on one line when the course name is long; plain is for a tooltip.
+const weekSub = (w, plain) => [esc(weekCourse(w)), plain ? DK.weekRange(w.week).replace(/\u200F/g, '') : `<span class="nw">${DK.weekRange(w.week)}</span>`].filter(Boolean).join(' · ');
 const dots = items => `<span class="wdots" aria-hidden="true">${items.map(x => `<i class="s-${x.status}"></i>`).join('')}</span>`;
 function tasksCard(list, today){
   if (!list.length) return '';
@@ -533,11 +539,12 @@ function tasksCard(list, today){
       ? done ? `<div class="wk-due ok"><svg class="i"><use href="#i-check"/></svg><span>تم تسليم مهام هالأسبوع كلها</span></div>`
         : `<div class="wk-due"><svg class="i"><use href="#i-cal"/></svg><span>آخر موعد للتسليم: ${DAYS[end.getDay()]} <span class="num">${numDate(end)}</span>، الساعة 11:59 بالليل${u ? ` · ${u}` : ''}</span></div>`
       : `<div class="wk-due soft"><svg class="i"><use href="#i-cal"/></svg><span>بتنزل يوم الأحد <span class="num">${numDate(wk.week)}</span>، وموعد تسليمها السبت <span class="num">${numDate(end)}</span></span></div>`;
-    return `<section class="tweek" id="wk-${wk.week}"><div class="wk-head"><span class="wk-tag">${tag}</span><b>${weekName(wk)}</b><span class="wk-range num">${DK.weekRange(wk.week)}</span></div>${due}${rows(wk.items)}</section>`;
+    return `<section class="tweek" id="wk-${wk.week}"><div class="wk-head"><span class="wk-tag">${tag}</span><b>${weekName(wk)}</b><span class="wk-range num">${weekSub(wk)}</span></div>${due}${rows(wk.items)}</section>`;
   };
   // A week as one line that opens; earlier weeks stay open until all their tasks are handed in.
-  const fold = (wk, open, label) => `<details class="tgroup" id="wk-${wk.week}"${open ? ' open' : ''}><summary>
-      <span class="wk-sum">${label ? `<small class="wk-lbl">${label}</small>` : ''}<span>${weekName(wk)}</span><small class="wk-range num">${DK.weekRange(wk.week)}</small></span>
+  // Earlier weeks sit under their course's heading, so their line only needs the dates.
+  const fold = (wk, open, label, course = true) => `<details class="tgroup" id="wk-${wk.week}"${open ? ' open' : ''}><summary>
+      <span class="wk-sum">${label ? `<small class="wk-lbl">${label}</small>` : ''}<span>${weekName(wk)}</span><small class="wk-range num">${course ? weekSub(wk) : DK.weekRange(wk.week)}</small></span>
       ${dots(wk.items)}<span class="gc num${weekDone(wk) ? ' full' : ''}">${weekDone(wk) ? '✓ تم تسليمها كلها' : wk.week > plan.thisWeek && wk.items.every(x => x.status === 'todo') ? tasksWord(wk.items.length) : `${wk.items.filter(x => x.status === 'done').length} من ${wk.items.length}`}</span>
       <svg class="i chev"><use href="#i-chev"/></svg></summary>${rows(wk.items)}</details>`;
 
@@ -549,8 +556,13 @@ function tasksCard(list, today){
     if (plan.next) body += focus(plan.next, plan.next.week === nextWeek ? 'الأسبوع الجاي' : 'المهام الجاية');
   }
   if (plan.now && plan.next) body += fold(plan.next, false, plan.next.week === nextWeek ? 'الأسبوع الجاي' : 'المهام الجاية');
-  if (plan.past.length) body += `<p class="tsec">الأسابيع السابقة</p>` + plan.past.map(wk => fold(wk, !weekDone(wk))).join('');
-  const later = [...plan.later.map(wk => `<p class="wk-sub" id="wk-${wk.week}">${weekName(wk)} <small class="num">${DK.weekRange(wk.week)}</small></p>${rows(wk.items)}`),
+  // Earlier weeks, latest first, with a heading each time the course they count in changes.
+  plan.past.forEach((wk, i) => {
+    const c = weekCourse(wk), head = !i || c !== weekCourse(plan.past[i - 1]);
+    if (head) body += `<p class="tsec">${i ? esc(c || 'الأسابيع السابقة') : `الأسابيع السابقة${c ? ` · ${esc(c)}` : ''}`}</p>`;
+    body += fold(wk, !weekDone(wk), '', false);
+  });
+  const later = [...plan.later.map(wk => `<p class="wk-sub" id="wk-${wk.week}">${weekName(wk)} <small class="num">${weekSub(wk)}</small></p>${rows(wk.items)}`),
     plan.undated.length ? `${plan.later.length ? '<p class="wk-sub">موعدها لسا ما تحدد</p>' : ''}${rows(plan.undated)}` : ''].join('');
   if (later) {
     const n = plan.later.reduce((s, wk) => s + wk.items.length, 0) + plan.undated.length;
@@ -558,9 +570,11 @@ function tasksCard(list, today){
   }
 
   // Once the diploma is a few weeks in, a strip of its weeks to see it all at a glance and jump to any of them.
-  const strip = plan.weeks.length >= 4 ? `<div class="wstrip" aria-label="أسابيع الدبلوم">${plan.weeks.map(wk => {
+  // A small gap marks where a new course starts the count again.
+  const strip = plan.weeks.length >= 4 ? `<div class="wstrip" aria-label="أسابيع الدبلوم">${plan.weeks.map((wk, i) => {
       const cls = wk.week === plan.thisWeek ? 'w-now' : wk.week > plan.thisWeek ? 'w-ahead' : weekDone(wk) ? 'w-done' : 'w-open';
-      return `<button type="button" class="${cls}" data-wk="${wk.week}" title="${weekName(wk)} · ${DK.weekRange(wk.week).replace(/\u200F/g, '')}">${weekNo(wk) || '•'}</button>`;
+      const gap = i && weekCourse(wk) !== weekCourse(plan.weeks[i - 1]) ? '<i class="wgap" aria-hidden="true"></i>' : '';
+      return `${gap}<button type="button" class="${cls}" data-wk="${wk.week}" title="${weekName(wk)} · ${weekSub(wk, true)}">${weekNo(wk) || '•'}</button>`;
     }).join('')}</div>` : '';
 
   return `<div class="card tasks enter">
@@ -665,33 +679,37 @@ function logout(){
 function demoAccount(){
   const t = DK.today(), first = DK.addMonths(new Date(t.getFullYear(), t.getMonth(), 24), t.getDate() > 24 ? 0 : -1);
   const day = n => DK.iso(new Date(t.getFullYear(), t.getMonth(), t.getDate() + n));
-  // Weeks around this one (0), each due on its Saturday; week -3 is a holiday, and the essay has no date yet.
+  // Weeks around this one (0), each due on its Saturday, numbered the way the admin panel publishes them:
+  // أساسيات التعلم والتعليم up to its essay (week -3 is a holiday), a week off, then البيداغوجيا starting again at 1.
   const sat = (w, back = 0) => DK.iso(new Date(t.getFullYear(), t.getMonth(), t.getDate() - t.getDay() + 6 + 7 * w - back));
-  const A = 'أساسيات التعلم والتعليم', S = 'الخبرة المدرسية';
-  const task = (group, title, w, status, at, extra) => ({ group, title, due: w === null ? '' : sat(w), status, at: at || '', ...extra });
+  const A = 'أساسيات التعلم والتعليم', P = 'البيداغوجيا', S = 'الخبرة المدرسية';
+  const task = (group, title, [w, weekNo, phase], status, at, extra) => ({ group, title, due: w === null ? '' : sat(w), weekNo, phase, status, at: at || '', ...extra });
+  const [a1, a2, a3, a4, a5, a6, p1, p2] = [[-5, 1, A], [-4, 2, A], [-2, 3, A], [-1, 4, A], [0, 5, A], [1, 6, A], [3, 1, P], [4, 2, P]];
+  const at = (w, back) => sat(w[0], back);
   return DK.account({
     tasks: [
-      task(A, 'مفهوم التعلم ونظرياته (مهمة منتدى نقاشي)', -5, 'done', sat(-5, 2)),
-      task(A, 'تحليل موقف تعليمي في ضوء نظريات التعلم', -5, 'done', sat(-5, 1), { grade: '10/10' }),
-      task(S, 'التعرّف على البيئة المدرسية', -5, 'done', sat(-5, 1)),
-      task(A, 'خصائص المتعلمين (مهمة منتدى نقاشي)', -4, 'done', sat(-4, 3)),
-      task(A, 'ملف تعريفي بطلبة صفّي', -4, 'done', sat(-4, 2)),
-      task(S, 'ملاحظة حصة صفية', -4, 'done', sat(-4, 1)),
-      task(A, 'إدارة الصف (مهمة منتدى نقاشي)', -2, 'done', sat(-2, 3)),
-      task(A, 'خطة إدارة الصف', -2, 'fix', day(-1), { note: 'طلب المدرّب إضافة أمثلة من صفك، ونعمل على إضافتها.' }),
-      task(S, 'تأمل في ملاحظة حصة زميل', -2, 'done', sat(-2, 1)),
-      task(A, 'بيئة التعلم الآمنة (مهمة منتدى نقاشي)', -1, 'done', sat(-1, 3)),
-      task(A, 'تصميم بيئة تعلم داعمة', -1, 'done', sat(-1, 2)),
-      task(S, 'تقرير الزيارة الصفية', -1, 'done', sat(-1, 1)),
-      task(A, 'أثر بناء العلاقات الإيجابية في بيئة التّعلم (مهمة منتدى نقاشي)', 0, 'ready', day(0)),
-      task(A, 'أثر بناء العلاقات الإيجابية في بيئة التّعلم', 0, 'doing'),
-      task(S, 'التّخطيط لدمج أصحاب العلاقة في بيئة التّعلم', 0, 'todo'),
-      task(A, 'التعلم النشط (مهمة منتدى نقاشي)', 1, 'todo'),
-      task(A, 'تخطيط درس بالتعلم النشط', 1, 'todo'),
-      task(S, 'تطبيق استراتيجية تعلم نشط في صفّي', 1, 'todo'),
-      task(A, 'التقويم من أجل التعلم (مهمة منتدى نقاشي)', 2, 'todo'),
-      task(S, 'أدوات تقويم صفية', 2, 'todo'),
-      task(S, 'المقال التأملي', null, 'todo')
+      task(A, 'مفهوم التعلم ونظرياته (مهمة منتدى نقاشي)', a1, 'done', at(a1, 2)),
+      task(A, 'تحليل موقف تعليمي في ضوء نظريات التعلم', a1, 'done', at(a1, 1), { grade: '10/10' }),
+      task(S, 'التعرّف على البيئة المدرسية', a1, 'done', at(a1, 1)),
+      task(A, 'خصائص المتعلمين (مهمة منتدى نقاشي)', a2, 'done', at(a2, 3)),
+      task(A, 'ملف تعريفي بطلبة صفّي', a2, 'done', at(a2, 2)),
+      task(S, 'ملاحظة حصة صفية', a2, 'done', at(a2, 1)),
+      task(A, 'إدارة الصف (مهمة منتدى نقاشي)', a3, 'done', at(a3, 3)),
+      task(A, 'خطة إدارة الصف', a3, 'fix', day(-1), { note: 'طلب المدرّب إضافة أمثلة من صفك، ونعمل على إضافتها.' }),
+      task(S, 'تأمل في ملاحظة حصة زميل', a3, 'done', at(a3, 1)),
+      task(A, 'بيئة التعلم الآمنة (مهمة منتدى نقاشي)', a4, 'done', at(a4, 3)),
+      task(A, 'تصميم بيئة تعلم داعمة', a4, 'done', at(a4, 2)),
+      task(S, 'تقرير الزيارة الصفية', a4, 'done', at(a4, 1)),
+      task(A, 'أثر بناء العلاقات الإيجابية في بيئة التّعلم (مهمة منتدى نقاشي)', a5, 'ready', day(0)),
+      task(A, 'أثر بناء العلاقات الإيجابية في بيئة التّعلم', a5, 'doing'),
+      task(S, 'التّخطيط لدمج أصحاب العلاقة في بيئة التّعلم', a5, 'todo'),
+      task(A, 'المقال التأملي', a6, 'todo'),
+      task(S, 'تأمل في ممارساتي الصفية', a6, 'todo'),
+      task(P, 'مفهوم البيداغوجيا (مهمة منتدى نقاشي)', p1, 'todo'),
+      task(P, 'تحليل ممارسة تدريسية', p1, 'todo'),
+      task(S, 'ملاحظة صفية مركّزة', p1, 'todo'),
+      task(P, 'التدريس المتمايز', p2, 'todo'),
+      task(S, 'ملف الإنجاز', [null, 0, ''], 'todo')
     ],
     name: 'محمد أحمد علي', title: 'أستاذ', total: 450, down: 100, installment: 50, firstDue: DK.iso(first),
     notes: 'الدفعة الأولى كانت مقدّم عند التسجيل.\nإذا تأخر الراتب، احكيلنا وبنأجّل القسط.',
