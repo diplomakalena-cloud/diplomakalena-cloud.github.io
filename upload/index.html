@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F3EDE0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>رفع الأدلة | دبلومك علينا</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="upload.css?v=2">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 20V9M7 13.5l5-5 5 5M5 4h14"/></symbol>
+  <symbol id="i-img" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="m4 18 5.5-5 4 3.5L16 14l4 4"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></symbol>
+  <symbol id="i-vid" viewBox="0 0 24 24"><rect x="3" y="5" width="13" height="14" rx="2"/><path d="m16 10 5-3v10l-5-3"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 6.1A9.8 9.8 0 0 1 12 6c6 0 9.5 6 9.5 6a17 17 0 0 1-3 3.6M6.4 7.6A16.6 16.6 0 0 0 2.5 12S6 18 12 18c1.5 0 2.9-.4 4.1-1"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4 2.5 20h19z"/><path d="M12 10v4.5M12 17.2v.1"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.38-.02-.53-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.3 1.27.49 1.7.63.72.23 1.37.2 1.88.12.58-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.27-.2-.57-.35M12.05 21.79h-.01a9.9 9.9 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88a9.82 9.82 0 0 1 6.99 2.9 9.82 9.82 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88m8.41-18.3A11.81 11.81 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.17-3.48-8.41"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="دبلومك علينا"><img src="/library/assets/logo-dark.webp" width="480" height="288" alt="دبلومك علينا"></a>
+    <span class="private"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg>رابط خاص بالمشتركين</span>
+  </div>
+</header>
+
+<main class="wrap" id="app">
+
+  <!-- checking -->
+  <section class="state" id="s-check" aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <p>لحظة، بنتأكد من رابطك…</p>
+  </section>
+
+  <!-- bad / missing link -->
+  <section class="state card msg" id="s-bad" hidden>
+    <span class="msg-ic warn"><svg class="i" aria-hidden="true"><use href="#i-alert"/></svg></span>
+    <h1 id="badTitle">الرابط مش فعّال</h1>
+    <p id="badText">هاد الرابط ملغي أو ناقص. تواصل معنا على واتساب ونبعتلك رابطك الخاص.</p>
+    <a class="btn btn-green" href="https://wa.me/962779283635" target="_blank" rel="noopener"><svg class="i fill" aria-hidden="true"><use href="#i-wa"/></svg>تواصل معنا</a>
+  </section>
+
+  <!-- form -->
+  <form class="state" id="s-form" hidden novalidate>
+    <div class="intro">
+      <p class="hello" id="hello">أهلًا</p>
+      <h1>ارفع <span class="foil">دليل جديد</span></h1>
+      <p class="lead">صور من صفك، منشور فيسبوك، شهادة، ورقة عمل… ارفعها هون وبتوصلنا مباشرة، وبتنحفظ بملفك عندنا لوقت تجهيز الأداة.</p>
+    </div>
+
+    <div class="card step">
+      <label class="lbl">نوع النشاط <small>(اختياري)</small></label>
+      <div class="kinds" role="radiogroup" aria-label="نوع النشاط">
+        <button type="button" class="kind" role="radio" aria-checked="false" data-kind="صور من حصة صفية">صور من حصة</button>
+        <button type="button" class="kind" role="radio" aria-checked="false" data-kind="منشور فيسبوك">منشور فيسبوك</button>
+        <button type="button" class="kind" role="radio" aria-checked="false" data-kind="شهادة أو دورة">شهادة أو دورة</button>
+        <button type="button" class="kind" role="radio" aria-checked="false" data-kind="ورقة عمل أو خطة">ورقة عمل أو خطة</button>
+        <button type="button" class="kind" role="radio" aria-checked="false" data-kind="فيديو">فيديو</button>
+        <button type="button" class="kind" role="radio" aria-checked="false" data-kind="أخرى">أخرى</button>
+      </div>
+
+      <label class="lbl" for="title">عنوان النشاط <b aria-hidden="true">*</b></label>
+      <input id="title" name="title" type="text" maxlength="120" required autocomplete="off" placeholder="مثلًا: حصة الكسور مع الصف السابع">
+      <p class="err" id="titleErr" hidden>اكتب عنوانًا واضحًا للنشاط (3 أحرف على الأقل).</p>
+
+      <label class="lbl" for="desc">شرح بسيط <small>(اختياري)</small></label>
+      <textarea id="desc" name="desc" rows="3" maxlength="2000" placeholder="شو صار بالنشاط؟ مع أي صف؟ أي تفاصيل بتساعدنا…"></textarea>
+    </div>
+
+    <div class="card step">
+      <label class="lbl" for="files">الملفات <b aria-hidden="true">*</b></label>
+      <label class="drop" id="drop" for="files">
+        <svg class="i" aria-hidden="true"><use href="#i-up"/></svg>
+        <strong>اختر الصور أو الملفات</strong>
+        <small>صور (ومنها صور الآيفون HEIC)، PDF، Word، وفيديو قصير. حتى 30 ملف بالنشاط الواحد.</small>
+      </label>
+      <input id="files" type="file" multiple class="sr"
+        accept="image/*,image/heic,image/heif,.heic,.heif,.jpg,.jpeg,.png,.webp,application/pdf,.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,video/mp4,video/quicktime,.mp4,.mov,.m4v">
+      <ul class="flist" id="flist" aria-live="polite"></ul>
+      <p class="err" id="filesErr" hidden></p>
+      <p class="tip"><svg class="i" aria-hidden="true"><use href="#i-eye-off"/></svg><span>قبل ما ترفع: خبّي وجوه وأسماء الطلبة وعلاماتهم بالصور.</span></p>
+    </div>
+
+    <button class="btn btn-gold big" type="submit" id="go"><svg class="i" aria-hidden="true"><use href="#i-up"/></svg>ارفع النشاط</button>
+    <p class="note">الملفات بتنحفظ كما هي بدون ضغط، وما حدا بيشوفها غيرنا.</p>
+  </form>
+
+  <!-- uploading -->
+  <section class="state card" id="s-up" hidden aria-live="polite">
+    <h2 class="up-title">جاري الرفع…</h2>
+    <p class="up-sub" id="upSub">لا تسكّر الصفحة لحد ما يخلص.</p>
+    <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="bar"><i id="barFill"></i></div>
+    <p class="up-pct" id="upPct">0%</p>
+    <ul class="flist up" id="ulist"></ul>
+  </section>
+
+  <!-- done -->
+  <section class="state card msg" id="s-done" hidden>
+    <span class="msg-ic ok"><svg class="i" aria-hidden="true"><use href="#i-check"/></svg></span>
+    <h1>وصل النشاط ✓</h1>
+    <p id="doneText"></p>
+    <button class="btn btn-green" type="button" id="again"><svg class="i" aria-hidden="true"><use href="#i-up"/></svg>ارفع نشاط ثاني</button>
+  </section>
+
+  <!-- failed -->
+  <section class="state card msg" id="s-fail" hidden>
+    <span class="msg-ic warn"><svg class="i" aria-hidden="true"><use href="#i-alert"/></svg></span>
+    <h1 id="failTitle">ما اكتمل الرفع</h1>
+    <p id="failText"></p>
+    <ul class="flist up" id="flistFail"></ul>
+    <div class="row">
+      <button class="btn btn-gold" type="button" id="retry">أكمل الرفع</button>
+      <button class="btn btn-green" type="button" id="again2" hidden>ارفع نشاط ثاني</button>
+      <a class="btn btn-line" href="https://wa.me/962779283635" target="_blank" rel="noopener">تواصل معنا</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot"><small>© 2026 دبلومك علينا</small></footer>
+
+<script src="upload.js?v=2" defer></script>
+</body>
+</html>
