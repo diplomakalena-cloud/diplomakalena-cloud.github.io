@@ -264,6 +264,7 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
         <span><svg class="i"><use href="#i-once"/></svg>5 أقسام قصيرة</span>
         <span><svg class="i"><use href="#i-lock"/></svg>إجاباتك بتنحفظ أول بأول</span>
       </div>
+      <p class="done-note" id="pickedPlan" hidden></p>
       <p class="done-note" id="doneNote" hidden>إنت عبّيت الاستبانة قبل هيك، شكراً إلك. إذا بدك تعدّل شي، عبّيها من جديد وبنعتمد آخر نسخة.</p>
       <button class="btn btn-gold btn-block" id="startBtn" type="button">يلا نبلّش<svg class="i"><use href="#i-next"/></svg></button>
       <button class="link-btn" id="restartBtn" type="button" hidden>ابدأ من جديد</button>
@@ -299,6 +300,7 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;padding:0 var(--gut
 
 <footer>دبلومك علينا · إنت ركّز على صفك، والدبلوم علينا</footer>
 
+<script src="../assets/plans.js"></script>
 <script>
 /* =====================================================================
    رابط Google Apps Script — الصقه هون بعد ما تنشر السكربت (انظر SETUP.md)
@@ -316,8 +318,23 @@ const OTHER = 'أخرى';
 
 /* ---------- Questions ----------
    col: the column header in the Google Sheet. */
+/* الباقات: الأسماء والأسعار من assets/plans.js (نفس مصدر الصفحة الرئيسية) */
+const DKP = (window.DK && window.DK.plans) || { basic:{ name:'الباقة الأساسية', total:200, monthly:20 }, premium:{ name:'الباقة المميزة', total:300, monthly:30 } };
+const DK_MONTHS = (window.DK && window.DK.months) || 10;
+const PLAN_VALUE = { basic: DKP.basic.name, premium: DKP.premium.name };
+const planTag = p => `${p.total} دينار · ${DK_MONTHS} أقساط × ${p.monthly}`;
+
 const SECTIONS = [
-  { title:'بيانات المعلم', qs:[
+  { title:'الباقة وبيانات المعلم', qs:[
+    { id:'plan', label:'ما الباقة التي تريد الاشتراك بها؟', col:'الباقة', type:'rich',
+      hint:'تفاصيل الباقتين كاملة في جدول المقارنة على الصفحة الرئيسية.',
+      options:[
+        { v:PLAN_VALUE.basic, tag:planTag(DKP.basic),
+          d:'نتابع المنصة وننجز المتطلبات المشمولة بصورة مستقلة، والتواصل معك عند الضرورة فقط.' },
+        { v:PLAN_VALUE.premium, tag:planTag(DKP.premium), badge:'متابعة شخصية',
+          d:'كل ما في الباقة الأساسية، مع متابعة دورية وشخصية عبر واتساب، وتخصيص أعلى للملفات، وخدمات إضافية.' },
+        { v:'مشترك من قبل', tag:'اشتراك سابق',
+          d:'اشتراكك يبقى على ما اتفقنا عليه، ولا يتغير عليك شيء دون موافقتك.' } ] },
     { id:'name', n:1, label:'الاسم الرباعي', col:'الاسم الرباعي', type:'text', autocomplete:'name', placeholder:'مثال: محمد أحمد علي حسن',
       check:v => v.trim().split(/\s+/).length >= 3 || 'اكتب الاسم رباعي لو سمحت' },
     { id:'ministry', n:2, label:'الرقم الوزاري', col:'الرقم الوزاري', type:'text', inputmode:'numeric', ltr:true, digits:true,
@@ -396,6 +413,9 @@ const SECTIONS = [
   ]},
 ];
 
+let qCount = 0;
+SECTIONS.forEach(sec => sec.qs.forEach(q => { q.n = ++qCount; }));
+
 /* ---------- Storage (never let it break the page) ---------- */
 const store = {
   get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } },
@@ -423,6 +443,8 @@ const draft = store.get(KEY_DRAFT) || {};
 let state = draft.answers || {};
 let step = Number.isInteger(draft.step) ? Math.min(draft.step, SECTIONS.length - 1) : 0;
 let savedTimer;
+const pickedPlan = PLAN_VALUE[new URLSearchParams(location.search).get('pkg')];
+if (pickedPlan) state.plan = pickedPlan;
 
 function saveDraft(){
   const ok = store.set(KEY_DRAFT, { answers: state, step, at: Date.now() });
@@ -714,7 +736,8 @@ window.addEventListener('online', () => {
 
 /* ---------- Boot ---------- */
 if (!ENDPOINT) $('#testBanner').hidden = false;
-const hasDraft = Object.keys(state).length > 0;
+const hasDraft = Object.keys(state).some(k => k !== 'plan');
+if (pickedPlan) { const pp = $('#pickedPlan'); pp.textContent = `اخترت ${pickedPlan}. تستطيع تغييرها في أول سؤال.`; pp.hidden = false; }
 if (hasDraft) { $('#startBtn').firstChild.textContent = 'كمّل من وين ما وقفت'; $('#restartBtn').hidden = false; }
 if (store.get(KEY_DONE) && !hasDraft) $('#doneNote').hidden = false;
 const pending = (store.get(KEY_OUTBOX) || []).length;
