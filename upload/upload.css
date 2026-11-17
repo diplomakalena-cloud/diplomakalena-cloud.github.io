@@ -82,8 +82,6 @@ input[type=file]:focus-visible + .flist,.drop:focus-within{outline:2.5px solid v
 .fi .mini{display:block;height:4px;border-radius:4px;background:rgba(0,77,64,.1);margin-top:5px;overflow:hidden}
 .fi .mini i{display:block;height:100%;width:0;background:var(--green);transition:width .3s}
 
-.tip{display:flex;gap:8px;align-items:flex-start;font-size:.84rem;color:var(--muted);padding:10px 12px;border-radius:12px;background:rgba(191,149,63,.09);border:1px dashed var(--line)}
-.tip svg{color:var(--gold-deep);margin-top:4px;font-size:1rem}
 
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:52px;padding:0 24px;border-radius:99px;font-family:var(--f-display);font-weight:700;font-size:1rem;
   transition:transform .3s var(--ease),box-shadow .3s,background .3s;white-space:nowrap}
